@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "polarizedtrees"
+version = "0.1.0"
+description = "Synthetic annotation datasets and polarization detection for human label studies"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+]
+
+[project.optional-dependencies]
+ndfu = ["ndfu"]          # for nDFU analysis in the demo notebook
+dev  = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["polarizedtrees*"]
