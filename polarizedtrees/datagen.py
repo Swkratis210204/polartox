@@ -282,3 +282,71 @@ class AnnotatorPool:
         print(f"  toxic_range      : {self.toxic_range}")
         print(f"  civil_range      : {self.civil_range}")
         print(f"  neutral_range    : {self.neutral_range}")
+
+    def describe_bias(self, bias_config):
+        """Pretty-print the bias config as a readable table."""
+        col_w = max(len(d) for d in bias_config) + 2
+        print(f"{'dimension':<{col_w}} {'role':<12} details")
+        print("-" * 60)
+        for dim, config in bias_config.items():
+            if config["role"] == "polarizing":
+                details = (
+                    f"toxic={config['toxic_pole']}  civil={config['civil_pole']}"
+                )
+            else:
+                details = f"convergence={config['convergence']}"
+            print(f"{dim:<{col_w}} {config['role']:<12} {details}")
+
+    def analyze(self, dataset, bias_config):
+        """
+        Compute nDFU scores for every text, overall and per dimension value.
+
+        Requires the `ndfu` package (`pip install polarizedtrees[ndfu]`).
+
+        Returns
+        -------
+        dict
+            results[text_id]["overall"] -> float
+            results[text_id][dim][value] -> float
+        """
+        try:
+            from ndfu import dfu
+        except ImportError:
+            raise ImportError(
+                "ndfu is required for analyze(). "
+                "Install it with: pip install polarizedtrees[ndfu]"
+            )
+
+        def _ndfu(ratings):
+            counts = np.bincount(ratings, minlength=self.scale + 1)[1:]
+            hist = counts / counts.sum()
+            return dfu(hist)
+
+        results = {}
+        for text_id, text_data in dataset.groupby("text_id"):
+            text_results = {"overall": _ndfu(text_data["rating"].values)}
+            for dim in self.active_dims:
+                text_results[dim] = {
+                    value: _ndfu(group["rating"].values)
+                    for value, group in text_data.groupby(dim)
+                }
+            results[text_id] = text_results
+        return results
+
+    def summarize(self, dataset, bias_config, text_id=0):
+        """
+        Print nDFU scores for one text, grouped by dimension, with bias roles shown.
+
+        Calls analyze() internally. Requires `ndfu`.
+        """
+        results = self.analyze(dataset, bias_config)
+        text = results[text_id]
+        print(f"Text {text_id} — overall nDFU: {text['overall']:.3f}\n")
+        for dim, values in text.items():
+            if dim == "overall":
+                continue
+            role = bias_config[dim]["role"]
+            print(f"{dim} ({role}):")
+            for value, score in values.items():
+                print(f"  {value}: {score:.3f}")
+            print()

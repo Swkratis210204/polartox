@@ -56,8 +56,28 @@ Returns `(dataset, bias_config)`. All texts in one call share the same bias conf
 pool.pool_size      # int — total annotators
 pool.n_identities   # int — unique demographic combinations
 pool.active_dims    # dict — dimensions after applying exclude
-pool.summary()      # prints full config
+pool.summary()      # prints full pool config
+
+pool.describe_bias(bias_config)
+# dimension    role         details
+# ------------------------------------------------------------
+# gender       unimodal     convergence=toxic
+# politics     polarizing   toxic=['left', 'right']  civil=['center']
+# ...
+
+pool.summarize(dataset, bias_config, text_id=0)
+# Text 0 — overall nDFU: 0.262
+# politics (polarizing):
+#   center: 0.667
+#   left:   0.176
+# ...
+
+results = pool.analyze(dataset, bias_config)  # raw nDFU scores
+# results[text_id]["overall"]      -> float
+# results[text_id][dim][value]     -> float
 ```
+
+`analyze()` and `summarize()` require `pip install "polarizedtrees[ndfu]"`.
 
 ## Dimensions
 
