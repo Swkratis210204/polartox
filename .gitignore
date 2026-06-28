@@ -3,3 +3,4 @@ notes/
 __pycache__/
 dist/
 PyPicodes.txt
+*.pdf
