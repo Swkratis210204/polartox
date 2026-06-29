@@ -20,12 +20,12 @@ from toxpol.datagen import AnnotatorPool, DEFAULT_DIMENSIONS
 
 pool = AnnotatorPool(
     dimensions=DEFAULT_DIMENSIONS,
+    scale=5,                      # ratings are integers in [1, scale] -- mandatory
+    toxic_range=(4, 5),           # rating range for the toxic pole in the High tier -- mandatory
+    civil_range=(1, 2),           # rating range for the civil pole in the High tier -- mandatory
+    neutral_range=(3, 3),         # reserved for future use -- mandatory
     exclude=None,                 # drop dimension names, e.g. ["education"]
     annotators_per_identity=10,   # annotators replicated per unique identity
-    scale=5,                      # ratings are integers in [1, scale]
-    toxic_range=(4, 5),           # rating range for the toxic pole in the High tier
-    civil_range=(1, 2),           # rating range for the civil pole in the High tier
-    neutral_range=(3, 3),         # reserved for future use
 )
 pool.summary()
 # Active dimensions : ['gender', 'politics', 'age', 'education', 'orientation']
@@ -49,24 +49,46 @@ dataset, bias_configs = pool.generate_dataset(
 Every text is independently assigned one of three severity tiers, mixed according to `high_ratio` / `moderate_ratio` / `low_ratio` (which must sum to 1.0):
 
 - **High** — every value of every dimension gets a fresh random weight (drawn from `(0.5, 2.0)`). An annotator's combined weight is the geometric mean of their weights across all dimensions. A threshold is computed as the median combined weight across the **full pool**; annotators above it rate from `toxic_range`, below it from `civil_range`. Because every dimension contributes simultaneously, no single dimension is privileged — the combination of dimensions that best explains the disagreement varies from text to text.
-- **Moderate** — the same weight mechanism, but with narrower, overlapping ranges, producing a softer signal that should resolve in fewer splits.
-- **Low** — a `low_unimodal_share` fraction of Low texts use no demographic split at all (every sampled annotator draws from a single random peak on the scale, with natural spread — the true negative control). The remainder use the weight mechanism with heavily overlapping ranges, producing only marginal residual signal.
+- **Moderate** — the same weight mechanism, but with narrower, more overlapping ranges than High, producing a softer signal that should resolve in fewer splits.
+- **Low** — a `low_unimodal_share` fraction of Low texts use no demographic split at all (every sampled annotator draws from a single random peak on the scale, with natural spread — the true negative control). The remainder use the weight mechanism with even more heavily overlapping ranges than Moderate, producing only marginal residual signal.
 
 `noise` applies uniformly across all tiers: with that probability, any individual annotator's rating is instead drawn fully at random from the whole scale, regardless of tier or pole.
 
+### Moderate and Low ranges are derived, not separately configured
+
+You only ever specify `toxic_range`/`civil_range` once, for the High tier. Moderate's and Low's ranges are automatically derived from them in `__init__`, shifted toward the center by a step proportional to `scale` — so they scale correctly no matter what rating scale you use, without needing four extra parameters:
+
+```python
+pool.moderate_toxic_range   # derived from toxic_range
+pool.moderate_civil_range   # derived from civil_range
+pool.low_toxic_range        # derived from toxic_range, shifted further
+pool.low_civil_range        # derived from civil_range, shifted further
+```
+
+For example, with `scale=5, toxic_range=(4,5), civil_range=(1,2)`:
+
+```python
+moderate_toxic_range = (4, 5)   # same as High
+moderate_civil_range = (1, 3)
+low_toxic_range      = (3, 5)
+low_civil_range      = (1, 3)
+```
+
 ## API
 
-### `AnnotatorPool(dimensions, ...)`
+### `AnnotatorPool(dimensions, scale, toxic_range, civil_range, neutral_range, ...)`
 
 | Parameter | Default | Description |
 |---|---|---|
 | `dimensions` | required | `dict[str, list[str]]` — demographic axes and their values |
+| `scale` | required | max rating value; ratings are integers in `[1, scale]`. No default — Moderate/Low ranges are derived from it. |
+| `toxic_range` | required | rating range for the toxic pole in the High tier. No default — also the basis for Moderate/Low's toxic ranges. |
+| `civil_range` | required | rating range for the civil pole in the High tier. No default — also the basis for Moderate/Low's civil ranges. |
+| `neutral_range` | required | reserved for future use. No default. |
 | `exclude` | `None` | dimension names to drop (for ablations) |
 | `annotators_per_identity` | `10` | replication factor per unique identity combination |
-| `scale` | `5` | max rating value; ratings are integers in `[1, scale]` |
-| `toxic_range` | `(4, 5)` | rating range for the toxic pole in the High tier |
-| `civil_range` | `(1, 2)` | rating range for the civil pole in the High tier |
-| `neutral_range` | `(3, 3)` | reserved for future use |
+
+`scale`, `toxic_range`, `civil_range`, and `neutral_range` must all be passed explicitly — there is no fallback default for any of them.
 
 ### `pool.generate_dataset(...)`
 
@@ -90,7 +112,7 @@ Returns `(dataset, bias_configs)`. Every text's tier and bias config are generat
 pool.pool_size      # int — total annotators
 pool.n_identities    # int — unique demographic combinations
 pool.active_dims     # dict — dimensions after applying exclude
-pool.summary()        # prints full pool config
+pool.summary()        # prints full pool config, including derived Moderate/Low ranges
 
 pool.describe_bias(bias_configs, text_id=0)
 # Text 0 -- tier: high
@@ -136,10 +158,10 @@ DEFAULT_DIMENSIONS = {
 Pass any custom dict to use different axes or values:
 
 ```python
-pool = AnnotatorPool({
-    "politics": ["left", "center", "right"],
-    "age":      ["<25", ">25"],
-})
+pool = AnnotatorPool(
+    {"politics": ["left", "center", "right"], "age": ["<25", ">25"]},
+    scale=5, toxic_range=(4, 5), civil_range=(1, 2), neutral_range=(3, 3),
+)
 # 6 identities → 60 annotators
 ```
 
