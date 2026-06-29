@@ -1,12 +1,19 @@
 """
 Synthetic annotation dataset generator for studying demographic polarization in human labeling.
 
-Builds a pool of annotators with explicit demographic identities and generates structured
-disagreement patterns where rating behavior is governed by per-dimension bias configurations.
+Builds a pool of annotators with explicit demographic identities and generates annotation
+datasets where each text is independently assigned a severity tier (high, moderate, or low
+polarization). Within the High and Moderate tiers, every value of every dimension receives a
+random weight specific to that text; an annotator's combined weight (the geometric mean of
+their weights across all dimensions) determines whether they fall on the toxic or civil side
+of that text's median threshold. This produces genuine intersectional structure: ratings
+depend on an annotator's full demographic profile, not a single dimension, and different
+texts can be explained by different combinations of dimensions at different depths.
 """
 
 import itertools
 import random
+from collections import Counter
 
 import numpy as np
 import pandas as pd
@@ -27,9 +34,17 @@ class AnnotatorPool:
     Synthetic annotator pool for generating polarized rating datasets.
 
     Builds a Cartesian-product pool of demographic identities, then generates
-    annotation datasets where each dimension is randomly assigned either a
-    "polarizing" role (splitting annotators into toxic/civil poles) or a
-    "unimodal" role (converging all annotators toward one rating range).
+    annotation datasets where each text is independently assigned a severity
+    tier:
+
+    - **High**: full-strength weight-based bias config, threshold at the
+      median, wide non-overlapping toxic/civil ranges. Strong bimodal split.
+    - **Moderate**: same weight mechanism, narrower overlapping ranges,
+      producing a softer signal.
+    - **Low**: the negative-control tier. A configurable fraction of Low
+      texts use no demographic split at all (single random peak plus
+      spread); the remainder use the weight mechanism with heavily
+      overlapping ranges. Both sub-cases land near zero polarization.
 
     Parameters
     ----------
@@ -48,19 +63,19 @@ class AnnotatorPool:
         Maximum value on the rating scale (ratings are integers in [1, scale]).
 
     toxic_range : tuple[int, int]
-        (low, high) inclusive range from which toxic-pole annotators draw ratings.
+        (low, high) inclusive range from which High-tier toxic-pole annotators draw ratings.
 
     civil_range : tuple[int, int]
-        (low, high) inclusive range from which civil-pole annotators draw ratings.
+        (low, high) inclusive range from which High-tier civil-pole annotators draw ratings.
 
     neutral_range : tuple[int, int]
-        (low, high) inclusive range used when a unimodal dimension converges to "neutral".
+        Reserved for future use; not currently sampled from directly.
 
     Examples
     --------
     >>> from toxpol.datagen import AnnotatorPool, DEFAULT_DIMENSIONS
     >>> pool = AnnotatorPool(DEFAULT_DIMENSIONS)
-    >>> dataset, bias_config = pool.generate_dataset(n_texts=50, n_annotators_per_text=100)
+    >>> dataset, bias_configs = pool.generate_dataset(n_texts=50, n_annotators_per_text=100)
     >>> dataset.head()
     """
 
@@ -105,45 +120,54 @@ class AnnotatorPool:
         return pool
 
     # ------------------------------------------------------------------
-    # Bias configuration
+    # Bias mechanics (High / Moderate / Low-weighted tiers)
     # ------------------------------------------------------------------
 
-    def _generate_bias_config(self, polarizing_prob=0.7):
+    def _generate_bias_config(self):
         """
-        Randomly assign each active dimension a role for one dataset instance.
+        Assign a random weight to each dimension value for a single text.
 
-        A "polarizing" dimension splits its values into a toxic pole and a civil
-        pole. An "unimodal" dimension converges all annotators toward one range.
-
-        Returns
-        -------
-        dict
-            Keys are dimension names. Each value is a dict with:
-            - role: "polarizing" | "unimodal"
-            - toxic_pole / civil_pole (if polarizing): lists of dimension values
-            - convergence (if unimodal): "toxic" | "civil" | "neutral"
+        Higher weight pushes an annotator toward the toxic pole, lower
+        weight toward civil, relative to the rest of the pool. Weights
+        are independent across dimensions and regenerated fresh for
+        every text.
         """
         config = {}
         for dim, values in self.active_dims.items():
-            role = random.choices(
-                ["polarizing", "unimodal"],
-                weights=[polarizing_prob, 1 - polarizing_prob],
-            )[0]
-            if role == "polarizing":
-                shuffled = values.copy()
-                random.shuffle(shuffled)
-                split = random.randint(1, len(shuffled) - 1)
-                config[dim] = {
-                    "role": "polarizing",
-                    "toxic_pole": shuffled[:split],
-                    "civil_pole": shuffled[split:],
-                }
-            else:
-                config[dim] = {
-                    "role": "unimodal",
-                    "convergence": random.choice(["toxic", "civil", "neutral"]),
-                }
+            config[dim] = {value: random.uniform(0.5, 2.0) for value in values}
         return config
+
+    def _get_combined_weight(self, annotator, bias_config):
+        """Geometric mean of weights across all dimensions for one annotator."""
+        score = 1.0
+        for dim in self.active_dims:
+            score *= bias_config[dim][annotator[dim]]
+        return score ** (1 / len(self.active_dims))
+
+    def _annotate(self, annotator, bias_config, threshold, toxic_range, civil_range, noise=0.05):
+        """
+        Rate toxic if the annotator's combined weight exceeds the text's
+        threshold, civil otherwise. Global noise adds random deviations.
+        """
+        score = self._get_combined_weight(annotator, bias_config)
+        rating_range = toxic_range if score > threshold else civil_range
+
+        if random.random() < noise:
+            return random.randint(1, self.scale)
+
+        return random.randint(*rating_range)
+
+    def _annotate_low_unimodal(self, peak, spread, noise=0.05):
+        """
+        Single shared peak anywhere on the scale, with natural spread.
+        No demographic split: every annotator draws from the same
+        distribution regardless of identity. Used for the unimodal
+        sub-case of the Low severity tier.
+        """
+        if random.random() < noise:
+            return random.randint(1, self.scale)
+        rating = int(round(np.random.normal(loc=peak, scale=spread)))
+        return int(np.clip(rating, 1, self.scale))
 
     # ------------------------------------------------------------------
     # Public API
@@ -153,32 +177,38 @@ class AnnotatorPool:
         self,
         n_texts=100,
         n_annotators_per_text=100,
-        noise=0.1,
-        polarizing_prob=0.7,
+        noise=0.05,
+        high_ratio=0.60,
+        moderate_ratio=0.20,
+        low_ratio=0.20,
+        low_unimodal_share=0.40,
     ):
         """
-        Generate a synthetic annotation dataset.
-
-        A single bias configuration is drawn for the entire dataset (all texts
-        share the same demographic polarization structure). Each text is then
-        annotated by a random subset of the pool.
+        Generate a synthetic annotation dataset with three polarization
+        severity tiers, mixed according to the given ratios. Each text is
+        an independent draw: its tier, and (for High/Moderate/Low-weighted
+        texts) its bias config, are generated fresh per text.
 
         Parameters
         ----------
         n_texts : int
-            Number of texts to annotate. Must be >= 1.
+            Number of texts to generate. Must be >= 1.
 
         n_annotators_per_text : int
             Annotators sampled per text (without replacement).
             Must be <= pool size (annotators_per_identity * number_of_identities).
 
         noise : float in [0, 1]
-            Probability that any annotator ignores the bias config and draws
-            a uniformly random rating instead.
+            Probability that any given annotator's rating is instead drawn
+            uniformly at random from the full scale.
 
-        polarizing_prob : float in [0, 1]
-            Prior probability that each dimension is assigned a "polarizing"
-            role in the bias config (vs. "unimodal").
+        high_ratio, moderate_ratio, low_ratio : float
+            Mixing ratios for the three severity tiers. Must sum to 1.0.
+
+        low_unimodal_share : float in [0, 1]
+            Within the Low tier, the fraction of texts that use the true
+            unimodal (no demographic split) sub-case rather than the
+            heavily-overlapped weighted sub-case.
 
         Returns
         -------
@@ -186,9 +216,10 @@ class AnnotatorPool:
             One row per (text_id, annotator_id) pair. Columns:
             text_id, annotator_id, <all active dimension columns>, rating.
 
-        bias_config : dict
-            The bias configuration used for this dataset. See
-            `_generate_bias_config` for the structure.
+        bias_configs : dict[int, dict]
+            Ground truth per text_id: its severity tier, sub-case (where
+            applicable), bias config (or None for true unimodal), and
+            threshold (where applicable).
         """
         if n_annotators_per_text > len(self.pool):
             raise ValueError(
@@ -196,58 +227,69 @@ class AnnotatorPool:
                 f"({len(self.pool)}). Reduce n_annotators_per_text or increase "
                 f"annotators_per_identity."
             )
+        assert abs(high_ratio + moderate_ratio + low_ratio - 1.0) < 1e-6, \
+            "high_ratio + moderate_ratio + low_ratio must sum to 1.0"
 
-        bias_config = self._generate_bias_config(polarizing_prob)
+        records = []
+        bias_configs = {}
 
-        # Precompute vote lookup for each polarizing dimension:
-        # maps annotator value → "toxic" | "civil"
-        vote_maps = {}
-        unimodal_fallback = None
-        for dim, config in bias_config.items():
-            if config["role"] == "polarizing":
-                vote_maps[dim] = (
-                    {v: "toxic" for v in config["toxic_pole"]}
-                    | {v: "civil" for v in config["civil_pole"]}
-                )
-            elif unimodal_fallback is None:
-                unimodal_fallback = config["convergence"]
-
-        frames = []
         for text_id in range(n_texts):
+            tier = random.choices(
+                ["high", "moderate", "low"],
+                weights=[high_ratio, moderate_ratio, low_ratio]
+            )[0]
+
             sampled = self.pool.sample(n=n_annotators_per_text, replace=False)
 
-            if vote_maps:
-                # Vectorised majority vote across all polarizing dimensions
-                toxic = np.zeros(len(sampled), dtype=np.int32)
-                civil = np.zeros(len(sampled), dtype=np.int32)
-                for dim, vmap in vote_maps.items():
-                    mapped = sampled[dim].map(vmap)
-                    toxic += (mapped == "toxic").values
-                    civil += (mapped == "civil").values
-                label = np.where(toxic > civil, 0,
-                         np.where(civil > toxic, 1, 2))  # 0=toxic,1=civil,2=neutral
-            else:
-                fb = {"toxic": 0, "civil": 1, "neutral": 2}[unimodal_fallback or "neutral"]
-                label = np.full(len(sampled), fb, dtype=np.int32)
+            # Low tier splits further into a true-unimodal sub-case and a
+            # heavily-overlapping weighted sub-case, both landing near zero
+            if tier == "low" and random.random() < low_unimodal_share:
+                peak = random.randint(1, self.scale)
+                spread = random.uniform(0.6, 1.2)
+                bias_configs[text_id] = {
+                    "tier": tier, "subcase": "unimodal", "config": None,
+                    "peak": peak, "spread": spread
+                }
+                for annotator_id, annotator in sampled.iterrows():
+                    rating = self._annotate_low_unimodal(peak, spread, noise)
+                    records.append({
+                        "text_id": text_id, "annotator_id": annotator_id,
+                        **annotator.to_dict(), "rating": rating
+                    })
+                continue
 
-            # Draw ratings from the appropriate range per label
-            ranges = [self.toxic_range, self.civil_range, self.neutral_range]
-            ratings = np.array([
-                np.random.randint(ranges[l][0], ranges[l][1] + 1) for l in label
-            ])
+            # High / Moderate, and the weighted sub-case of Low: generate
+            # a weight-based bias config and tier-specific pole ranges
+            bias_config = self._generate_bias_config()
+            scores = [
+                self._get_combined_weight(annotator, bias_config)
+                for _, annotator in self.pool.iterrows()
+            ]
+            threshold = np.median(scores)
 
-            # Inject noise
-            noise_mask = np.random.random(len(sampled)) < noise
-            ratings[noise_mask] = np.random.randint(1, self.scale + 1, noise_mask.sum())
+            if tier == "high":
+                toxic_range, civil_range = self.toxic_range, self.civil_range
+                subcase = None
+            elif tier == "moderate":
+                toxic_range, civil_range = (4, 5), (1, 3)
+                subcase = None
+            else:  # low, weighted sub-case
+                toxic_range, civil_range = (3, 5), (1, 3)
+                subcase = "weighted"
 
-            frame = sampled.copy()
-            frame.insert(0, "text_id", text_id)
-            frame["rating"] = ratings
-            frames.append(frame)
+            bias_configs[text_id] = {
+                "tier": tier, "subcase": subcase, "config": bias_config, "threshold": threshold
+            }
 
-        dataset = pd.concat(frames)
-        dataset.index.name = "annotator_id"
-        return dataset, bias_config
+            for annotator_id, annotator in sampled.iterrows():
+                rating = self._annotate(annotator, bias_config, threshold, toxic_range, civil_range, noise)
+                records.append({
+                    "text_id": text_id, "annotator_id": annotator_id,
+                    **annotator.to_dict(), "rating": rating
+                })
+
+        dataset = pd.DataFrame(records)
+        return dataset, bias_configs
 
     # ------------------------------------------------------------------
     # Convenience / diagnostics
@@ -269,26 +311,24 @@ class AnnotatorPool:
         print(f"Unique identities : {self.n_identities}")
         print(f"Annotators/identity: {self.annotators_per_identity}")
         print(f"Pool size          : {self.pool_size}")
-        print(f"Rating scale       : 1–{self.scale}")
+        print(f"Rating scale       : 1-{self.scale}")
         print(f"  toxic_range      : {self.toxic_range}")
         print(f"  civil_range      : {self.civil_range}")
         print(f"  neutral_range    : {self.neutral_range}")
 
-    def describe_bias(self, bias_config):
-        """Pretty-print the bias config as a readable table."""
-        col_w = max(len(d) for d in bias_config) + 2
-        print(f"{'dimension':<{col_w}} {'role':<12} details")
-        print("-" * 60)
-        for dim, config in bias_config.items():
-            if config["role"] == "polarizing":
-                details = (
-                    f"toxic={config['toxic_pole']}  civil={config['civil_pole']}"
-                )
-            else:
-                details = f"convergence={config['convergence']}"
-            print(f"{dim:<{col_w}} {config['role']:<12} {details}")
+    def describe_bias(self, bias_configs, text_id=0):
+        """Pretty-print one text's bias config (tier, sub-case, weights) as a readable table."""
+        cfg = bias_configs[text_id]
+        print(f"Text {text_id} -- tier: {cfg['tier']}" + (f" ({cfg['subcase']})" if cfg.get('subcase') else ""))
+        if cfg["config"] is None:
+            print(f"  unimodal peak={cfg['peak']}  spread={cfg['spread']:.2f}")
+            return
+        print(f"  threshold (median combined weight): {cfg['threshold']:.3f}")
+        for dim, weights in cfg["config"].items():
+            weight_str = "  ".join(f"{v}={w:.2f}" for v, w in weights.items())
+            print(f"  {dim:<12} {weight_str}")
 
-    def analyze(self, dataset, bias_config):
+    def analyze(self, dataset, bias_configs):
         """
         Compute nDFU scores for every text, overall and per dimension value.
 
@@ -324,50 +364,51 @@ class AnnotatorPool:
             results[text_id] = text_results
         return results
 
-    def summarize(self, dataset, bias_config, text_id=0):
+    def summarize(self, dataset, bias_configs, text_id=0):
         """
-        Print nDFU scores for one text, grouped by dimension, with bias roles shown.
-
-        Calls analyze() internally. Requires `ndfu`.
+        Print nDFU scores for one text, grouped by dimension, with its
+        severity tier shown. Calls analyze() internally. Requires `ndfu`.
         """
-        results = self.analyze(dataset, bias_config)
+        results = self.analyze(dataset, bias_configs)
         text = results[text_id]
-        print(f"Text {text_id} — overall nDFU: {text['overall']:.3f}\n")
+        tier = bias_configs[text_id]["tier"]
+        print(f"Text {text_id} (tier: {tier}) -- overall nDFU: {text['overall']:.3f}\n")
         for dim, values in text.items():
             if dim == "overall":
                 continue
-            role = bias_config[dim]["role"]
-            print(f"{dim} ({role}):")
+            print(f"{dim}:")
             for value, score in values.items():
                 print(f"  {value}: {score:.3f}")
             print()
 
-    def summarize_all(self, dataset, bias_config):
+    def summarize_all(self, dataset, bias_configs):
         """
-        Print mean nDFU per dimension value, aggregated across all texts.
-
-        Gives a compact cross-text view: instead of per-text scores, each
-        dimension value shows its average nDFU and the spread (min–max).
-        Useful for seeing which demographic groups consistently disagree
-        more across the whole dataset.
-
-        Calls analyze() internally. Requires `ndfu`.
+        Print mean nDFU per severity tier and per dimension value,
+        aggregated across all texts. Calls analyze() internally.
+        Requires `ndfu`.
         """
-        results = self.analyze(dataset, bias_config)
+        results = self.analyze(dataset, bias_configs)
         n_texts = len(results)
 
         overall_scores = [results[t]["overall"] for t in results]
-        print(f"Overall nDFU — mean: {np.mean(overall_scores):.3f}  "
-              f"min: {np.min(overall_scores):.3f}  "
-              f"max: {np.max(overall_scores):.3f}  "
+        print(f"Overall nDFU -- mean: {np.mean(overall_scores):.3f}  "
+              f"median: {np.median(overall_scores):.3f}  "
               f"(across {n_texts} texts)\n")
 
+        tier_counts = Counter(bias_configs[t]["tier"] for t in bias_configs)
+        print(f"Tier counts: {dict(tier_counts)}\n")
+
+        for tier in ("high", "moderate", "low"):
+            scores = [results[t]["overall"] for t in results if bias_configs[t]["tier"] == tier]
+            if scores:
+                print(f"{tier:<10} mean: {np.mean(scores):.3f}  "
+                      f"min: {np.min(scores):.3f}  max: {np.max(scores):.3f}  (n={len(scores)})")
+        print()
+
         for dim in self.active_dims:
-            role = bias_config[dim]["role"]
-            print(f"{dim} ({role}):")
+            print(f"\n{dim}:")
             for value in self.active_dims[dim]:
                 scores = [results[t][dim][value] for t in results if value in results[t][dim]]
-                print(f"  {value:<15} mean: {np.mean(scores):.3f}  "
-                      f"min: {np.min(scores):.3f}  "
-                      f"max: {np.max(scores):.3f}")
-            print()
+                if scores:
+                    print(f"  {value:<15} mean: {np.mean(scores):.3f}  "
+                          f"min: {np.min(scores):.3f}  max: {np.max(scores):.3f}")

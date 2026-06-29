@@ -53,22 +53,35 @@ def test_n_annotators_exceeds_pool_raises():
         pool.generate_dataset(n_texts=1, n_annotators_per_text=pool.pool_size + 1)
 
 
-def test_bias_config_keys_match_active_dims():
+def test_invalid_ratio_sum_raises():
     pool = AnnotatorPool(SMALL_DIMS)
-    _, bias_config = pool.generate_dataset(n_texts=2, n_annotators_per_text=5)
-    assert set(bias_config.keys()) == set(pool.active_dims.keys())
+    with pytest.raises(AssertionError, match="sum to 1.0"):
+        pool.generate_dataset(
+            n_texts=2, n_annotators_per_text=5,
+            high_ratio=0.5, moderate_ratio=0.3, low_ratio=0.3,
+        )
 
 
-def test_bias_config_roles_are_valid():
+def test_bias_configs_keys_match_text_ids():
     pool = AnnotatorPool(SMALL_DIMS)
-    _, bias_config = pool.generate_dataset(n_texts=2, n_annotators_per_text=5)
-    for dim, config in bias_config.items():
-        assert config["role"] in ("polarizing", "unimodal")
-        if config["role"] == "polarizing":
-            assert "toxic_pole" in config
-            assert "civil_pole" in config
+    n = 5
+    dataset, bias_configs = pool.generate_dataset(n_texts=n, n_annotators_per_text=5)
+    assert set(bias_configs.keys()) == set(range(n))
+
+
+def test_bias_config_tiers_are_valid():
+    pool = AnnotatorPool(SMALL_DIMS)
+    _, bias_configs = pool.generate_dataset(n_texts=10, n_annotators_per_text=5)
+    for text_id, cfg in bias_configs.items():
+        assert cfg["tier"] in ("high", "moderate", "low")
+        if cfg["tier"] in ("high", "moderate") or cfg.get("subcase") == "weighted":
+            assert cfg["config"] is not None
+            assert "threshold" in cfg
+            assert set(cfg["config"].keys()) == set(pool.active_dims.keys())
         else:
-            assert config["convergence"] in ("toxic", "civil", "neutral")
+            assert cfg["config"] is None
+            assert "peak" in cfg
+            assert "spread" in cfg
 
 
 def test_noise_zero_ratings_in_range():
@@ -88,3 +101,30 @@ def test_default_dimensions():
     pool = AnnotatorPool(DEFAULT_DIMENSIONS)
     assert pool.n_identities == 162
     assert pool.pool_size == 1620
+
+
+def test_tier_ratios_respected_approximately():
+    pool = AnnotatorPool(DEFAULT_DIMENSIONS)
+    n = 200
+    _, bias_configs = pool.generate_dataset(
+        n_texts=n, n_annotators_per_text=50,
+        high_ratio=0.6, moderate_ratio=0.2, low_ratio=0.2,
+    )
+    tiers = [cfg["tier"] for cfg in bias_configs.values()]
+    high_share = tiers.count("high") / n
+    assert 0.45 < high_share < 0.75  # generous tolerance for a stochastic draw
+
+
+def test_severity_ordering_high_gt_moderate_gt_low():
+    pool = AnnotatorPool(DEFAULT_DIMENSIONS)
+    dataset, bias_configs = pool.generate_dataset(
+        n_texts=150, n_annotators_per_text=100,
+        high_ratio=0.6, moderate_ratio=0.2, low_ratio=0.2,
+    )
+    results = pool.analyze(dataset, bias_configs)
+    tier_scores = {"high": [], "moderate": [], "low": []}
+    for text_id, cfg in bias_configs.items():
+        tier_scores[cfg["tier"]].append(results[text_id]["overall"])
+    import numpy as np
+    means = {t: np.mean(s) for t, s in tier_scores.items() if s}
+    assert means["high"] > means["moderate"] > means["low"]
