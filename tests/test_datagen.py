@@ -116,6 +116,7 @@ def test_tier_ratios_respected_approximately():
 
 
 def test_severity_ordering_high_gt_moderate_gt_low():
+    pytest.importorskip("ndfu")
     pool = AnnotatorPool(DEFAULT_DIMENSIONS)
     dataset, bias_configs = pool.generate_dataset(
         n_texts=150, n_annotators_per_text=100,
