@@ -1,16 +1,17 @@
-# toxpol-nlp
+# polartox
 
 ![Python](https://img.shields.io/badge/python-3.9%20|%203.10%20|%203.11%20|%203.12-blue)
-[![PyPI](https://img.shields.io/pypi/v/toxpol-nlp)](https://pypi.org/project/toxpol-nlp/)
+[![PyPI](https://img.shields.io/pypi/v/polartox)](https://pypi.org/project/polartox/)
 
-
-
-NLP toolkit for **toxicity and polarization research**. Provides tools for synthetic dataset generation and polarization detection in human annotation studies.
+NLP toolkit for **annotator polarization research**. Provides tools for synthetic dataset generation and polarization detection in human annotation studies.
 
 ## Install
 
 ```bash
-pip install toxpol-nlp
+pip install polartox
+
+# with nDFU support (Pavlopoulos & Likas, 2024 -- github.com/ipavlopoulos/ndfu)
+pip install "polartox[ndfu]"
 ```
 
 ## Repository Structure
@@ -18,7 +19,7 @@ pip install toxpol-nlp
 ```
 data_gen/          synthetic annotation dataset generator
 polarized_trees/   Polarized Trees detection algorithm
-toxpol/            installable package (source code)
+polartox/          installable package (source code)
 ```
 
 ### `data_gen/`
@@ -35,8 +36,10 @@ The Polarized Trees detection algorithm. Given an annotation dataset, it identif
 
 | Module | Description | Status |
 |---|---|---|
-| `toxpol.datagen` | Synthetic annotator pool with injected, ground-truth polarization | Stable |
-| `toxpol.trees` | Polarized Trees detection algorithm | Coming soon |
+| `polartox.datagen` | Synthetic annotator pool with injected, ground-truth polarization | Stable |
+| `polartox.trees` | Polarized Trees detection algorithm | Coming soon |
+
+nDFU scoring is provided by the collaborative [`ndfu`](https://github.com/ipavlopoulos/ndfu) package (Pavlopoulos & Likas, 2024) rather than reimplemented here — install via the `[ndfu]` extra above.
 
 ## Changelog
 

@@ -1,146 +1,133 @@
-# `toxpol.datagen` — Synthetic Annotation Dataset Generator
+# `polartox.datagen` — Synthetic Annotation Dataset Generator
 
-Builds a pool of annotators with explicit demographic identities and generates annotation datasets where every text is independently assigned a **severity tier** (High, Moderate, or Low polarization), with per-text random weights producing genuine intersectional disagreement.
+Builds a pool of annotators with explicit demographic identities and generates annotation datasets where every text independently gets **k active dimensions** (0–4) that drive its disagreement — `k=0` is a true unimodal negative control, `k>0` texts have a random subset of dimensions, each with its own random toxic/civil lean split and intensity.
 
-Because the bias configuration is returned alongside the dataset, recovery can be tested directly against ground truth: did the algorithm find the right dimensions, at the right depth, for texts of each severity tier?
+Each active dimension's pull is governed by a single continuous **intensity** parameter, interpolating between the uniform distribution (no signal) and a fully deterministic pole (maximal signal). Identities' final rating distributions are built by taking the **elementwise product** of their active-dimension shapes — signal composes rather than averages away, so the dataset reaches the full nDFU range instead of collapsing toward the middle.
+
+Because the generative config is returned alongside the dataset, recovery can be tested directly against ground truth: did the algorithm find the right dimensions, at the right depth, for texts of varying k and intensity?
 
 ## Install
 
 ```bash
-pip install toxpol-nlp
-
-# with nDFU support (for analysis methods)
-pip install "toxpol-nlp[ndfu]"
+pip install polartox
 ```
 
 ## Quickstart
 
 ```python
-from toxpol.datagen import AnnotatorPool, DEFAULT_DIMENSIONS
+from polartox.datagen import AnnotatorPool, DEFAULT_DIMENSIONS, DEFAULT_DEPTH_WEIGHTS, DEFAULT_INTENSITY_RANGE
 
 pool = AnnotatorPool(
     dimensions=DEFAULT_DIMENSIONS,
-    scale=5,                      # ratings are integers in [1, scale] -- mandatory
-    toxic_range=(4, 5),           # rating range for the toxic pole in the High tier -- mandatory
-    civil_range=(1, 2),           # rating range for the civil pole in the High tier -- mandatory
-    neutral_range=(3, 3),         # reserved for future use -- mandatory
-    exclude=None,                 # drop dimension names, e.g. ["education"]
-    annotators_per_identity=10,   # annotators replicated per unique identity
+    scale=5,                              # ratings are integers in [1, scale] -- mandatory
+    intensity_range=DEFAULT_INTENSITY_RANGE,  # (alpha_min, alpha_max), each active dim draws its own alpha -- mandatory
+    depth_weights=DEFAULT_DEPTH_WEIGHTS,      # P(k active dims) for k = 0..4 -- mandatory
+    annotators_per_identity=10,           # annotators replicated per unique identity
 )
 pool.summary()
-# Active dimensions : ['gender', 'politics', 'age', 'education', 'orientation']
+# Dimensions        : ['gender', 'politics', 'age', 'education', 'orientation']
 # Pool size          : 1620  (162 identities × 10 annotators each)
 
-dataset, bias_configs = pool.generate_dataset(
+result = pool.generate_dataset(
     n_texts=100,                  # number of texts to generate
-    n_annotators_per_text=150,    # sampled per text; must be ≤ pool.pool_size
+    n_annotators_per_text=None,   # None uses the full pool; pass an int to subsample instead
     noise=0.05,                   # prob. any rating is drawn fully at random
-    high_ratio=0.60,              # share of texts with strong, non-overlapping polarization
-    moderate_ratio=0.20,          # share with the same mechanism but a softer signal
-    low_ratio=0.20,                # share with little to no polarization (negative control)
-    low_unimodal_share=0.40,      # within Low, fraction with no demographic split at all
+    seed=42,
 )
-# dataset columns: text_id, annotator_id, <dimensions>, rating
-# bias_configs: ground-truth tier, sub-case, weights, and threshold per text
+
+# Unpacks like the classic (dataset, ground_truth) tuple:
+dataset, ground_truth = result
+
+# ...or use it directly:
+result.head()
+result.describe_text(text_id=0)
 ```
 
 ## How it works
 
-Every text is independently assigned one of three severity tiers, mixed according to `high_ratio` / `moderate_ratio` / `low_ratio` (which must sum to 1.0):
+For every text, independently:
 
-- **High** — every value of every dimension gets a fresh random weight (drawn from `(0.5, 2.0)`). An annotator's combined weight is the geometric mean of their weights across all dimensions. A threshold is computed as the median combined weight across the **full pool**; annotators above it rate from `toxic_range`, below it from `civil_range`. Because every dimension contributes simultaneously, no single dimension is privileged — the combination of dimensions that best explains the disagreement varies from text to text.
-- **Moderate** — the same weight mechanism, but with narrower, more overlapping ranges than High, producing a softer signal that should resolve in fewer splits.
-- **Low** — a `low_unimodal_share` fraction of Low texts use no demographic split at all (every sampled annotator draws from a single random peak on the scale, with natural spread — the true negative control). The remainder use the weight mechanism with even more heavily overlapping ranges than Moderate, producing only marginal residual signal.
+1. **Sample k** — how many dimensions are active, drawn from `depth_weights` (a distribution over 0..len(dimensions)). `k=0` is the negative control: every sampled annotator draws from a single shared random peak on the scale, with natural spread — no demographic structure at all.
+2. **Sample which k dimensions** are active, uniformly at random from the full set — no dimension is privileged across the dataset.
+3. For each active dimension, **randomly split its values** into a toxic-leaning group and a civil-leaning group (the split is re-drawn per text — no value is permanently "the toxic one").
+4. For each active dimension, **draw an intensity `alpha`** uniformly from `intensity_range`. `alpha=0` means that dimension contributes no signal (identical to uniform); `alpha=1` means it deterministically forces its pole.
+5. Each identity's final rating distribution is the **elementwise product** of the shapes implied by its value on every active dimension, renormalized. Agreeing leans sharpen the result; conflicting leans pull it back toward the middle — this is what produces genuine intersectional behavior without hand-specifying every combination.
 
-`noise` applies uniformly across all tiers: with that probability, any individual annotator's rating is instead drawn fully at random from the whole scale, regardless of tier or pole.
+`noise` applies uniformly regardless of k: with that probability, any individual annotator's rating is instead drawn fully at random from the whole scale.
 
-### Moderate and Low ranges are derived, not separately configured
+### Why elementwise product instead of averaging
 
-You only ever specify `toxic_range`/`civil_range` once, for the High tier. Moderate's and Low's ranges are automatically derived from them in `__init__`, shifted toward the center by a step proportional to `scale` — so they scale correctly no matter what rating scale you use, without needing four extra parameters:
-
-```python
-pool.moderate_toxic_range   # derived from toxic_range
-pool.moderate_civil_range   # derived from civil_range
-pool.low_toxic_range        # derived from toxic_range, shifted further
-pool.low_civil_range        # derived from civil_range, shifted further
-```
-
-For example, with `scale=5, toxic_range=(4,5), civil_range=(1,2)`:
-
-```python
-moderate_toxic_range = (4, 5)   # same as High
-moderate_civil_range = (1, 3)
-low_toxic_range      = (3, 5)
-low_civil_range      = (1, 3)
-```
+An earlier version of this generator combined per-dimension signals by taking the geometric mean of per-value weights, then thresholding at the population median. Averaging washes out variance — sampling many annotations from a large, diverse pool collapses toward the aggregate regardless of injected structure (a consequence of the Central Limit Theorem in log-space), capping achievable nDFU well below 1. Multiplying distributions is an *intersection* of constraints, not a lossy aggregate: it composes signal instead of diluting it, which is what lets this generator reach the full nDFU range.
 
 ## API
 
-### `AnnotatorPool(dimensions, scale, toxic_range, civil_range, neutral_range, ...)`
+### `AnnotatorPool(dimensions, scale, intensity_range, depth_weights, annotators_per_identity)`
 
 | Parameter | Default | Description |
 |---|---|---|
 | `dimensions` | required | `dict[str, list[str]]` — demographic axes and their values |
-| `scale` | required | max rating value; ratings are integers in `[1, scale]`. No default — Moderate/Low ranges are derived from it. |
-| `toxic_range` | required | rating range for the toxic pole in the High tier. No default — also the basis for Moderate/Low's toxic ranges. |
-| `civil_range` | required | rating range for the civil pole in the High tier. No default — also the basis for Moderate/Low's civil ranges. |
-| `neutral_range` | required | reserved for future use. No default. |
-| `exclude` | `None` | dimension names to drop (for ablations) |
-| `annotators_per_identity` | `10` | replication factor per unique identity combination |
+| `scale` | required | max rating value; ratings are integers in `[1, scale]` |
+| `intensity_range` | required | `(alpha_min, alpha_max)`, each in `[0, 1]`. Controls how strongly each active dimension pulls toward its pole. |
+| `depth_weights` | required | `dict[int, float]`, `P(k active dims)` for `k = 0..len(dimensions)`. Must sum to 1. |
+| `annotators_per_identity` | required | replication factor per unique identity combination |
 
-`scale`, `toxic_range`, `civil_range`, and `neutral_range` must all be passed explicitly — there is no fallback default for any of them.
+All parameters are mandatory — there is no silent fallback for any of them. If you want the reference configuration, pass the `DEFAULT_*` constants explicitly, as in the quickstart above.
 
 ### `pool.generate_dataset(...)`
 
 | Parameter | Default | Description |
 |---|---|---|
-| `n_texts` | `100` | number of texts to generate |
-| `n_annotators_per_text` | `100` | annotators sampled per text (without replacement); must be `≤ pool.pool_size` |
+| `n_texts` | required | number of texts to generate |
+| `n_annotators_per_text` | `None` | annotators sampled per text (without replacement). `None`, or any value ≥ `pool.pool_size`, uses the full pool for every text. |
 | `noise` | `0.05` | probability that any annotator's rating is drawn fully at random |
-| `high_ratio` | `0.60` | share of texts assigned the High tier |
-| `moderate_ratio` | `0.20` | share of texts assigned the Moderate tier |
-| `low_ratio` | `0.20` | share of texts assigned the Low tier |
-| `low_unimodal_share` | `0.40` | within Low, the fraction using the true-unimodal sub-case rather than the weighted sub-case |
+| `seed` | `0` | random seed |
 
-`high_ratio + moderate_ratio + low_ratio` must sum to 1.0. These are *probabilities* applied independently per text, not exact counts — with 100 texts and `high_ratio=0.60`, expect approximately (not exactly) 60 High-tier texts.
+Returns a `GeneratedDataset`.
 
-Returns `(dataset, bias_configs)`. Every text's tier and bias config are generated independently — call once for a full dataset with built-in heterogeneity across severity levels.
+### `GeneratedDataset`
+
+The return value of `generate_dataset`. Unpacks as `(dataset, ground_truth)` for backward compatibility, and also supports:
+
+```python
+result.data              # the underlying pd.DataFrame
+result.ground_truth       # the underlying dict[int, dict]
+
+result.head(n=5)          # dataset.head(n)
+result.tail(n=5)          # dataset.tail(n)
+result.sample(n=5, **kw)  # dataset.sample(n, **kw)
+
+result.text_ids_by_k(k)   # list of text_ids with exactly k active dimensions
+
+result.describe_text(text_id)
+# Text 3  (n_annotators=1620)
+#   k = 2
+#   active_dims = ['politics', 'age']
+#   politics     alpha=0.74  lean: left=civil, center=civil, right=toxic
+#   age          alpha=0.55  lean: <25=toxic, 25-50=toxic, >50=civil
+#   rating counts: {1: 210, 2: 188, 3: 240, 4: 401, 5: 581}
+```
+
+`ground_truth[text_id]` is a dict:
+- for `k=0` texts: `{"active_dims": [], "peak": int, "spread": float}`
+- for `k>0` texts: `{"active_dims": [...], "lean": {dim: {value: "toxic"/"civil"}}, "alpha": {dim: float}}`
 
 ### Diagnostics
 
 ```python
-pool.pool_size      # int — total annotators
-pool.n_identities    # int — unique demographic combinations
-pool.active_dims     # dict — dimensions after applying exclude
-pool.summary()        # prints full pool config, including derived Moderate/Low ranges
-
-pool.describe_bias(bias_configs, text_id=0)
-# Text 0 -- tier: high
-#   threshold (median combined weight): 1.124
-#   gender       male=1.87  female=1.80  non-binary=0.82
-#   politics     left=0.71  center=1.23  right=0.88
-#   ...
-
-pool.summarize(dataset, bias_configs, text_id=0)
-# Text 0 (tier: high) -- overall nDFU: 0.735
-# gender:
-#   male: 0.310
-#   female: 0.360
-#   ...
-
-results = pool.analyze(dataset, bias_configs)  # raw nDFU scores
-# results[text_id]["overall"]      -> float
-# results[text_id][dim][value]     -> float
-
-pool.summarize_all(dataset, bias_configs)
-# Overall nDFU -- mean: 0.459  median: 0.559  (across 100 texts)
-# Tier counts: {'high': 61, 'moderate': 19, 'low': 20}
-# high       mean: 0.735  min: 0.485  max: 0.964  (n=61)
-# moderate   mean: 0.109  min: 0.000  max: 0.269  (n=19)
-# low        mean: 0.090  min: 0.000  max: 0.235  (n=20)
+pool.pool_size       # int -- total annotators
+pool.n_identities     # int -- unique demographic combinations
+pool.summary()         # prints full pool config
 ```
 
-`analyze()`, `summarize()`, and `summarize_all()` require `pip install "toxpol-nlp[ndfu]"`.
+nDFU scoring is provided by the external [`ndfu`](https://github.com/ipavlopoulos/ndfu) package (install via `pip install "polartox[ndfu]"`):
+
+```python
+from ndfu import dfu, pdf
+
+text_data = dataset[dataset["text_id"] == 0]
+hist = pdf(text_data["rating"].tolist(), range(1, pool.scale + 1))
+score = dfu(hist)
+```
 
 ## Default Dimensions
 
@@ -159,8 +146,11 @@ Pass any custom dict to use different axes or values:
 
 ```python
 pool = AnnotatorPool(
-    {"politics": ["left", "center", "right"], "age": ["<25", ">25"]},
-    scale=5, toxic_range=(4, 5), civil_range=(1, 2), neutral_range=(3, 3),
+    dimensions={"politics": ["left", "center", "right"], "age": ["<25", ">25"]},
+    scale=5,
+    intensity_range=(0.3, 1.0),
+    depth_weights={0: 0.1, 1: 0.5, 2: 0.4},
+    annotators_per_identity=10,
 )
 # 6 identities → 60 annotators
 ```
@@ -168,3 +158,17 @@ pool = AnnotatorPool(
 ## Demo
 
 See [`datagen_demo.ipynb`](datagen_demo.ipynb) for an end-to-end walkthrough with visualizations.
+
+## Migrating from `polartox`
+
+This package replaces the earlier severity-tier / weight-threshold mechanism from `polartox` entirely. Key differences:
+
+| Old (`polartox`) | New (`polartox.datagen`) |
+|---|---|
+| `high_ratio` / `moderate_ratio` / `low_ratio` tiers | `depth_weights` over `k` (number of active dims) |
+| `toxic_range` / `civil_range` / `neutral_range` | `intensity_range` (continuous `alpha`) |
+| Geometric mean of weights + median threshold | Elementwise product of per-dimension shapes |
+| Returns `(dataset, bias_configs)` tuple | Returns `GeneratedDataset` (still unpacks as a tuple) |
+| `pool.describe_bias`, `pool.analyze`, `pool.summarize`, `pool.summarize_all` | `result.describe_text(id)`; nDFU via the external `ndfu` package |
+
+The old mechanism is no longer maintained; its known limitation (nDFU capped well below 1 due to CLT-driven averaging) is what motivated this rewrite.
