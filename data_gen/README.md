@@ -92,13 +92,13 @@ The return value of `generate_dataset`. Unpacks as `(dataset, ground_truth)` for
 result.data              # the underlying pd.DataFrame
 result.ground_truth       # the underlying dict[int, dict]
 
-result.head(n=5)          # dataset.head(n)
-result.tail(n=5)          # dataset.tail(n)
-result.sample(n=5, **kw)  # dataset.sample(n, **kw)
+result.head(5)                     # same as result.data.head(5)
+result.tail(5)                     # same as result.data.tail(5)
+result.sample(5, random_state=0)   # same as result.data.sample(5, random_state=0)
 
-result.text_ids_by_k(k)   # list of text_ids with exactly k active dimensions
+result.text_ids_by_k(2)            # list of text_ids with exactly 2 active dimensions
 
-result.describe_text(text_id)
+result.describe_text(3)
 # Text 3  (n_annotators=1620)
 #   k = 2
 #   active_dims = ['politics', 'age']

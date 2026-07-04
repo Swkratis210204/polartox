@@ -3,7 +3,16 @@
 All notable changes to this project are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [0.1.0] — Unreleased
+## [0.1.1] — 2026-07-04
+
+### Fixed
+- `GeneratedDataset.describe_text()` no longer leaks numpy string reprs (`np.str_(...)`) into printed dimension names; `ground_truth`'s `active_dims` now stores plain Python `str` instead of numpy string objects.
+- `describe_text()` now explains what `alpha` means inline (`intensity: 0 = no effect, 1 = fully deterministic pole`) and formats lean/rating-count output more readably.
+- `GeneratedDataset.text_ids_by_k()` now prints a truncated, readable summary (count + first N ids) instead of dumping the full list, while still returning the complete list for programmatic use.
+
+---
+
+## [0.1.0] — 2026-07-04
 
 ### Changed
 - Full rewrite and rename from `polartox`. This is a new baseline, not a

@@ -74,9 +74,17 @@ class GeneratedDataset:
     def sample(self, n=5, **kwargs):
         return self.data.sample(n, **kwargs)
 
-    def text_ids_by_k(self, k):
-        """Return all text_ids with exactly k active dimensions."""
-        return [tid for tid, cfg in self.ground_truth.items() if len(cfg["active_dims"]) == k]
+    def text_ids_by_k(self, k, show=10):
+        """
+        Return all text_ids with exactly k active dimensions. Prints a
+        short summary (count + first `show` ids) instead of dumping the
+        full list, since there are often hundreds of matches.
+        """
+        ids = [tid for tid, cfg in self.ground_truth.items() if len(cfg["active_dims"]) == k]
+        preview = ids[:show]
+        suffix = f", ... ({len(ids) - show} more)" if len(ids) > show else ""
+        print(f"k={k}: {len(ids)} texts -> {preview}{suffix}")
+        return ids
 
     def describe_text(self, text_id):
         """
@@ -86,20 +94,20 @@ class GeneratedDataset:
         cfg = self.ground_truth[text_id]
         text_rows = self.data[self.data["text_id"] == text_id]
 
-        print(f"Text {text_id}  (n_annotators={len(text_rows)})")
+        print(f"Text {text_id}  ({len(text_rows)} annotators)")
         if not cfg["active_dims"]:
-            print("  k = 0 (negative control)")
-            print(f"  peak = {cfg['peak']}, spread = {cfg['spread']:.2f}")
+            print("  k = 0 -- negative control, no dimension is active")
+            print(f"  shared peak = {cfg['peak']}, spread = {cfg['spread']:.2f}")
         else:
-            print(f"  k = {len(cfg['active_dims'])}")
-            print(f"  active_dims = {cfg['active_dims']}")
+            print(f"  k = {len(cfg['active_dims'])} active dimension(s)")
+            print("  alpha = how strongly a dimension pulls toward its pole (0 = no effect, 1 = fully deterministic)")
             for dim in cfg["active_dims"]:
-                lean_str = ", ".join(f"{v}={l}" for v, l in cfg["lean"][dim].items())
-                print(f"    {dim:<12} alpha={cfg['alpha'][dim]:.2f}  lean: {lean_str}")
+                lean_str = ", ".join(f"{v} -> {l}" for v, l in cfg["lean"][dim].items())
+                print(f"    - {dim} (alpha={cfg['alpha'][dim]:.2f}): {lean_str}")
 
-        counts = text_rows["rating"].value_counts().sort_index().to_dict()
-        print(f"  rating counts: {counts}")
-
+        counts = text_rows["rating"].value_counts().sort_index()
+        counts_str = ", ".join(f"{rating}: {count}" for rating, count in counts.items())
+        print(f"  rating counts -> {counts_str}")
 
 class AnnotatorPool:
     """
@@ -197,7 +205,7 @@ class AnnotatorPool:
         k = rng.choice(ks, p=ps)
 
         active_dims = (
-            list(rng.choice(self.dim_names, size=k, replace=False)) if k > 0 else []
+            [str(d) for d in rng.choice(self.dim_names, size=k, replace=False)] if k > 0 else []
         )
 
         lean, alpha = {}, {}
