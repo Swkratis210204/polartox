@@ -1,7 +1,7 @@
 # polartox
 
 ![Python](https://img.shields.io/badge/python-3.9%20|%203.10%20|%203.11%20|%203.12-blue)
-[![PyPI](https://img.shields.io/pypi/v/polartox)](https://pypi.org/project/polartox/)
+[![PyPI](https://img.shields.io/badge/PyPI-0.1.1-blue)](https://pypi.org/project/polartox/)
 
 NLP toolkit for **annotator polarization research**. Provides tools for synthetic dataset generation and polarization detection in human annotation studies.
 
