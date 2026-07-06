@@ -92,7 +92,7 @@ If a node's own nDFU is already below `theta_stop`, the tree stops immediately w
 
 `run_full_evaluation` was run end-to-end on three differently-configured synthetic corpora (100 texts each, `theta_filter=0.3`, `min_size_frac=0.03`, `max_depth=6`, PRGbeta), comparing the default configuration against `relative_h=True`:
 
-### v2 — with `relative_h=True, h=0.15` (current recommended default)
+### v2 — with `relative_h=True, h=0.1` (current recommended default)
 
 | Dataset | Config | Retention | Mean leaves | Mean residual nDFU | Indeterminate rate | Jaccard | Precision | Recall | Exact match |
 |---|---|---|---|---|---|---|---|---|---|
