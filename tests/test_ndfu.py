@@ -45,4 +45,7 @@ def test_high_intensity_single_dim_scores_high_with_real_ndfu():
     for text_id, group in dataset.groupby("text_id"):
         hist = pdf(group["rating"].tolist(), range(1, pool.scale + 1))
         score = dfu(hist)
-        assert score > 0.5
+        # Odd-cardinality dims (e.g. 3 values) split 2:1, capping dfu near
+        # 0.5; only even-cardinality dims (e.g. "orientation") reach ~1.0.
+        # 0.4 stays well above the k=0 control's < 0.2 while tolerating both.
+        assert score > 0.4

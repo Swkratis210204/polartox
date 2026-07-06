@@ -26,10 +26,10 @@ classifiers = [
 dependencies = [
     "numpy",
     "pandas",
+    "ndfu",
 ]
 
 [project.optional-dependencies]
-ndfu = ["ndfu"]
 dev  = ["pytest", "build", "twine"]
 
 [project.urls]

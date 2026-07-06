@@ -75,6 +75,23 @@ The paper names PRGmax "the primary splitting criterion." Direct testing found a
 
 If a node's own nDFU is already below `theta_stop`, the tree stops immediately without searching for a split at all — distinct from `h`, which asks whether a *found* split is good enough to use. Without this check, a node that is already essentially resolved can still fragment further on pure noise: removing it from an otherwise-identical run increased one text's tree from 6 leaves to 58, with the extra branches splitting on demographic dimensions that had no real effect on that text. Set `theta_stop=None` to disable and match the literal paper pseudocode.
 
+## Baseline performance across multiple synthetic datasets
+
+To check the method isn't tuned to one specific data-generating setup, `run_full_evaluation` was run end-to-end on three differently-configured synthetic corpora (100 texts each, default `theta_filter=0.3`, `min_size_frac=0.03`, `h=0.05`, `max_depth=6`, PRGbeta):
+
+| Dataset | Config | Retention | Mean leaves | Mean residual nDFU | Indeterminate rate | Jaccard | Precision | Recall | Exact match |
+|---|---|---|---|---|---|---|---|---|---|
+| A — default | `intensity_range=(0.3, 1.0)` | 0.93 | 8.00 | 0.214 | 0.004 | 0.812 | 0.950 | 0.862 | 0.570 |
+| B — weak signal | `intensity_range=(0.2, 0.6)` | 0.88 | 9.33 | 0.259 | 0.017 | 0.846 | 0.917 | 0.929 | 0.614 |
+| C — deep (biased toward k=3,4) | `depth_weights` shifted toward higher k | 0.92 | 8.34 | 0.181 | 0.005 | 0.820 | 0.993 | 0.827 | 0.576 |
+
+Results move in an interpretable, mechanism-consistent direction rather than fluctuating randomly:
+
+- **Weaker overall signal (B)** raises recall (0.929) — with no single dimension dominating as strongly, more true causes get found — but also raises the indeterminate rate (~4x A) and lowers precision slightly, since weaker signal produces more genuinely ambiguous outcomes and occasional spurious splits.
+- **More true causes per text (C)** raises precision to near-perfect (0.993) — the method still rarely invents a fake cause — but lowers recall (0.827), since more true causes per text means more chances for the weakest one to be absorbed by stronger co-occurring causes (a pattern documented throughout development).
+
+No configuration collapses or behaves erratically; jaccard stays in a tight 0.81–0.85 band across all three, supporting this as a usable baseline across corpora with varying signal strength and complexity, not just the default settings.
+
 ## API
 
 ### `PolarizedTreesPipeline(dims, scale, theta_filter, h, max_depth, min_size=None, min_size_frac=0.03, variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15)`

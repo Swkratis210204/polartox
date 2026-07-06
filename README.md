@@ -9,9 +9,6 @@ NLP toolkit for **annotator polarization research**. Provides tools for syntheti
 
 ```bash
 pip install polartox
-
-# with nDFU support (Pavlopoulos & Likas, 2024 -- github.com/ipavlopoulos/ndfu)
-pip install "polartox[ndfu]"
 ```
 
 ## Repository Structure
@@ -39,7 +36,7 @@ The Polarized Trees detection algorithm. Given an annotation dataset, recursivel
 | `polartox.datagen` | Synthetic annotator pool with injected, ground-truth polarization | Stable |
 | `polartox.polarized_trees` | Polarized Trees detection algorithm | Stable (baseline) |
 
-nDFU scoring is provided by the collaborative [`ndfu`](https://github.com/ipavlopoulos/ndfu) package (Pavlopoulos & Likas, 2024) rather than reimplemented here — install via the `[ndfu]` extra above.
+nDFU scoring is provided by the collaborative [`ndfu`](https://github.com/ipavlopoulos/ndfu) package (Pavlopoulos & Likas, 2024) rather than reimplemented here — installed automatically as a core dependency.
 
 ## Changelog
 
