@@ -3,6 +3,49 @@
 All notable changes to this project are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.2.0] — 2026-07-06
+
+### Added
+- `polartox.polarized_trees`: Polarized Trees detection algorithm (paper
+  Steps 1–6), built on the collaborative `ndfu` package. `PolarizedTreesPipeline`
+  covers the full pipeline: nDFU-based text filtering, per-text tree
+  construction, pole assignment, and corpus-level metrics (Dimension
+  Frequency, Subgroup Pole Consistency, Subgroup PRG).
+- `diagnostics()`: ground-truth-free corpus statistics (retention rate,
+  mean residual nDFU, indeterminate rate, etc.) — usable on real annotation
+  data with no known answer to check against.
+- `recovery_metrics()`: jaccard/precision/recall/exact-match against known
+  ground truth — a validation harness for synthetic data only, kept
+  separate from the ground-truth-free metrics above.
+- `inspect_tree()`: per-text drill-down with an optional rating-distribution
+  histogram at every node.
+- `run_full_evaluation()`: single entry point running the whole pipeline;
+  returns F/C/P and diagnostics always, plus recovery metrics and
+  validation-enriched F/C/P columns (`ever_truly_active`,
+  `true_lean_match_rate`, `mean_true_alpha`) when `ground_truth` is supplied.
+
+### Design decisions (empirically validated departures from the paper)
+- `min_size_frac` (default 3% of each text's annotator count) replaces a
+  fixed `min_size`. The paper's `nmin=2` is a mathematical floor, not a
+  reliability threshold: tested directly, `min_size=2` produced a coin-flip
+  ("indeterminate") leaf in 100% of texts and 76% larger trees on average,
+  versus 8.9% and a meaningfully lower jaccard-vs-ground-truth gap at
+  `min_size=50` on the same corpus. A fixed count doesn't generalize across
+  datasets with different annotator densities, hence the fraction-based default.
+- `variant="beta"` (PRGbeta, harmonic mean of PRGmax and PRGvar) replaces
+  the paper's stated primary criterion, PRGmax alone. Found a concrete case
+  where PRGmax picked a spurious dimension over a real one because its
+  worst-case-only design penalizes a mostly-good split for one bad subgroup;
+  PRGbeta corrected this while avoiding PRGvar's tendency to produce values
+  too small to clear a sensible `h`.
+- `theta_stop`: a node-level pre-filter with no equivalent in the paper's
+  pseudocode. Stops a node immediately if its own nDFU is already low,
+  without searching for a split. Removing it on one test text increased
+  the tree from 6 to 58 leaves, fragmenting on dimensions with no real
+  effect on that text.
+
+---
+
 ## [0.1.1] — 2026-07-04
 
 ### Fixed
@@ -15,8 +58,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [0.1.0] — 2026-07-04
 
 ### Changed
-- Full rewrite and rename from `polartox`. This is a new baseline, not a
-  continuation of `polartox`'s version history.
+- Full rewrite and rename from `toxpol-nlp`. This is a new baseline, not a
+  continuation of `toxpol-nlp`'s version history.
 - Synthetic data generation mechanism replaced entirely: severity tiers
   (High/Moderate/Low) and geometric-mean-of-weights + median threshold are
   replaced by a k-active-dimensions design, where each active dimension's
@@ -47,6 +90,6 @@ instead of diluting it, reaching the full nDFU range.
 
 ---
 
-## Prior history (`polartox`, deprecated)
-See the [`polartox` PyPI page](https://pypi.org/project/polartox/) for
+## Prior history (`toxpol-nlp`, deprecated)
+See the [`toxpol-nlp` PyPI page](https://pypi.org/project/toxpol-nlp/) for
 changelog entries prior to this rewrite.
