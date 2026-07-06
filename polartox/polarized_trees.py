@@ -58,6 +58,7 @@ def _leaf(node_data, path, ndfu_val, theta_pole, reason):
 def detect_polarized_subgroups(
     data, dims, min_size, h, max_depth, scale,
     theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0,
+    relative_h=False,   # NEW
     verbose=False, return_tree=False,
 ):
     """
@@ -107,8 +108,13 @@ def detect_polarized_subgroups(
             if prg > best_prg:
                 best_dim, best_prg = dim, prg
 
-        if best_dim is None or best_prg <= h:
-            reason = "no dim passed min_size" if best_dim is None else f"best PRG {best_prg:.3f} <= h"
+        if best_dim is not None and relative_h:
+            comparison_value = best_prg / nd if nd > 0 else 0
+        else:
+            comparison_value = best_prg
+
+        if best_dim is None or comparison_value <= h:
+            reason = "no dim passed min_size" if best_dim is None else f"best PRG {best_prg:.3f} (relative={comparison_value:.3f}) <= h"
             leaf = _leaf(node_data, path, nd, theta_pole, reason)
             leaves.append(leaf)
             return leaf
@@ -161,7 +167,8 @@ class PolarizedTreesPipeline:
 
     def __init__(self, dims, scale, theta_filter, h, max_depth,
              min_size=None, min_size_frac=0.03, min_size_frac_schedule=None,
-             variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15):
+             variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15,
+             relative_h=False):
         """
         min_size_frac_schedule : (base, step) tuple or None
             If given, min_size_frac tightens with depth: frac(depth) =
@@ -180,6 +187,7 @@ class PolarizedTreesPipeline:
         self.beta = beta
         self.theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
         self.theta_stop = theta_stop
+        self.relative_h = relative_h
 
         if min_size_frac_schedule is not None:
             base, step = min_size_frac_schedule
@@ -216,7 +224,8 @@ class PolarizedTreesPipeline:
             min_size = self._min_size_for(len(text_data))
             self.trees_[tid] = detect_polarized_subgroups(
                 text_data, self.dims, min_size, self.h, self.max_depth, self.scale,
-                self.theta_pole, self.theta_stop, self.variant, self.beta, return_tree=True,
+                self.theta_pole, self.theta_stop, self.variant, self.beta,
+                relative_h=self.relative_h, return_tree=True,
             )
         return self.trees_
 

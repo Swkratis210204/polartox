@@ -1,9 +1,59 @@
-# Changelog
+## [0.3.2] — 2026-07-06
 
-All notable changes to this project are documented here.
-Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+### Reverted
+- `AnnotatorPool.alpha_window` (added in 0.3.0) is **removed**. Narrowing
+  co-active dimensions' alpha values together improved recovery metrics,
+  but only by making the synthetic data easier to solve, not by improving
+  the detection algorithm. If real annotator disagreement has one dominant
+  demographic driver and a much weaker secondary one on the same text —
+  entirely plausible — the generator should be able to produce that case,
+  not quietly exclude it. `_sample_text_config` reverts to fully
+  independent per-dimension alpha draws.
+- The `intensity_range=(0.6, 1.0)` recommendation from 0.3.0 is likewise
+  withdrawn; `DEFAULT_INTENSITY_RANGE=(0.3, 1.0)` remains the reference
+  configuration.
+
+### Added
+- `polarized_trees.PolarizedTreesPipeline`: new `relative_h` parameter
+  (default `False`). When `True`, the splitting-gain threshold `h` is
+  compared against `PRG / node's own nDFU` (a fraction of remaining
+  disagreement explained) instead of the raw PRG value. Fixes the same
+  "absorption" problem `alpha_window` was targeting, but at the actual
+  source: the paper's fixed-threshold `h` unfairly penalizes a real-but-
+  weaker cause in an already-mostly-resolved subgroup, since the same raw
+  PRG value means a small fraction of a large residual or a large fraction
+  of a small one, and the original comparison couldn't tell those apart.
+
+### Corpus-level impact (3-dataset baseline, unmodified generator, tree fix only)
+| Dataset | Jaccard (v1, absolute h=0.05) | Jaccard (v2, relative h=0.15) |
+|---|---|---|
+| A — default | 0.812 | 0.863 |
+| B — weak signal | 0.846 | 0.882 |
+| C — deep (k=3,4 biased) | 0.820 | 0.825 |
+
+Every metric (jaccard, precision, recall, exact match) improved or stayed
+flat across all three corpora with `relative_h=True` — no regressions
+observed anywhere, unlike every `min_size`-based fix attempted previously,
+each of which improved one case only by taking an equal amount away from
+another. `relative_h=True, h=0.15` is now the recommended configuration.
+
+### Why this approach over 0.3.0's `alpha_window`
+`alpha_window` changed *what the generator is allowed to produce*.
+`relative_h` changes *how the tree judges a split* — a fix to the
+detection algorithm itself, testable and shown to generalize on the
+original, unmodified, harder synthetic data. This is the more honest fix:
+if the method's F/C/P output is to be trusted on real data (where there's
+no control over how mismatched true causes' strengths are), the
+improvement needs to live in the algorithm, not in how forgiving the test
+data is.
+
+---
 
 ## [0.3.0] — 2026-07-06
+**⚠️ Superseded by 0.3.1.** The `alpha_window` parameter and
+`intensity_range=(0.6, 1.0)` recommendation below were reconsidered and
+reverted — see 0.3.1 for why and what replaced them. Left here for
+history.
 
 ### Changed
 - `AnnotatorPool`: added `alpha_window` parameter (default `0.15`). For
