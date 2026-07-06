@@ -134,6 +134,13 @@ class AnnotatorPool:
         P(k active dimensions) for k = 0 .. len(dimensions). Must sum to 1.
     annotators_per_identity : int
         How many annotators share each unique demographic combination.
+    alpha_window : float
+        For texts with 2+ active dimensions, each dimension's alpha is
+        drawn within +/- alpha_window of a shared per-text base value,
+        rather than fully independently. Reduces (does not eliminate) an
+        "absorption" failure mode where a strong dimension's signal buries
+        a much weaker co-active one during detection -- see
+        polartox.polarized_trees for details.
     """
 
     def __init__(
@@ -204,9 +211,7 @@ class AnnotatorPool:
         ps = list(self.depth_weights.values())
         k = rng.choice(ks, p=ps)
 
-        active_dims = (
-            [str(d) for d in rng.choice(self.dim_names, size=k, replace=False)] if k > 0 else []
-        )
+        active_dims = list(rng.choice(self.dim_names, size=k, replace=False)) if k > 0 else []
 
         lean, alpha = {}, {}
         alpha_min, alpha_max = self.intensity_range

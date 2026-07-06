@@ -23,6 +23,7 @@ pool = AnnotatorPool(
     intensity_range=DEFAULT_INTENSITY_RANGE,  # (alpha_min, alpha_max), each active dim draws its own alpha -- mandatory
     depth_weights=DEFAULT_DEPTH_WEIGHTS,      # P(k active dims) for k = 0..4 -- mandatory
     annotators_per_identity=10,           # annotators replicated per unique identity
+    alpha_window=0.15,                    # how close co-active dims' alpha values stay to each other
 )
 pool.summary()
 # Dimensions        : ['gender', 'politics', 'age', 'education', 'orientation']
@@ -50,7 +51,7 @@ For every text, independently:
 1. **Sample k** — how many dimensions are active, drawn from `depth_weights` (a distribution over 0..len(dimensions)). `k=0` is the negative control: every sampled annotator draws from a single shared random peak on the scale, with natural spread — no demographic structure at all.
 2. **Sample which k dimensions** are active, uniformly at random from the full set — no dimension is privileged across the dataset.
 3. For each active dimension, **randomly split its values** into a toxic-leaning group and a civil-leaning group (the split is re-drawn per text — no value is permanently "the toxic one").
-4. For each active dimension, **draw an intensity `alpha`** uniformly from `intensity_range`. `alpha=0` means that dimension contributes no signal (identical to uniform); `alpha=1` means it deterministically forces its pole.
+4. **Draw a shared base intensity for the text**, then each active dimension's **intensity `alpha`** is drawn within `± alpha_window` of that base (clipped to `intensity_range`) — rather than each dimension drawing fully independently. `alpha=0` means a dimension contributes no signal (identical to uniform); `alpha=1` means it deterministically forces its pole.
 5. Each identity's final rating distribution is the **elementwise product** of the shapes implied by its value on every active dimension, renormalized. Agreeing leans sharpen the result; conflicting leans pull it back toward the middle — this is what produces genuine intersectional behavior without hand-specifying every combination.
 
 `noise` applies uniformly regardless of k: with that probability, any individual annotator's rating is instead drawn fully at random from the whole scale.
@@ -59,9 +60,15 @@ For every text, independently:
 
 An earlier version of this generator combined per-dimension signals by taking the geometric mean of per-value weights, then thresholding at the population median. Averaging washes out variance — sampling many annotations from a large, diverse pool collapses toward the aggregate regardless of injected structure (a consequence of the Central Limit Theorem in log-space), capping achievable nDFU well below 1. Multiplying distributions is an *intersection* of constraints, not a lossy aggregate: it composes signal instead of diluting it, which is what lets this generator reach the full nDFU range.
 
+### Why `alpha_window` instead of fully independent alpha draws
+
+Originally, every active dimension in a text drew its `alpha` fully independently from `intensity_range`. Testing against `polartox.polarized_trees` on texts with exactly 2 active dimensions (k=2) found this let a strong dimension (e.g. alpha=0.95) get paired with a much weaker co-active one (e.g. alpha=0.45) in the same text. The detection algorithm reliably found the strong dimension and **missed the weaker one entirely** — an "absorption" failure observed in 63% of k=2 texts under independent draws.
+
+`alpha_window` fixes this at the source: each text draws one shared base alpha, and every active dimension's alpha stays within `± alpha_window` of that base. This directly narrows the gap between co-active dimensions' strengths. Measured on 200 texts with `alpha_window=0.15`: the exact-absorption pattern dropped from 63% to 38% of k=2 texts, with corpus-wide jaccard-vs-ground-truth improving from 0.811 to 0.871 and exact match from 59.5% to 68.6%. Not eliminated — a smaller window may reduce it further, at the cost of less varied per-dimension strength within a text; this remains an open area for further tuning.
+
 ## API
 
-### `AnnotatorPool(dimensions, scale, intensity_range, depth_weights, annotators_per_identity)`
+### `AnnotatorPool(dimensions, scale, intensity_range, depth_weights, annotators_per_identity, alpha_window=0.15)`
 
 | Parameter | Default | Description |
 |---|---|---|
@@ -70,8 +77,9 @@ An earlier version of this generator combined per-dimension signals by taking th
 | `intensity_range` | required | `(alpha_min, alpha_max)`, each in `[0, 1]`. Controls how strongly each active dimension pulls toward its pole. |
 | `depth_weights` | required | `dict[int, float]`, `P(k active dims)` for `k = 0..len(dimensions)`. Must sum to 1. |
 | `annotators_per_identity` | required | replication factor per unique identity combination |
+| `alpha_window` | `0.15` | for texts with 2+ active dimensions, each dimension's alpha is drawn within this window of a shared per-text base value, rather than fully independently. Reduces (does not eliminate) the "absorption" failure mode described above. |
 
-All parameters are mandatory — there is no silent fallback for any of them. If you want the reference configuration, pass the `DEFAULT_*` constants explicitly, as in the quickstart above.
+`dimensions`, `scale`, `intensity_range`, `depth_weights`, and `annotators_per_identity` are mandatory — there is no silent fallback for any of them. If you want the reference configuration, pass the `DEFAULT_*` constants explicitly, as in the quickstart above.
 
 ### `pool.generate_dataset(...)`
 
@@ -159,11 +167,11 @@ pool = AnnotatorPool(
 
 See [`datagen_demo.ipynb`](datagen_demo.ipynb) for an end-to-end walkthrough with visualizations.
 
-## Migrating from `polartox`
+## Migrating from `polartox` (pre-rewrite)
 
-This package replaces the earlier severity-tier / weight-threshold mechanism from `polartox` entirely. Key differences:
+This package replaces the earlier severity-tier / weight-threshold mechanism entirely. Key differences:
 
-| Old (`polartox`) | New (`polartox.datagen`) |
+| Old | New (`polartox.datagen`) |
 |---|---|
 | `high_ratio` / `moderate_ratio` / `low_ratio` tiers | `depth_weights` over `k` (number of active dims) |
 | `toxic_range` / `civil_range` / `neutral_range` | `intensity_range` (continuous `alpha`) |

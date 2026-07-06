@@ -4,13 +4,17 @@ Given an annotation dataset, recursively partitions annotators by demographic di
 
 Implements the paper's full six-step pipeline: compute nDFU per text, filter to meaningfully polarized texts, build one tree per text via recursive PRG-based splitting, assign pole labels to leaves, and aggregate dataset-level metrics (Dimension Frequency, Subgroup Pole Consistency, Subgroup PRG) across the whole corpus.
 
+![Example polarized tree](polarized_tree.png)
+
+A basic example of the method in action: one text's annotators recursively split by demographic dimension until each leaf is a subgroup consistently leaning toward one pole.
+
 ## Install
 
 ```bash
-pip install "polartox[ndfu]"
+pip install polartox
 ```
 
-(`ndfu` is required — nDFU scoring is provided by the collaborative [`ndfu`](https://github.com/ipavlopoulos/ndfu) package, Pavlopoulos & Likas 2024, not reimplemented here.)
+(`ndfu` is a core dependency — nDFU scoring is provided by the collaborative [`ndfu`](https://github.com/ipavlopoulos/ndfu) package, Pavlopoulos & Likas 2024, not reimplemented here.)
 
 ## Quickstart
 

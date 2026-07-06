@@ -3,6 +3,37 @@
 All notable changes to this project are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.3.0] — 2026-07-06
+
+### Changed
+- `AnnotatorPool`: added `alpha_window` parameter (default `0.15`). For
+  texts with 2+ active dimensions, alpha is now drawn from a shared
+  per-text base value +/- `alpha_window`, instead of fully independent
+  draws per dimension. **This changes generated data for the same seed.**
+  Fixes an "absorption" failure mode where independent draws could pair
+  a strong dimension with a much weaker co-active one; the tree would
+  then reliably find only the strong dimension, missing the other
+  entirely. Measured on 200 k=2 texts: reduced from 63% to 38% of texts
+  showing this exact pattern. Not eliminated -- documented as a known,
+  reduced-but-present limitation.
+
+### Recommended defaults updated
+- `intensity_range=(0.6, 1.0)` (previously `(0.3, 1.0)`) is now the
+  suggested default when validating `polarized_trees`, based on direct
+  testing showing it improves recovery at k=3 (jaccard 0.854→0.954) and
+  k=4 (0.850→0.897) with no measurable cost elsewhere. `DEFAULT_INTENSITY_RANGE`
+  itself is unchanged to avoid a silent behavior change for existing code
+  relying on the old default; pass `intensity_range=(0.6, 1.0)` explicitly.
+
+### Corpus-level impact (200-text synthetic validation, both changes combined)
+| | Before | After |
+|---|---|---|
+| Overall jaccard | 0.811 | 0.871 |
+| Overall exact match | 0.595 | 0.686 |
+| k=2 jaccard | 0.612 | 0.675 |
+| k=3 jaccard | 0.854 | 0.954 |
+| k=4 jaccard | 0.850 | 0.897 |
+
 ## [0.2.0] — 2026-07-06
 
 ### Added

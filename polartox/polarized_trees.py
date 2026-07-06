@@ -61,22 +61,28 @@ def detect_polarized_subgroups(
     verbose=False, return_tree=False,
 ):
     """
-    Steps 3-5: build one Polarized Tree for a single text's annotations.
-
-    theta_stop (not in the paper): stop immediately if a node's own nDFU
-    is already below this value, skipping the split search entirely.
-    Empirically necessary -- without it, small subgroups get fragmented
-    on pure sampling noise. Set to None to disable.
-
-    variant="beta" (not the paper's stated default of "max") empirically
-    outperformed PRGmax and PRGvar alone on synthetic validation data.
+    ...
+    min_size : int or callable
+        Fixed absolute minimum subgroup size, OR a callable min_size(depth)
+        returning a FRACTION of the text's total annotators for that depth
+        -- lets the threshold tighten as the tree goes deeper, since early
+        splits (finding the 1st/2nd true cause) are reliable on large
+        groups, while late splits risk mistaking residual noise (from
+        imperfect intensity/alpha in the data) for a genuine extra cause.
     """
     theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
+    n_total = len(data)
     leaves = []
+
+    def resolve_min_size(depth):
+        if callable(min_size):
+            return max(2, round(min_size(depth) * n_total))
+        return min_size
 
     def dfs(node_data, remaining_dims, depth, path):
         ratings = node_data["rating"].to_numpy()
         nd = ndfu_score(ratings, scale)
+        ms = resolve_min_size(depth)
 
         if verbose:
             print(f"\n{'  '*depth}[{' -> '.join(f'{d}={v}' for d,v in path) or 'root'}] nDFU={nd:.3f}")
@@ -95,7 +101,7 @@ def detect_polarized_subgroups(
         best_dim, best_prg = None, 0
         for dim in remaining_dims:
             groups = {v: g["rating"].to_numpy() for v, g in node_data.groupby(dim)}
-            if any(len(g) < min_size for g in groups.values()):
+            if any(len(g) < ms for g in groups.values()):
                 continue
             prg, _, _ = compute_prg(ratings, groups, scale, variant, beta)
             if prg > best_prg:
@@ -154,13 +160,20 @@ class PolarizedTreesPipeline:
     """
 
     def __init__(self, dims, scale, theta_filter, h, max_depth,
-                 min_size=None, min_size_frac=0.03,
-                 variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15):
+             min_size=None, min_size_frac=0.03, min_size_frac_schedule=None,
+             variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15):
+        """
+        min_size_frac_schedule : (base, step) tuple or None
+            If given, min_size_frac tightens with depth: frac(depth) =
+            base + step * (depth - 1). Overrides min_size_frac and min_size.
+            Empirically motivated: a single fixed threshold either lets noise
+            through deep in the tree (too loose) or blocks legitimate late
+            splits in texts with 3+ true causes (too strict) -- see project
+            notes for the k=2 vs k=3/4 tradeoff this resolves.
+        """
         self.dims = list(dims)
         self.scale = scale
         self.theta_filter = theta_filter
-        self.min_size = min_size
-        self.min_size_frac = min_size_frac if min_size is None else None
         self.h = h
         self.max_depth = max_depth
         self.variant = variant
@@ -168,11 +181,21 @@ class PolarizedTreesPipeline:
         self.theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
         self.theta_stop = theta_stop
 
+        if min_size_frac_schedule is not None:
+            base, step = min_size_frac_schedule
+            self.min_size = lambda depth: base + step * (depth - 1)
+            self.min_size_frac = None
+        else:
+            self.min_size = min_size
+            self.min_size_frac = min_size_frac if min_size is None else None
+
         self.trees_ = {}
         self.overall_ndfu_ = {}
         self.retained_ids_ = []
 
     def _min_size_for(self, n):
+        if callable(self.min_size):
+            return self.min_size  # pass the callable straight through
         return max(2, round(self.min_size_frac * n)) if self.min_size_frac else self.min_size
 
     def filter_polarized_texts(self, dataset):
