@@ -77,52 +77,23 @@ def detect_polarized_subgroups(
 
     theta_stop (not in the paper): stops a node immediately, before
     searching for any split, if the node's own nDFU is already below this
-    value. This is an ABSOLUTE nDFU floor -- it can stop a branch before a
-    real, weaker co-active cause is ever tested, if a stronger cause has
-    already resolved most of the disagreement (leaving a small residual
-    that theta_stop treats as "resolved enough," even when a genuine
-    second cause is hiding inside it). Lowering theta_stop (e.g. 0.10
-    instead of 0.15) recovers some of these cases at the cost of slightly
-    more noise-driven splits elsewhere; see relative_h below for a
-    complementary fix to the related decision made via h. Set to None to
-    disable entirely (not recommended -- removing it was found to
-    fragment already-resolved nodes on pure sampling noise, e.g. one text
-    went from 6 leaves to 58 without this check).
+    value. Set to None to disable (not recommended -- fragments
+    already-resolved nodes on pure sampling noise otherwise).
 
     relative_h (not in the paper): if True, a candidate split is accepted
     only if best_prg / node's own nDFU > h, instead of comparing best_prg
-    to h directly. The same raw PRG value means a small fraction of a
-    large remaining disagreement, or a large fraction of a small one --
-    the paper's literal absolute comparison can't tell these apart, which
-    was found to unfairly reject a real-but-weaker cause in an
-    already-mostly-resolved subgroup. Tested on unmodified synthetic data
-    across three differently-configured corpora: every recovery metric
-    improved or stayed flat with relative_h=True, h=0.15, with no
-    regressions observed anywhere (see README). Recommended True.
+    to h directly. Recommended True -- see README for validation.
 
-    variant="beta" (not the paper's stated default of "max") empirically
-    outperformed PRGmax and PRGvar alone on synthetic validation data.
-
-    min_size : int or callable
-        Fixed absolute minimum subgroup size, OR a callable min_size(depth)
-        returning a FRACTION of the text's total annotators for that depth.
-        PolarizedTreesPipeline does not build one of these automatically;
-        pass a fixed int (directly, or via min_size_frac) unless you have
-        a specific reason to vary the threshold by depth yourself.
+    variant="beta" (harmonic mean of PRGmax/PRGvar) empirically
+    outperformed PRGmax alone (the paper's stated default) on synthetic
+    validation data.
     """
     theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
-    n_total = len(data)
     leaves = []
-
-    def resolve_min_size(depth):
-        if callable(min_size):
-            return max(2, round(min_size(depth) * n_total))
-        return min_size
 
     def dfs(node_data, remaining_dims, depth, path):
         ratings = node_data["rating"].to_numpy()
         nd = ndfu_score(ratings, scale)
-        ms = resolve_min_size(depth)
 
         if verbose:
             print(f"\n{'  '*depth}[{' -> '.join(f'{d}={v}' for d,v in path) or 'root'}] nDFU={nd:.3f}")
@@ -141,16 +112,13 @@ def detect_polarized_subgroups(
         best_dim, best_prg = None, 0
         for dim in remaining_dims:
             groups = {v: g["rating"].to_numpy() for v, g in node_data.groupby(dim)}
-            if any(len(g) < ms for g in groups.values()):
+            if any(len(g) < min_size for g in groups.values()):
                 continue
             prg, _, _ = compute_prg(ratings, groups, scale, variant, beta)
             if prg > best_prg:
                 best_dim, best_prg = dim, prg
 
-        if best_dim is not None and relative_h:
-            comparison_value = best_prg / nd if nd > 0 else 0
-        else:
-            comparison_value = best_prg
+        comparison_value = (best_prg / nd if nd > 0 else 0) if (best_dim is not None and relative_h) else best_prg
 
         if best_dim is None or comparison_value <= h:
             reason = "no dim passed min_size" if best_dim is None else f"best PRG {best_prg:.3f} (relative={comparison_value:.3f}) <= h"
@@ -240,8 +208,6 @@ class PolarizedTreesPipeline:
         self.retained_ids_ = []
 
     def _min_size_for(self, n):
-        if callable(self.min_size):
-            return self.min_size  # pass a custom depth-dependent callable straight through
         return max(2, round(self.min_size_frac * n)) if self.min_size_frac else self.min_size
 
     def filter_polarized_texts(self, dataset):
