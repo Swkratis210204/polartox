@@ -26,7 +26,18 @@ def print_histogram(ratings, scale, label="ratings", indent=0, width=30):
 
 
 def compute_prg(node_ratings, groups, scale, variant="beta", beta=1.0):
-    """PRGmax, PRGvar, or PRGbeta (harmonic mean of both -- recommended default)."""
+    """
+    PRG for one candidate split, per the paper's definitions:
+        PRGmax(A, dim)  = |nDFUglobal(A) - max_k nDFU(gk)|
+        PRGvar(A, dim)  = |nDFUglobal(A) - sum_k (Nk/N) * nDFU(gk)|
+        PRGbeta(A, dim) = (1+beta^2) * PRGmax * PRGvar / (beta^2 * PRGmax + PRGvar)
+
+    variant : "max", "var", or "beta" (recommended default -- see README
+    "Departures from the paper": PRGmax alone was found to pick a spurious
+    dimension over a real one in a concrete tested case; PRGbeta corrected
+    this while avoiding PRGvar's tendency to produce values too small to
+    clear a sensible h).
+    """
     global_ndfu = ndfu_score(node_ratings, scale)
     group_ndfus = {v: ndfu_score(r, scale) for v, r in groups.items()}
     n = len(node_ratings)
@@ -58,18 +69,46 @@ def _leaf(node_data, path, ndfu_val, theta_pole, reason):
 def detect_polarized_subgroups(
     data, dims, min_size, h, max_depth, scale,
     theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0,
-    relative_h=False,   # NEW
+    relative_h=False,
     verbose=False, return_tree=False,
 ):
     """
-    ...
+    Steps 3-5: build one Polarized Tree for a single text's annotations.
+
+    theta_stop (not in the paper): stops a node immediately, before
+    searching for any split, if the node's own nDFU is already below this
+    value. This is an ABSOLUTE nDFU floor -- it can stop a branch before a
+    real, weaker co-active cause is ever tested, if a stronger cause has
+    already resolved most of the disagreement (leaving a small residual
+    that theta_stop treats as "resolved enough," even when a genuine
+    second cause is hiding inside it). Lowering theta_stop (e.g. 0.10
+    instead of 0.15) recovers some of these cases at the cost of slightly
+    more noise-driven splits elsewhere; see relative_h below for a
+    complementary fix to the related decision made via h. Set to None to
+    disable entirely (not recommended -- removing it was found to
+    fragment already-resolved nodes on pure sampling noise, e.g. one text
+    went from 6 leaves to 58 without this check).
+
+    relative_h (not in the paper): if True, a candidate split is accepted
+    only if best_prg / node's own nDFU > h, instead of comparing best_prg
+    to h directly. The same raw PRG value means a small fraction of a
+    large remaining disagreement, or a large fraction of a small one --
+    the paper's literal absolute comparison can't tell these apart, which
+    was found to unfairly reject a real-but-weaker cause in an
+    already-mostly-resolved subgroup. Tested on unmodified synthetic data
+    across three differently-configured corpora: every recovery metric
+    improved or stayed flat with relative_h=True, h=0.15, with no
+    regressions observed anywhere (see README). Recommended True.
+
+    variant="beta" (not the paper's stated default of "max") empirically
+    outperformed PRGmax and PRGvar alone on synthetic validation data.
+
     min_size : int or callable
         Fixed absolute minimum subgroup size, OR a callable min_size(depth)
-        returning a FRACTION of the text's total annotators for that depth
-        -- lets the threshold tighten as the tree goes deeper, since early
-        splits (finding the 1st/2nd true cause) are reliable on large
-        groups, while late splits risk mistaking residual noise (from
-        imperfect intensity/alpha in the data) for a genuine extra cause.
+        returning a FRACTION of the text's total annotators for that depth.
+        PolarizedTreesPipeline does not build one of these automatically;
+        pass a fixed int (directly, or via min_size_frac) unless you have
+        a specific reason to vary the threshold by depth yourself.
     """
     theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
     n_total = len(data)
@@ -163,21 +202,25 @@ class PolarizedTreesPipeline:
     of each text's own annotator count, so the same config works across
     datasets with different annotator counts. Pass min_size for a fixed
     absolute count instead.
+
+    theta_stop stops a node immediately, before searching for any split,
+    if the node's own nDFU is already below this value. This is an
+    ABSOLUTE floor -- it can cut off a branch before a real, weaker
+    co-active cause is tested, if a stronger cause already resolved most
+    of the disagreement. Lower values (e.g. 0.10) recover some of these
+    cases; see relative_h for a complementary fix. See
+    detect_polarized_subgroups for full details on both.
+
+    relative_h (recommended True): compares a candidate split's PRG to h
+    as a fraction of the node's own remaining nDFU, instead of as a raw
+    absolute value. Tested to improve recovery on every metric across
+    multiple synthetic corpora with no regressions; see README.
     """
 
     def __init__(self, dims, scale, theta_filter, h, max_depth,
-             min_size=None, min_size_frac=0.03, min_size_frac_schedule=None,
-             variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15,
-             relative_h=False):
-        """
-        min_size_frac_schedule : (base, step) tuple or None
-            If given, min_size_frac tightens with depth: frac(depth) =
-            base + step * (depth - 1). Overrides min_size_frac and min_size.
-            Empirically motivated: a single fixed threshold either lets noise
-            through deep in the tree (too loose) or blocks legitimate late
-            splits in texts with 3+ true causes (too strict) -- see project
-            notes for the k=2 vs k=3/4 tradeoff this resolves.
-        """
+                 min_size=None, min_size_frac=0.03,
+                 variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15,
+                 relative_h=False):
         self.dims = list(dims)
         self.scale = scale
         self.theta_filter = theta_filter
@@ -189,13 +232,8 @@ class PolarizedTreesPipeline:
         self.theta_stop = theta_stop
         self.relative_h = relative_h
 
-        if min_size_frac_schedule is not None:
-            base, step = min_size_frac_schedule
-            self.min_size = lambda depth: base + step * (depth - 1)
-            self.min_size_frac = None
-        else:
-            self.min_size = min_size
-            self.min_size_frac = min_size_frac if min_size is None else None
+        self.min_size = min_size
+        self.min_size_frac = min_size_frac if min_size is None else None
 
         self.trees_ = {}
         self.overall_ndfu_ = {}
@@ -203,7 +241,7 @@ class PolarizedTreesPipeline:
 
     def _min_size_for(self, n):
         if callable(self.min_size):
-            return self.min_size  # pass the callable straight through
+            return self.min_size  # pass a custom depth-dependent callable straight through
         return max(2, round(self.min_size_frac * n)) if self.min_size_frac else self.min_size
 
     def filter_polarized_texts(self, dataset):
