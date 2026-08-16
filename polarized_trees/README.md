@@ -141,7 +141,7 @@ is unavailable.
 The configuration used in the paper was selected through model selection on
 the synthetic benchmark rather than being an inherent fixed property of the
 method. The selected configuration and the benchmark results are described
-in `polarized_trees.pdf`.
+in `polarized_trees.pdf` and [`../benchmarks/README.md`](../benchmarks/README.md).
 
 ## Synthetic validation vs. real inference
 
@@ -183,6 +183,14 @@ rather than reproducing the full benchmark.
 
 ## Further reading
 
-For the full methodology, PRG definitions, stopping criteria, hyperparameter
-selection, synthetic benchmark, recovery results, inference diagnostics, and
-limitations, see **`polarized_trees.pdf`**.
+For the full methodology, PRG definitions, stopping criteria, and method
+details, see **`polarized_trees.pdf`**.
+
+The results of hyperparameter selection, configuration benchmarking,
+synthetic recovery evaluation, and the final selected configuration are
+documented separately in
+[`../benchmarks/README.md`](../benchmarks/README.md).
+
+This keeps the package documentation focused on using and understanding
+Polarized Trees, while the benchmark documentation contains the experimental
+details and reproducibility information.
