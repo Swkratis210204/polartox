@@ -1,62 +1,171 @@
 # polartox
 
-NLP toolkit for **annotator polarization research**. Provides tools for synthetic dataset generation and polarization detection in human annotation studies.
+NLP toolkit for **annotator polarization research**. Provides tools for
+synthetic annotation-data generation, Polarized Trees analysis, and
+systematic hyperparameter benchmarking.
 
 ## Install
 
-    pip install polartox
+```bash
+pip install polartox
+```
 
 ## Repository Structure
 
-    data_gen/          synthetic annotation dataset generator
-    polarized_trees/   Polarized Trees detection algorithm
-    polartox/          installable package (source code)
-    benchmarks/        reproducibility code for the paper experiments
+```text
+polartox/
+├── polartox/          installable Python package
+├── data_gen/          synthetic-data generation demos and materials
+├── polarized_trees/   Polarized Trees demos and research materials
+├── benchmarks/        synthetic benchmark and paper reproducibility code
+├── tests/             package and benchmark tests
+├── CHANGELOG.md
+├── LICENSE
+├── README.md
+└── pyproject.toml
+```
+
+### `polartox/`
+
+The installable package containing the implementation.
+
+It provides:
+
+- `polartox.datagen` — synthetic annotator-pool generation;
+- `polartox.polarized_trees` — Polarized Trees analysis;
+- `polartox.benchmark` — hyperparameter search and model selection.
 
 ### `data_gen/`
 
-Tools for generating synthetic annotation datasets with **injected, known polarization**. Real annotation data cannot provide ground truth for which demographic dimensions drive disagreement — this module does. The generated datasets are the primary validation input for the Polarized Trees algorithm.
+Materials and demos for generating synthetic annotation datasets with
+**known polarization ground truth**.
 
-→ See `data_gen/README.md` for the full API and usage.
+The synthetic generator creates annotation data for which the active
+socio-demographic dimensions are known. This provides a controlled setting
+for evaluating whether Polarized Trees can recover the dimensions that
+generate observed disagreement.
 
 ### `polarized_trees/`
 
-The Polarized Trees detection algorithm. Given an annotation dataset, recursively partitions annotators by demographic dimension to find the subgroups most polarized on a given text (paper Steps 1–6): which dimensions drive disagreement, and which intersectional subgroups diverge most strongly.
+Research and demonstration materials for the Polarized Trees methodology.
 
-→ See `polarized_trees/README.md` for the full API, usage, and a comparison of three empirically-validated departures from the paper's literal specification.
+Given annotation data, Polarized Trees recursively partitions annotators by
+socio-demographic dimensions to identify the dimensions and intersectional
+subgroups associated with polarized opinions.
+
+### `benchmarks/`
+
+Code used to reproduce the synthetic benchmark experiments reported in the
+paper.
+
+The benchmark workflow:
+
+```text
+Synthetic dataset generation
+          ↓
+Fixed datasets + ground truth
+          ↓
+Configuration search
+          ↓
+Recovery-based model selection
+          ↓
+Selected Polarized Trees pipeline
+          ↓
+Inference on unseen data
+```
+
+The `treesbenchmark.ipynb` notebook serves both as a runnable demonstration
+of `PolarizedTreesBenchmark` and as the experimental workflow used to obtain
+the configurations and results reported in the paper.
+
+See [`benchmarks/README.md`](benchmarks/README.md) for the complete
+benchmark workflow and reproducibility instructions.
 
 ## Tools
 
 | Module | Description | Status |
 |---|---|---|
 | `polartox.datagen` | Synthetic annotator pool with injected, ground-truth polarization | Stable |
-| `polartox.polarized_trees` | Polarized Trees detection algorithm | Stable (baseline) |
+| `polartox.polarized_trees` | Polarized Trees detection algorithm | Stable |
+| `polartox.benchmark` | Hyperparameter search and model selection for Polarized Trees | Stable |
 
-nDFU scoring is provided by the collaborative [`ndfu`](https://github.com/ipavlopoulos/ndfu) package (Pavlopoulos & Likas, 2024) rather than reimplemented here — installed automatically as a core dependency.
+## `polartox.datagen`
 
-## Reproducing the paper benchmark
+Generates synthetic annotation datasets with known ground truth.
 
-The repository also contains the experimental code used to reproduce the synthetic benchmark reported in the paper.
+Each text can have zero or more active socio-demographic dimensions that
+drive disagreement, allowing the generated data to be used for quantitative
+recovery evaluation.
 
-The benchmark code is kept separately from the installable `polartox` package under [`benchmarks/`](benchmarks/). It consists of two notebooks:
+## `polartox.polarized_trees`
 
-1. `benchmarks/notebooks/datasetdemo.ipynb` generates and explores the synthetic datasets with known polarization ground truth.
-2. `benchmarks/notebooks/treesbenchmark.ipynb` runs the benchmark over the predefined configuration space, selects the best configuration using the synthetic ground truth, and evaluates it on an unseen synthetic corpus.
+Runs the Polarized Trees detection procedure on annotation data.
 
-The notebooks should be run in this order:
+The pipeline identifies:
 
-    datasetdemo.ipynb
-            ↓
-    benchmark_data/
-            ↓
-    treesbenchmark.ipynb
-            ↓
-    benchmark_results/
+- polarized socio-demographic dimensions;
+- intersectional subgroups;
+- dataset-level polarization summaries **F, C, and P**;
+- associated diagnostics.
 
-The full benchmark is computationally expensive and may take several hours depending on the available hardware. Existing benchmark results can be inspected without rerunning the complete benchmark.
+When ground truth is available, recovery metrics such as Jaccard,
+precision, recall, and exact match can also be computed.
 
-See [`benchmarks/README.md`](benchmarks/README.md) for the complete reproduction workflow, project structure, and details of the generated datasets and benchmark outputs.
+## `polartox.benchmark`
+
+`PolarizedTreesBenchmark` provides systematic hyperparameter search and model
+selection when ground truth is available.
+
+The benchmark:
+
+1. generates configurations from a search space;
+2. evaluates each configuration against the supplied ground truth;
+3. computes the requested recovery metrics;
+4. ranks configurations according to a selected metric;
+5. returns the best configuration and pipeline;
+6. provides the complete results, top configurations, and reports.
+
+The default search space corresponds to the configuration space used in the
+paper and contains **3,240 valid configurations**.
+
+The valid PRG variant/beta combinations are:
+
+```text
+max  → beta = 1.0
+var  → beta = 1.0
+beta → beta = 0.5, 1.0, 2.0
+```
+
+Both `full` and `random` search are supported. Users can also customize the
+search space, number of runs, seed, metrics, selection metric, and selection
+direction.
+
+## Testing
+
+Run the complete test suite with:
+
+```bash
+python -m pytest -q
+```
+
+To run the benchmark tests specifically:
+
+```bash
+python -m pytest tests/test_benchmark.py -v
+```
+
+## nDFU
+
+nDFU scoring is provided by the collaborative
+[`ndfu`](https://github.com/ipavlopoulos/ndfu) package (Pavlopoulos & Likas,
+2024) rather than reimplemented here. It is installed automatically as a
+core dependency.
+
+## Paper
+
+The full methodology and paper-specific details are available in
+[`polarized_trees/polarized_trees.pdf`](polarized_trees/polarized_trees.pdf).
 
 ## Changelog
 
-See CHANGELOG.md for release history.
+See [`CHANGELOG.md`](CHANGELOG.md) for release history.

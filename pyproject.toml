@@ -4,15 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "polartox"
-version = "0.3.2"
-description = "NLP toolkit for annotator polarization research: synthetic datasets, polarized trees, and disagreement metrics"
+version = "0.5.0"
+description = "NLP toolkit for annotator polarization research: synthetic data generation, Polarized Trees, and hyperparameter benchmarking"
 readme = "PYPI_README.md"
 requires-python = ">=3.9"
 license = "MIT"
 authors = [
     { name = "SwkratisCS", email = "swkratisgiannoutsos@gmail.com" }
 ]
-keywords = ["polarization", "annotation", "synthetic data", "nlp", "disagreement", "crowdsourcing", "demographics", "polarized trees"]
+keywords = [
+    "polarization",
+    "annotation",
+    "synthetic data",
+    "nlp",
+    "disagreement",
+    "crowdsourcing",
+    "demographics",
+    "polarized trees",
+    "hyperparameter optimization",
+    "model selection"
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
@@ -30,10 +41,14 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev  = ["pytest", "build", "twine"]
+dev = [
+    "pytest",
+    "build",
+    "twine",
+]
 
 [project.urls]
-Repository = "https://github.com/SwkratisCS/polarizedtrees"
+Repository = "https://github.com/Swkratis210204/polartox"
 
 [tool.setuptools.packages.find]
 where = ["."]

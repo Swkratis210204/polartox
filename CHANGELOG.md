@@ -1,3 +1,85 @@
+## [0.5.0] — 2026-08-17
+
+### Added
+
+- Added `PolarizedTreesBenchmark` for systematic hyperparameter search and
+  model selection using annotation data with known ground truth.
+- Added support for both `full` and `random` configuration search, including
+  reproducible random sampling through a user-specified seed.
+- Added configurable recovery metrics, selection metric, and selection
+  direction for flexible model selection.
+- Added support for custom search spaces as well as explicit lists of
+  configurations.
+- Added the paper's default benchmark search space of **3,240 valid
+  configurations**, including conditional beta values for the `max`, `var`,
+  and `beta` variants.
+- Added benchmark outputs for complete configuration results, ranked
+  configurations, best configuration, best score, best pipeline, and
+  benchmark reports.
+- Added comprehensive benchmark tests covering input validation,
+  configuration generation, search strategies, model selection, ranking,
+  reporting, saving, and the end-to-end workflow.
+
+### Changed
+
+- Updated the benchmark implementation to distinguish between ordinary
+  Cartesian-product search spaces and the conditional `variant`/`beta`
+  configuration space used in the paper.
+- Updated the benchmark defaults to reproduce the paper's configuration
+  search.
+- Updated the benchmark workflow to support both the research benchmark and
+  general-purpose user-defined benchmarks.
+- Updated the benchmark notebook to use the package `PolarizedTreesBenchmark`
+  implementation rather than manual hyperparameter selection.
+- Updated the benchmark reproducibility documentation to describe the full
+  benchmark workflow, configurable settings, model selection, and subsequent
+  ground-truth-free inference.
+- Updated the benchmark README with a methodological overview figure and
+  clearer documentation of the synthetic benchmark and inference workflow.
+
+### Testing
+
+- Added tests verifying that the default paper search space produces exactly
+  **3,240 valid configurations**.
+- Added tests verifying the conditional beta values:
+  `max → 1.0`, `var → 1.0`, and
+  `beta → {0.5, 1.0, 2.0}`.
+- Added tests ensuring custom small search spaces and explicit configuration
+  lists remain supported.
+- Added tests for reproducibility of random configuration sampling.
+- Verified the benchmark test suite passes successfully.
+
+## [0.4.0] — 2026-08-16
+
+### Changed
+
+- Reorganized the repository into a clearer separation between the
+  installable `polartox` package, benchmark code, documentation, and
+  reproducibility materials.
+- Revised the project documentation and examples to provide a more direct
+  introduction to synthetic data generation and Polarized Trees usage.
+- Updated the benchmark workflow to use fixed synthetic corpora for
+  hyperparameter selection and a separate unseen synthetic corpus for final
+  inference, matching the experimental procedure described in the revised
+  paper.
+- Updated the benchmark documentation to report the explored
+  hyperparameter configurations, selected configuration, recovery results,
+  and inference diagnostics separately from the package documentation.
+- Revised the paper to reflect the final Polarized Trees methodology,
+  synthetic evaluation environment, model-selection procedure, and
+  inference evaluation.
+- Updated the repository notebooks and supporting documentation to match the
+  revised paper and the current package structure.
+
+### Documentation
+
+- Added clearer package-level documentation for `polartox.datagen` and
+  `polartox.polarized_trees`.
+- Added guided demos for synthetic data generation and Polarized Trees.
+- Added a dedicated benchmark README documenting the reproducibility
+  workflow and experimental results.
+
+
 ## [0.3.2] — 2026-07-06
 
 ### Reverted
