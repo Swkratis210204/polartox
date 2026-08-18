@@ -161,11 +161,6 @@ nDFU scoring is provided by the collaborative
 2024) rather than reimplemented here. It is installed automatically as a
 core dependency.
 
-## Paper
-
-The full methodology and paper-specific details are available in
-[`polarized_trees/polarized_trees.pdf`](polarized_trees/polarized_trees.pdf).
-
 ## Changelog
 
 See [`CHANGELOG.md`](CHANGELOG.md) for release history.
