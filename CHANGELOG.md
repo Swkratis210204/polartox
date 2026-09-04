@@ -38,7 +38,7 @@
 
 - Top-level `README.md` and `PYPI_README.md` now link every notebook in
   the repository: the end-to-end DICES workflow
-  (`polarized_trees/DICES_polarized_trees_end_to_end.ipynb`) and all five
+  (`Dices/DICES_polarized_trees_end_to_end.ipynb`) and all five
   component demos (`data_gen/datagen_demo.ipynb`,
   `polarized_tree/polarized_tree_demo.ipynb`,
   `polarized_trees/trees_demo.ipynb`,
@@ -48,6 +48,11 @@
 - Updated `README.md`, `PYPI_README.md`, `polarized_trees/README.md`,
   `data_gen/README.md`, and `polartox/datagen.py` docstrings to reflect
   the `polartox.polarized_tree` / `polartox.pipeline` module split.
+- Moved the DICES end-to-end notebook, its diagnostics CSVs, and the
+  example tree image out of `polarized_trees/` into a new top-level
+  `Dices/` folder, with its own README, since it is real-data inference
+  rather than a synthetic `PolarizedTreesPipeline` demo like the rest of
+  `polarized_trees/`.
 - Added `polarized_tree/README.md` documenting the `PolarizedTree` API.
 
 ### Testing

@@ -18,6 +18,7 @@ polartox/
 ├── data_gen/          synthetic-data generation demos and materials
 ├── polarized_tree/    single-tree (PolarizedTree) demo
 ├── polarized_trees/   pipeline / corpus-level Polarized Trees demos and research materials
+├── Dices/             real-data (DICES-350/990) end-to-end inference notebook
 ├── benchmarks/        synthetic benchmark and paper reproducibility code
 ├── tests/             package and benchmark tests
 ├── CHANGELOG.md
@@ -63,6 +64,12 @@ Given annotation data, Polarized Trees recursively partitions annotators by
 socio-demographic dimensions to identify the dimensions and intersectional
 subgroups associated with polarized opinions.
 
+### `Dices/`
+
+Applies Polarized Trees to the **DICES-350** and **DICES-990** datasets —
+real conversational-safety annotations, not synthetic data, so there is no
+ground truth and no recovery metrics. See [`Dices/README.md`](Dices/README.md).
+
 ### `benchmarks/`
 
 Code used to reproduce the synthetic benchmark experiments reported in the
@@ -96,9 +103,10 @@ benchmark workflow and reproducibility instructions.
 
 **End-to-end, on real annotation data:**
 
-- [`polarized_trees/DICES_polarized_trees_end_to_end.ipynb`](polarized_trees/DICES_polarized_trees_end_to_end.ipynb)
-  — the complete workflow on the DICES safety dataset: filtering, tree
-  construction, F/C/P, and inference without ground truth.
+- [`Dices/DICES_polarized_trees_end_to_end.ipynb`](Dices/DICES_polarized_trees_end_to_end.ipynb)
+  — the complete workflow on the DICES-350/990 safety datasets: filtering,
+  tree construction, F/C/P, and inference without ground truth. See
+  [`Dices/README.md`](Dices/README.md).
 
 **Component demos, one workflow step at a time (synthetic data):**
 
