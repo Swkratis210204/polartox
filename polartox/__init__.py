@@ -5,11 +5,13 @@ from polartox.datagen import (
     DEFAULT_INTENSITY_RANGE,
 )
 
-from polartox.polarized_trees import (
-    PolarizedTreesPipeline,
+from polartox.polarized_tree import (
+    PolarizedTree,
     detect_polarized_subgroups,
     render_tree_text,
 )
+
+from polartox.pipeline import PolarizedTreesPipeline
 
 from polartox.benchmark import (
     PolarizedTreesBenchmark,
@@ -23,6 +25,7 @@ __all__ = [
     "DEFAULT_DIMENSIONS",
     "DEFAULT_DEPTH_WEIGHTS",
     "DEFAULT_INTENSITY_RANGE",
+    "PolarizedTree",
     "PolarizedTreesPipeline",
     "detect_polarized_subgroups",
     "render_tree_text",

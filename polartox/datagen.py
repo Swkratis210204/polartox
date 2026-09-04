@@ -140,7 +140,7 @@ class AnnotatorPool:
         rather than fully independently. Reduces (does not eliminate) an
         "absorption" failure mode where a strong dimension's signal buries
         a much weaker co-active one during detection -- see
-        polartox.polarized_trees for details.
+        polartox.polarized_tree for details.
     """
 
     def __init__(

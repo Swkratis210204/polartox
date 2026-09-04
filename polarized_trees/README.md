@@ -1,7 +1,10 @@
-# `polartox.polarized_trees` — Polarized Trees
+# Polarized Trees — `polartox.polarized_tree` + `polartox.pipeline`
 
-`polartox.polarized_trees` identifies demographic dimensions and
-intersectional subgroups that explain polarization in annotation data.
+Polarized Trees identifies demographic dimensions and intersectional
+subgroups that explain polarization in annotation data. Single-tree
+construction (`PolarizedTree`) lives in `polartox.polarized_tree`;
+corpus-level orchestration (`PolarizedTreesPipeline`) lives in
+`polartox.pipeline`.
 
 Starting from the ratings for one text, Polarized Trees recursively partitions
 annotators using the demographic dimension that gives the largest reduction
@@ -23,7 +26,7 @@ used by the method.
 ## Quickstart
 
 ```python
-from polartox.polarized_trees import PolarizedTreesPipeline
+from polartox.pipeline import PolarizedTreesPipeline
 
 pipe = PolarizedTreesPipeline(
     dims=["gender", "politics", "age", "education", "orientation"],
@@ -180,6 +183,11 @@ evaluation → inference without ground truth**
 
 The demo is intentionally compact and focuses on understanding the method
 rather than reproducing the full benchmark.
+
+For a demo of `PolarizedTree` on its own -- building and inspecting one
+tree directly, without a pipeline or a corpus -- see
+[`../polarized_tree/README.md`](../polarized_tree/README.md) and
+`../polarized_tree/polarized_tree_demo.ipynb`.
 
 ## Further reading
 

@@ -193,7 +193,7 @@ It is intentionally small and explanatory rather than a full benchmark.
 ## From synthetic data to Polarized Trees
 
 The generator provides the controlled environment for evaluating
-`polartox.polarized_trees`:
+`polartox.pipeline` (`PolarizedTreesPipeline`):
 
 ``` text
 synthetic data + known ground truth

@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from polartox.polarized_trees import (
-    ndfu_score, compute_prg, detect_polarized_subgroups,
-    jaccard, PolarizedTreesPipeline,
+from polartox.pipeline import PolarizedTreesPipeline
+from polartox.polarized_tree import (
+    ndfu_score, compute_prg, detect_polarized_subgroups, jaccard, PolarizedTree,
 )
 
 SCALE = 5
@@ -166,6 +166,161 @@ def test_jaccard_partial_overlap():
 
 
 # ------------------------------------------------------------------
+# PolarizedTree
+# ------------------------------------------------------------------
+
+@pytest.fixture
+def built_tree():
+    dataset, _ = make_toy_dataset()
+    text_data = dataset[dataset["text_id"] == 0]
+    tree = PolarizedTree.build(
+        text_data, dims=["gender", "politics", "age"],
+        min_size=10, h=0.05, max_depth=4, scale=SCALE,
+        theta_stop=0.1, variant="beta", beta=1.0, text_id=0,
+    )
+    return tree, dataset
+
+
+def test_polarized_tree_build_matches_detect_polarized_subgroups():
+    dataset, _ = make_toy_dataset()
+    text_data = dataset[dataset["text_id"] == 0]
+    leaves, root = detect_polarized_subgroups(
+        text_data, dims=["gender", "politics", "age"],
+        min_size=10, h=0.05, max_depth=4, scale=SCALE,
+        theta_stop=0.1, variant="beta", beta=1.0, return_tree=True,
+    )
+    tree = PolarizedTree.build(
+        text_data, dims=["gender", "politics", "age"],
+        min_size=10, h=0.05, max_depth=4, scale=SCALE,
+        theta_stop=0.1, variant="beta", beta=1.0, text_id=0,
+    )
+    assert tree.get_root() == root
+    assert tree.get_leaves() == leaves
+
+
+def test_polarized_tree_get_root_and_get_leaves(built_tree):
+    tree, _ = built_tree
+    root = tree.get_root()
+    leaves = tree.get_leaves()
+    assert isinstance(root, dict) and "is_leaf" in root
+    assert isinstance(leaves, list) and len(leaves) > 0
+    assert all("pole" in leaf for leaf in leaves)
+
+
+def test_polarized_tree_n_leaves_and_depth(built_tree):
+    tree, _ = built_tree
+    assert tree.n_leaves == len(tree.get_leaves())
+    assert tree.depth == max(len(leaf["path"]) for leaf in tree.get_leaves())
+
+
+def test_polarized_tree_n_leaves_and_depth_empty_tree():
+    # A tree that never splits (single leaf, empty path) still reports sane
+    # depth/n_leaves instead of erroring on an empty max().
+    dataset, _ = make_toy_dataset()
+    text_data = dataset[dataset["text_id"] == 0]
+    tree = PolarizedTree.build(
+        text_data, dims=["gender", "politics"], min_size=10_000, h=0.05,
+        max_depth=4, scale=SCALE, theta_stop=0.1, text_id=0,
+    )
+    assert tree.n_leaves == 1
+    assert tree.depth == 0
+
+
+def test_polarized_tree_internal_nodes_are_all_non_leaf(built_tree):
+    tree, _ = built_tree
+    internal = list(tree.internal_nodes())
+    assert len(internal) > 0
+    for depth, dim, prg, path, node in internal:
+        assert node["is_leaf"] is False
+        assert node["split_dim"] == dim
+        assert node["prg"] == prg
+        assert len(path) == depth - 1
+
+
+def test_polarized_tree_find_node_root_is_root(built_tree):
+    tree, _ = built_tree
+    assert tree.find_node(()) == tree.get_root()
+
+
+def test_polarized_tree_find_node_matches_each_leaf(built_tree):
+    tree, _ = built_tree
+    for leaf in tree.get_leaves():
+        found = tree.find_node(tuple(leaf["path"]))
+        assert found == leaf
+
+
+def test_polarized_tree_find_node_invalid_path_returns_none(built_tree):
+    tree, _ = built_tree
+    assert tree.find_node((("not_a_real_dim", "x"),)) is None
+
+
+def test_polarized_tree_node_ratings_root_matches_text_size(built_tree):
+    tree, dataset = built_tree
+    text_size = (dataset["text_id"] == 0).sum()
+    assert len(tree.node_ratings(dataset)) == text_size
+
+
+def test_polarized_tree_node_ratings_leaf_matches_leaf_n(built_tree):
+    tree, dataset = built_tree
+    for leaf in tree.get_leaves():
+        ratings = tree.node_ratings(dataset, path=leaf["path"])
+        assert len(ratings) == leaf["n"]
+
+
+def test_polarized_tree_node_ratings_isolates_its_own_text():
+    # node_ratings must filter to this tree's text_id, not just the passed
+    # dataset -- otherwise a multi-text dataset would leak other texts' rows.
+    dataset, _ = make_toy_dataset(n_texts=3)
+    text_data = dataset[dataset["text_id"] == 1]
+    tree = PolarizedTree.build(
+        text_data, dims=["gender", "politics"], min_size=10, h=0.05,
+        max_depth=4, scale=SCALE, theta_stop=0.1, text_id=1,
+    )
+    assert len(tree.node_ratings(dataset)) == (dataset["text_id"] == 1).sum()
+
+
+def test_polarized_tree_node_distribution_runs_without_error(built_tree, capsys):
+    tree, dataset = built_tree
+    tree.node_distribution(dataset)
+    captured = capsys.readouterr()
+    assert "root (n=" in captured.out
+
+
+def test_polarized_tree_leaf_distributions_prints_one_block_per_leaf(built_tree, capsys):
+    tree, dataset = built_tree
+    tree.leaf_distributions(dataset)
+    captured = capsys.readouterr()
+    assert captured.out.count("(n=") == tree.n_leaves
+    for leaf in tree.get_leaves():
+        label = " -> ".join(f"{d}={v}" for d, v in leaf["path"]) or "root"
+        assert f"{label} (n={leaf['n']}):" in captured.out
+
+
+def test_polarized_tree_render_runs_without_error(built_tree, capsys):
+    tree, _ = built_tree
+    tree.render()
+    captured = capsys.readouterr()
+    assert "root" in captured.out
+    for leaf in tree.get_leaves():
+        assert leaf["pole"] in captured.out
+
+
+def test_polarized_tree_inspect_without_distributions_omits_histograms(built_tree, capsys):
+    tree, dataset = built_tree
+    tree.inspect(dataset, show_distributions=False)
+    captured = capsys.readouterr()
+    assert "root" in captured.out
+    assert "ratings" not in captured.out
+
+
+def test_polarized_tree_inspect_with_distributions_includes_histograms(built_tree, capsys):
+    tree, dataset = built_tree
+    tree.inspect(dataset, show_distributions=True)
+    captured = capsys.readouterr()
+    assert captured.out.count("ratings (n=") == tree.n_leaves + len(list(tree.internal_nodes()))
+
+
+# ------------------------------------------------------------------
 # PolarizedTreesPipeline
 # ------------------------------------------------------------------
 
@@ -196,9 +351,9 @@ def test_build_all_trees_with_explicit_ids(pipeline_and_data):
     pipe, dataset, _ = pipeline_and_data
     trees = pipe.build_all_trees(dataset, text_ids=[0, 1])
     assert set(trees.keys()) == {0, 1}
-    for leaves, root in trees.values():
-        assert isinstance(leaves, list)
-        assert "is_leaf" in root
+    for tree in trees.values():
+        assert isinstance(tree.get_leaves(), list)
+        assert "is_leaf" in tree.get_root()
 
 
 def test_dimension_frequency_without_ground_truth(pipeline_and_data):
@@ -294,6 +449,6 @@ def test_inspect_tree_runs_without_error(pipeline_and_data, capsys):
     pipe, dataset, _ = pipeline_and_data
     pipe.filter_polarized_texts(dataset)
     pipe.build_all_trees(dataset, text_ids=[0])
-    pipe.inspect_tree(0, dataset, show_distributions=True)
+    pipe.trees_[0].inspect(dataset, show_distributions=True)
     captured = capsys.readouterr()
     assert "root" in captured.out

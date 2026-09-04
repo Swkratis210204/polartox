@@ -1,3 +1,71 @@
+## [0.6.0] — 2026-09-04
+
+### Changed (breaking)
+
+- Split `polartox.polarized_trees` into two modules along a tree/pipeline
+  boundary: `polartox.polarized_tree` (single-tree construction and
+  inspection: `PolarizedTree`, `detect_polarized_subgroups`, `ndfu_score`,
+  `compute_prg`, `render_tree_text`, `jaccard`) and `polartox.pipeline`
+  (corpus-level orchestration: `PolarizedTreesPipeline`). The old
+  `polartox.polarized_trees` module no longer exists — update
+  `from polartox.polarized_trees import ...` to `from polartox.polarized_tree
+  import ...` or `from polartox.pipeline import ...` as appropriate.
+- `PolarizedTreesPipeline.trees_` now holds `PolarizedTree` instances
+  instead of raw `(leaves, root)` tuples. Code that unpacked
+  `leaves, root = pipeline.trees_[text_id]` directly must switch to
+  `tree.get_leaves()` / `tree.get_root()`.
+- `PolarizedTreesPipeline.inspect_tree(...)` is **removed**. Index into
+  `pipeline.trees_[text_id]` to get the `PolarizedTree` directly and call
+  `tree.inspect(dataset, show_distributions=...)` on it — the whole point
+  of `trees_` holding real `PolarizedTree` objects now is that callers use
+  the tree's own API instead of going through the pipeline.
+
+### Added
+
+- `PolarizedTree`: a new public class wrapping one text's built tree.
+  Exposes `get_root()`, `get_leaves()`, `n_leaves`, `depth`,
+  `internal_nodes()`, `find_node(path)`, `node_ratings(dataset, path)`,
+  `node_distribution(dataset, path)`, `leaf_distributions(dataset)`,
+  `render()`, and `inspect(dataset, show_distributions=False)`. Can be
+  built and used directly on a single text's ratings, independent of
+  `PolarizedTreesPipeline` or a corpus.
+- `polarized_tree/` folder: new README and `polarized_tree_demo.ipynb`
+  demonstrating `PolarizedTree` standalone (build one tree, render it,
+  inspect distributions, walk/query it programmatically) without going
+  through the pipeline.
+
+### Documentation
+
+- Top-level `README.md` and `PYPI_README.md` now link every notebook in
+  the repository: the end-to-end DICES workflow
+  (`polarized_trees/DICES_polarized_trees_end_to_end.ipynb`) and all five
+  component demos (`data_gen/datagen_demo.ipynb`,
+  `polarized_tree/polarized_tree_demo.ipynb`,
+  `polarized_trees/trees_demo.ipynb`,
+  `benchmarks/notebooks/datasetdemo.ipynb`,
+  `benchmarks/notebooks/treesbenchmark.ipynb`) — previously only
+  `treesbenchmark.ipynb` was mentioned, and only by name, with no link.
+- Updated `README.md`, `PYPI_README.md`, `polarized_trees/README.md`,
+  `data_gen/README.md`, and `polartox/datagen.py` docstrings to reflect
+  the `polartox.polarized_tree` / `polartox.pipeline` module split.
+- Added `polarized_tree/README.md` documenting the `PolarizedTree` API.
+
+### Testing
+
+- Added 16 dedicated `PolarizedTree` tests covering every public method:
+  `build()` (verified to match `detect_polarized_subgroups()` exactly),
+  `get_root()`/`get_leaves()`, `n_leaves`/`depth` (including a
+  never-splits tree, to guard the empty-`max()` edge case), `internal_nodes()`,
+  `find_node()` (root, every leaf's own path, and an invalid path),
+  `node_ratings()` (including that it isolates its own `text_id` out of a
+  multi-text dataset rather than leaking other texts' rows),
+  `node_distribution()`/`leaf_distributions()`, `render()`, and `inspect()`
+  with and without `show_distributions`. Previously `PolarizedTree` had no
+  direct tests — only incidental coverage through `PolarizedTreesPipeline`.
+- Verified end-to-end: full test suite (104/104), a built sdist and wheel
+  each installed and smoke-tested in isolated virtual environments, and
+  `twine check` on both artifacts.
+
 ## [0.5.0] — 2026-08-17
 
 ### Added
