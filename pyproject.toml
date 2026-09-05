@@ -48,6 +48,7 @@ dev = [
 ]
 
 [project.urls]
+Homepage = "https://swkratis210204.github.io/polartox/"
 Repository = "https://github.com/Swkratis210204/polartox"
 
 [tool.setuptools.packages.find]

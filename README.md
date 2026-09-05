@@ -4,6 +4,8 @@ NLP toolkit for **annotator polarization research**. Provides tools for
 synthetic annotation-data generation, Polarized Trees analysis, and
 systematic hyperparameter benchmarking.
 
+**[Project website](https://swkratis210204.github.io/polartox/)** &mdash; overview, the four modules, and nDFU explained.
+
 ## Install
 
 ```bash
