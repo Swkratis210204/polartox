@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://swkratis210204.github.io/PolarizationTrees/sitemap.xml
+Sitemap: https://swkratis210204.github.io/polartox/sitemap.xml
