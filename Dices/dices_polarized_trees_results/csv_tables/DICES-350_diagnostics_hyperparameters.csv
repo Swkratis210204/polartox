@@ -1,0 +1,4 @@
+rank,theta_filter,min_size_frac,max_depth
+1,0.3,0.03,8
+2,0.2,0.02,8
+3,0.2,0.02,4
