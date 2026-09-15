@@ -186,8 +186,8 @@ rather than reproducing the full benchmark.
 
 For a demo of `PolarizedTree` on its own -- building and inspecting one
 tree directly, without a pipeline or a corpus -- see
-[`../polarized_tree/README.md`](../polarized_tree/README.md) and
-`../polarized_tree/polarized_tree_demo.ipynb`.
+[`../tree_module/README.md`](../tree_module/README.md) and
+`../tree_module/polarized_tree_demo.ipynb`.
 
 ## Further reading
 

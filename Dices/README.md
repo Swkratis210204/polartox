@@ -29,7 +29,7 @@ F/C/P and diagnostics only — the same ground-truth-free outputs
 
 ## Why this notebook exists
 
-The rest of the repository (`data_gen/`, `polarized_tree/`, `polarized_trees/`,
+The rest of the repository (`data_gen/`, `tree_module/`, `polarized_trees/`,
 `benchmarks/`) validates and tunes Polarized Trees on synthetic data with
 known ground truth. This notebook is the real-data counterpart: it takes
 the configuration selected on synthetic corpora and applies it, unmodified,
@@ -47,4 +47,4 @@ detailed per-configuration breakdown on DICES-350 and DICES-990.
 For what F/C/P and the diagnostics actually mean, and how the method
 works, see [`../polarized_trees/README.md`](../polarized_trees/README.md).
 For the single-tree API used to build and inspect any one item's tree
-directly, see [`../polarized_tree/README.md`](../polarized_tree/README.md).
+directly, see [`../tree_module/README.md`](../tree_module/README.md).

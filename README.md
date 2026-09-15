@@ -18,7 +18,7 @@ pip install polartox
 polartox/
 ├── polartox/          installable Python package
 ├── data_gen/          synthetic-data generation demos and materials
-├── polarized_tree/    single-tree (PolarizedTree) demo
+├── tree_module/       single-tree (PolarizedTree) demo
 ├── polarized_trees/   pipeline / corpus-level Polarized Trees demos and research materials
 ├── Dices/             real-data (DICES-350/990) end-to-end inference notebook
 ├── benchmarks/        synthetic benchmark and paper reproducibility code
@@ -50,11 +50,11 @@ socio-demographic dimensions are known. This provides a controlled setting
 for evaluating whether Polarized Trees can recover the dimensions that
 generate observed disagreement.
 
-### `polarized_tree/`
+### `tree_module/`
 
 Demo for `PolarizedTree`, the single-tree building block: build and inspect
 one text's polarized tree directly, without a corpus or a pipeline. See
-[`polarized_tree/README.md`](polarized_tree/README.md).
+[`tree_module/README.md`](tree_module/README.md).
 
 ### `polarized_trees/`
 
@@ -115,7 +115,7 @@ benchmark workflow and reproducibility instructions.
 - [`data_gen/datagen_demo.ipynb`](data_gen/datagen_demo.ipynb) — generate
   synthetic annotation data with known polarization ground truth
   (`polartox.datagen`).
-- [`polarized_tree/polarized_tree_demo.ipynb`](polarized_tree/polarized_tree_demo.ipynb)
+- [`tree_module/polarized_tree_demo.ipynb`](tree_module/polarized_tree_demo.ipynb)
   — build and inspect one text's tree directly (`PolarizedTree`), without a
   pipeline or a corpus.
 - [`polarized_trees/trees_demo.ipynb`](polarized_trees/trees_demo.ipynb) —
