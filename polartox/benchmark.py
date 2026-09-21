@@ -1,8 +1,11 @@
 import inspect
 import itertools
 import json
+import os
+import pickle
 import random
 import time
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -27,6 +30,33 @@ DEFAULT_METRICS = [
 
 DEFAULT_SELECTION_METRIC = "jaccard"
 
+# Metrics that get distribution statistics next to their mean.
+# exact_match is 0/1, so its mean is already the whole distribution.
+STAT_METRICS = ["jaccard", "precision", "recall"]
+
+STATS = {
+    "median": lambda s: s.median(),
+    "std": lambda s: s.std(),
+    "q1": lambda s: s.quantile(0.25),
+    "q3": lambda s: s.quantile(0.75),
+    "min": lambda s: s.min(),
+    "max": lambda s: s.max(),
+}
+
+GROUP_COLUMN = "corpus"
+
+# Set once per worker process by _init_worker (see n_jobs in run()).
+_WORKER_BENCHMARK = None
+
+
+def _init_worker(benchmark):
+    global _WORKER_BENCHMARK
+    _WORKER_BENCHMARK = benchmark
+
+
+def _run_in_worker(config):
+    return _WORKER_BENCHMARK._run_one_configuration(config)
+
 
 class PolarizedTreesBenchmark:
 
@@ -44,10 +74,35 @@ class PolarizedTreesBenchmark:
         selection_direction="max",
         top_k=10,
         verbose=True,
+        text_groups=None,
+        keep_text_results=True,
+        checkpoint_dir=None,
+        checkpoint_every=50,
+        n_jobs=1,
     ):
         self.pipeline = pipeline
         self.annotations = annotations
         self.ground_truth = ground_truth
+
+        # Optional {text_id: corpus} mapping. When given, every metric
+        # and statistic is computed per corpus and then averaged over
+        # corpora. Without it all texts form a single group.
+        self.text_groups = (
+            None if text_groups is None else dict(text_groups)
+        )
+        self.keep_text_results = keep_text_results
+
+        # When checkpoint_dir is set, run() saves its progress every
+        # checkpoint_every configurations and resumes from that file.
+        self.checkpoint_dir = (
+            None if checkpoint_dir is None else Path(checkpoint_dir)
+        )
+        self.checkpoint_every = checkpoint_every
+
+        # Worker processes used to evaluate configurations. Each worker
+        # holds its own copy of the annotations (memory scales with it);
+        # -1 means all CPUs.
+        self.n_jobs = n_jobs
 
         if search_space is None:
             self.search_space = {
@@ -91,6 +146,8 @@ class PolarizedTreesBenchmark:
         self.verbose = verbose
 
         self.results_ = None
+        self.group_results_ = None
+        self.text_results_ = None
         self.best_config_ = None
         self.best_score_ = None
         self.best_pipeline_ = None
@@ -167,6 +224,17 @@ class PolarizedTreesBenchmark:
 
         if not self.metrics:
             raise ValueError("At least one metric must be requested.")
+
+        if self.text_groups is not None:
+            missing_groups = annotation_ids - {
+                self._as_id(text_id) for text_id in self.text_groups
+            }
+
+            if missing_groups:
+                raise ValueError(
+                    "text_groups is missing entries for text_ids: "
+                    f"{sorted(missing_groups)[:10]}"
+                )
 
         if self.selection_metric not in self.metrics:
             raise ValueError(
@@ -410,6 +478,50 @@ class PolarizedTreesBenchmark:
 
         return value
 
+    @staticmethod
+    def _as_id(text_id):
+        try:
+            return int(text_id)
+        except (TypeError, ValueError):
+            return text_id
+
+    def _value_columns(self):
+        """Metric columns in output order: mean, then its statistics."""
+        columns = []
+
+        for metric in self.metrics:
+            columns.append(metric)
+
+            if metric in STAT_METRICS:
+                columns.extend(f"{metric}_{stat}" for stat in STATS)
+
+        return columns
+
+    def _parameter_columns(self, configurations):
+        """Search-space keys, plus generated keys such as `beta`."""
+        if isinstance(self.search_space, dict):
+            columns = list(self.search_space)
+        else:
+            columns = []
+
+        extras = []
+
+        for config in configurations:
+            for key in config:
+                if key not in columns and key not in extras:
+                    extras.append(key)
+
+        if not isinstance(self.search_space, dict):
+            return sorted(extras)
+
+        position = (
+            columns.index("variant") + 1
+            if "variant" in columns
+            else len(columns)
+        )
+
+        return columns[:position] + extras + columns[position:]
+
     def _run_one_configuration(self, config):
         candidate = self._build_pipeline(config)
 
@@ -420,12 +532,164 @@ class PolarizedTreesBenchmark:
         )
 
         recovery = output["recovery"]
+
+        if self.text_groups is None:
+            labels = pd.Series(
+                "all",
+                index=recovery.index,
+            )
+        else:
+            labels = recovery["text_id"].map(
+                {
+                    self._as_id(text_id): group
+                    for text_id, group in self.text_groups.items()
+                }
+            )
+
+            if labels.isna().any():
+                raise ValueError(
+                    "text_groups does not cover every evaluated text."
+                )
+
+        # One row per corpus: mean and statistics of the per-text values.
+        group_rows = []
+
+        for name, part in recovery.groupby(labels, sort=False):
+            group_row = {
+                GROUP_COLUMN: name,
+                "n_texts_evaluated": len(part),
+            }
+
+            for metric in self.metrics:
+                values = part[metric].astype(float)
+                group_row[metric] = float(values.mean())
+
+                if metric in STAT_METRICS:
+                    for stat, function in STATS.items():
+                        group_row[f"{metric}_{stat}"] = float(
+                            function(values)
+                        )
+
+            group_rows.append(group_row)
+
+        # One row per configuration: every column is the average of
+        # the per-corpus values (average of the averages).
+        group_frame = pd.DataFrame(group_rows)
         row = dict(config)
 
-        for metric in self.metrics:
-            row[metric] = float(recovery[metric].mean())
+        for column in self._value_columns():
+            row[column] = float(group_frame[column].mean())
 
-        return row
+        text_frame = None
+
+        if self.keep_text_results:
+            wanted = [
+                column
+                for column in [
+                    "text_id",
+                    "k_true",
+                    "true_dims",
+                    "found_dims",
+                    *self.metrics,
+                ]
+                if column in recovery.columns
+            ]
+
+            text_frame = recovery[wanted].copy()
+            text_frame.insert(0, GROUP_COLUMN, labels.to_numpy())
+
+            for column in ("true_dims", "found_dims"):
+                if column in text_frame.columns:
+                    text_frame[column] = text_frame[column].map(
+                        lambda dims: ",".join(map(str, dims))
+                    )
+
+        return row, group_rows, text_frame
+
+    def _checkpoint_path(self):
+        return self.checkpoint_dir / "benchmark_checkpoint.pkl"
+
+    def _save_checkpoint(self, configurations, rows, group_rows, text_frames):
+        """Atomically save progress, plus a readable partial summary."""
+        self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
+        path = self._checkpoint_path()
+        temp = path.with_suffix(".tmp")
+
+        with open(temp, "wb") as f:
+            pickle.dump(
+                {
+                    "configurations": configurations,
+                    "rows": rows,
+                    "group_rows": group_rows,
+                    "text_frames": text_frames,
+                },
+                f,
+            )
+
+        os.replace(temp, path)
+
+        pd.DataFrame(rows).to_csv(
+            self.checkpoint_dir / "benchmark_partial_summary.csv",
+            index=False,
+        )
+
+    def _load_checkpoint(self, configurations):
+        """Return saved progress, or None if absent or for another search."""
+        if self.checkpoint_dir is None:
+            return None
+
+        path = self._checkpoint_path()
+
+        if not path.exists():
+            return None
+
+        try:
+            with open(path, "rb") as f:
+                state = pickle.load(f)
+        except Exception:
+            return None
+
+        if state.get("configurations") != configurations:
+            if self.verbose:
+                print(
+                    "Checkpoint belongs to a different search; ignoring it."
+                )
+            return None
+
+        return state
+
+    def _evaluate(self, configurations):
+        """Yield _run_one_configuration output for each configuration, in order."""
+        n_jobs = self.n_jobs
+
+        if n_jobs is None or n_jobs == -1:
+            n_jobs = os.cpu_count() or 1
+
+        if not isinstance(n_jobs, int) or n_jobs < 1:
+            raise ValueError("n_jobs must be a positive integer or -1.")
+
+        workers = min(n_jobs, len(configurations))
+
+        if workers <= 1:
+            for config in configurations:
+                yield self._run_one_configuration(config)
+            return
+
+        # Workers already run in parallel: keep BLAS from adding its own
+        # threads on top (inherited by the spawned processes).
+        for variable in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
+            os.environ.setdefault(variable, "1")
+
+        executor = ProcessPoolExecutor(
+            max_workers=workers,
+            initializer=_init_worker,
+            initargs=(self,),
+        )
+
+        try:
+            yield from executor.map(_run_in_worker, configurations)
+        finally:
+            executor.shutdown(wait=False, cancel_futures=True)
 
     def run(self):
         configurations = self._generate_configurations()
@@ -435,12 +699,46 @@ class PolarizedTreesBenchmark:
 
         start = time.time()
         rows = []
+        group_rows = []
+        text_frames = []
         total = len(configurations)
 
-        for i, config in enumerate(configurations, start=1):
-            row = self._run_one_configuration(config)
+        state = self._load_checkpoint(configurations)
+
+        if state is not None:
+            rows = state["rows"]
+            group_rows = state["group_rows"]
+            text_frames = state["text_frames"]
+
+            if self.verbose:
+                print(f"Resuming from checkpoint at {len(rows)}/{total}.")
+
+        done = len(rows)
+        pending = configurations[done:]
+
+        # Results arrive in configuration order, whether they were
+        # computed here or in worker processes.
+        outputs = self._evaluate(pending)
+
+        for i, (config, output) in enumerate(
+            zip(pending, outputs), start=done + 1
+        ):
+            row, config_group_rows, text_frame = output
             row["configuration_id"] = i
             rows.append(row)
+
+            for group_row in config_group_rows:
+                group_rows.append(
+                    {
+                        "configuration_id": i,
+                        **config,
+                        **group_row,
+                    }
+                )
+
+            if text_frame is not None:
+                text_frame.insert(0, "configuration_id", i)
+                text_frames.append(text_frame)
 
             if self.verbose:
                 score = row[self.selection_metric]
@@ -449,26 +747,32 @@ class PolarizedTreesBenchmark:
                     f"{self.selection_metric}={score:.4f}"
                 )
 
+            if (
+                self.checkpoint_dir is not None
+                and self.checkpoint_every
+                and i % self.checkpoint_every == 0
+                and i < total
+            ):
+                self._save_checkpoint(
+                    configurations, rows, group_rows, text_frames
+                )
+
+                if self.verbose:
+                    print(f"Checkpoint saved at {i}/{total}.")
+
         self.runtime_ = time.time() - start
         results = pd.DataFrame(rows)
 
-        parameter_columns = list(
-            self.search_space.keys()
-        ) if isinstance(self.search_space, dict) else sorted(
-            {
-                key
-                for config in configurations
-                for key in config
-            }
-        )
+        parameter_columns = self._parameter_columns(configurations)
+        value_columns = self._value_columns()
 
-        columns = [
-            "configuration_id",
-            *parameter_columns,
-            *self.metrics,
+        results = results[
+            [
+                "configuration_id",
+                *parameter_columns,
+                *value_columns,
+            ]
         ]
-
-        results = results[columns]
 
         results = results.sort_values(
             by=self.selection_metric,
@@ -482,9 +786,52 @@ class PolarizedTreesBenchmark:
                 "rank",
                 "configuration_id",
                 *parameter_columns,
-                *self.metrics,
+                *value_columns,
             ]
         ]
+
+        rank_of = dict(
+            zip(results["configuration_id"], results["rank"])
+        )
+
+        group_results = pd.DataFrame(group_rows)
+        group_results.insert(
+            0,
+            "rank",
+            group_results["configuration_id"].map(rank_of),
+        )
+        group_results = group_results[
+            [
+                "rank",
+                "configuration_id",
+                *parameter_columns,
+                GROUP_COLUMN,
+                "n_texts_evaluated",
+                *value_columns,
+            ]
+        ].sort_values(
+            "rank",
+            kind="stable",
+        ).reset_index(drop=True)
+
+        self.group_results_ = group_results
+
+        if text_frames:
+            text_results = pd.concat(
+                text_frames,
+                ignore_index=True,
+            )
+            text_results.insert(
+                0,
+                "rank",
+                text_results["configuration_id"].map(rank_of),
+            )
+            self.text_results_ = text_results.sort_values(
+                "rank",
+                kind="stable",
+            ).reset_index(drop=True)
+        else:
+            self.text_results_ = None
 
         self.results_ = results
         best_row = results.iloc[0]
@@ -622,6 +969,33 @@ class PolarizedTreesBenchmark:
 
         path = Path(path)
         self.results_.to_csv(path, index=False)
+        return path
+
+    def get_group_results(self):
+        """Return per-corpus results (one row per configuration and corpus)."""
+        if self.group_results_ is None:
+            raise RuntimeError("Run the benchmark first.")
+        return self.group_results_.copy()
+
+    def get_text_results(self):
+        """Return raw per-text recovery values for every configuration."""
+        if self.text_results_ is None:
+            raise RuntimeError(
+                "No per-text results. Run the benchmark with "
+                "keep_text_results=True."
+            )
+        return self.text_results_.copy()
+
+    def save_group_results(self, path="benchmark_runs.csv"):
+        """Save per-corpus results to CSV."""
+        path = Path(path)
+        self.get_group_results().to_csv(path, index=False)
+        return path
+
+    def save_text_results(self, path="benchmark_text_results.csv"):
+        """Save raw per-text recovery values to CSV."""
+        path = Path(path)
+        self.get_text_results().to_csv(path, index=False)
         return path
 
     def save_report(self, path="benchmark_report.json"):

@@ -1,0 +1,9 @@
+{
+  "retention_rate": 0.86,
+  "mean_leaves": 7.593023255813954,
+  "mean_depth": 2.3169984686064318,
+  "mean_residual_ndfu": 0.17932784484016107,
+  "mean_top_split_prg": 0.4408721547050139,
+  "indeterminate_rate": 0.006125574272588055,
+  "dims_never_used": []
+}

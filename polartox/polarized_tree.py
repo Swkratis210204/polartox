@@ -12,6 +12,9 @@ Corpus-level orchestration across many texts lives in polarized_trees.py
 but never reaches into their internals directly.
 """
 
+from functools import lru_cache
+
+import numpy as np
 import pandas as pd
 from ndfu import dfu, pdf
 
@@ -20,6 +23,24 @@ def ndfu_score(ratings, scale):
     if len(ratings) == 0:
         return float("nan")
     return dfu(pdf(list(ratings), list(range(1, scale + 1))))
+
+
+@lru_cache(maxsize=None)
+def _ndfu_from_counts(counts, n):
+    """nDFU of a rating histogram; `counts` is a tuple over the scale and
+    `n` the number of ratings (which may exceed sum(counts) if some
+    ratings fall outside the scale, exactly as in ndfu_score)."""
+    if n == 0:
+        return float("nan")
+    return dfu(np.array(counts, dtype=float) / n)
+
+
+def _histograms(codes, ratings, n_groups, scale):
+    """Rating histogram per group: shape (n_groups, scale). Ratings that are
+    not integers within 1..scale count towards no bin."""
+    valid = (ratings >= 1) & (ratings <= scale) & (ratings == np.floor(ratings))
+    flat = codes[valid] * scale + (ratings[valid].astype(np.int64) - 1)
+    return np.bincount(flat, minlength=n_groups * scale).reshape(n_groups, scale)
 
 
 def print_histogram(ratings, scale, label="ratings", indent=0, width=30):
@@ -36,9 +57,16 @@ def compute_prg(node_ratings, groups, scale, variant="beta", beta=1.0):
     global_ndfu = ndfu_score(node_ratings, scale)
     group_ndfus = {v: ndfu_score(r, scale) for v, r in groups.items()}
     n = len(node_ratings)
+    sizes = {v: len(r) for v, r in groups.items()}
 
+    prg = _combine_prg(global_ndfu, group_ndfus, sizes, n, variant, beta)
+    return prg, global_ndfu, group_ndfus
+
+
+def _combine_prg(global_ndfu, group_ndfus, sizes, n, variant, beta):
+    """PRG from precomputed nDFUs; `group_ndfus` and `sizes` map group -> value."""
     prg_max = abs(global_ndfu - max(group_ndfus.values()))
-    prg_var = abs(global_ndfu - sum(len(r) / n * group_ndfus[v] for v, r in groups.items()))
+    prg_var = abs(global_ndfu - sum(sizes[v] / n * group_ndfus[v] for v in group_ndfus))
 
     if variant == "max":
         prg = prg_max
@@ -49,11 +77,10 @@ def compute_prg(node_ratings, groups, scale, variant="beta", beta=1.0):
         prg = (1 + beta**2) * prg_max * prg_var / denom if denom > 0 else 0.0
     else:
         raise ValueError("variant must be 'max', 'var', or 'beta'")
-    return prg, global_ndfu, group_ndfus
+    return prg
 
 
-def _leaf(node_data, path, ndfu_val, theta_pole, reason):
-    ratings = node_data["rating"].to_numpy()
+def _leaf(ratings, path, ndfu_val, theta_pole, reason):
     n = len(ratings)
     p_tox = float((ratings >= theta_pole).sum()) / n if n else float("nan")
     pole = "toxic" if p_tox > 0.5 else "civil" if p_tox < 0.5 else "indeterminate"
@@ -86,9 +113,28 @@ def detect_polarized_subgroups(
             return max(2, round(min_size(depth) * n_total))
         return min_size
 
-    def dfs(node_data, remaining_dims, depth, path):
-        ratings = node_data["rating"].to_numpy()
-        nd = ndfu_score(ratings, scale)
+    # Nodes are index arrays into the text's rows. Each dimension is coded
+    # once (sorted, like groupby; NaN gets -1 and is dropped from groups),
+    # and every split is then a histogram over (group, rating) -- no
+    # per-node pandas groupby.
+    all_ratings = data["rating"].to_numpy()
+    coded = {}
+
+    for dim in dims:
+        codes, uniques = pd.factorize(data[dim], sort=True)
+        coded[dim] = (codes.astype(np.int64), uniques)
+
+    def split(idx, dim):
+        """(group values, per-group row indexes) of a node split on `dim`."""
+        codes, uniques = coded[dim]
+        c = codes[idx]
+        return [(uniques[g], idx[c == g]) for g in np.unique(c[c >= 0])]
+
+    def dfs(idx, remaining_dims, depth, path):
+        ratings = all_ratings[idx]
+        n = len(idx)
+        counts = _histograms(np.zeros(n, dtype=np.int64), ratings, 1, scale)[0]
+        nd = _ndfu_from_counts(tuple(counts.tolist()), n)
         ms = resolve_min_size(depth)
 
         if verbose:
@@ -96,21 +142,31 @@ def detect_polarized_subgroups(
             print_histogram(ratings, scale, indent=depth)
 
         if theta_stop is not None and nd < theta_stop:
-            leaf = _leaf(node_data, path, nd, theta_pole, f"nDFU {nd:.3f} < theta_stop")
+            leaf = _leaf(ratings, path, nd, theta_pole, f"nDFU {nd:.3f} < theta_stop")
             leaves.append(leaf)
             return leaf
 
         if depth > max_depth or not remaining_dims:
-            leaf = _leaf(node_data, path, nd, theta_pole, "max_depth/dimension exhaustion")
+            leaf = _leaf(ratings, path, nd, theta_pole, "max_depth/dimension exhaustion")
             leaves.append(leaf)
             return leaf
 
         best_dim, best_prg = None, 0
         for dim in remaining_dims:
-            groups = {v: g["rating"].to_numpy() for v, g in node_data.groupby(dim)}
-            if any(len(g) < ms for g in groups.values()):
+            codes = coded[dim][0][idx]
+            present = codes >= 0
+            k = len(coded[dim][1])
+            sizes = np.bincount(codes[present], minlength=k)
+            keep = np.flatnonzero(sizes)
+
+            if (sizes[keep] < ms).any():
                 continue
-            prg, _, _ = compute_prg(ratings, groups, scale, variant, beta)
+
+            hists = _histograms(codes[present], ratings[present], k, scale)
+            group_ndfus = {g: _ndfu_from_counts(tuple(hists[g].tolist()), int(sizes[g]))
+                           for g in keep}
+            prg = _combine_prg(nd, group_ndfus, {g: int(sizes[g]) for g in keep},
+                               n, variant, beta)
             if prg > best_prg:
                 best_dim, best_prg = dim, prg
 
@@ -121,17 +177,17 @@ def detect_polarized_subgroups(
 
         if best_dim is None or comparison_value <= h:
             reason = "no dim passed min_size" if best_dim is None else f"best PRG {best_prg:.3f} (relative={comparison_value:.3f}) <= h"
-            leaf = _leaf(node_data, path, nd, theta_pole, reason)
+            leaf = _leaf(ratings, path, nd, theta_pole, reason)
             leaves.append(leaf)
             return leaf
 
         remaining_next = [d for d in remaining_dims if d != best_dim]
-        children = {v: dfs(g, remaining_next, depth + 1, path + [(best_dim, v)])
-                    for v, g in node_data.groupby(best_dim)}
-        return {"path": list(path), "n": len(ratings), "ndfu": nd, "is_leaf": False,
+        children = {v: dfs(child, remaining_next, depth + 1, path + [(best_dim, v)])
+                    for v, child in split(idx, best_dim)}
+        return {"path": list(path), "n": n, "ndfu": nd, "is_leaf": False,
                 "split_dim": best_dim, "prg": best_prg, "children": children}
 
-    root = dfs(data, list(dims), 1, [])
+    root = dfs(np.arange(n_total), list(dims), 1, [])
     return (leaves, root) if return_tree else leaves
 
 

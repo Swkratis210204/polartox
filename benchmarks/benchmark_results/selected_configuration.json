@@ -1,7 +1,7 @@
 {
   "theta_filter": 0.3,
   "min_size_frac": 0.03,
-  "max_depth": 8,
+  "max_depth": 4,
   "variant": "beta",
   "beta": 1.0,
   "h": 0.15,

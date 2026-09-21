@@ -599,6 +599,134 @@ def test_run_evaluates_all_configurations(
     assert "exact_match" in results.columns
 
 
+def test_checkpoint_is_saved_and_resumed(
+    pipeline,
+    annotations,
+    ground_truth,
+    small_search_space,
+    tmp_path,
+):
+    def make(**kwargs):
+        return PolarizedTreesBenchmark(
+            pipeline=pipeline,
+            annotations=annotations,
+            ground_truth=ground_truth,
+            search_space=small_search_space,
+            strategy="full",
+            verbose=False,
+            checkpoint_dir=tmp_path,
+            checkpoint_every=2,
+            **kwargs,
+        )
+
+    expected = make().run().get_results()
+
+    # The final configuration is not checkpointed, so the file
+    # left behind is the one written after configuration 2.
+    assert (tmp_path / "benchmark_checkpoint.pkl").exists()
+    assert len(pd.read_csv(tmp_path / "benchmark_partial_summary.csv")) == 2
+
+    resumed = make()
+    calls = []
+    original = resumed._run_one_configuration
+
+    def counting(config):
+        calls.append(config)
+        return original(config)
+
+    resumed._run_one_configuration = counting
+    resumed.run()
+
+    assert len(calls) == 2
+    pd.testing.assert_frame_equal(resumed.get_results(), expected)
+
+
+def test_parallel_run_matches_serial_run(
+    pipeline,
+    annotations,
+    ground_truth,
+    small_search_space,
+    tmp_path,
+):
+    def make(n_jobs, **kwargs):
+        return PolarizedTreesBenchmark(
+            pipeline=pipeline,
+            annotations=annotations,
+            ground_truth=ground_truth,
+            search_space=small_search_space,
+            strategy="full",
+            verbose=False,
+            n_jobs=n_jobs,
+            **kwargs,
+        )
+
+    serial = make(1).run()
+    parallel = make(2, checkpoint_dir=tmp_path, checkpoint_every=2).run()
+
+    pd.testing.assert_frame_equal(
+        parallel.get_results(), serial.get_results()
+    )
+    pd.testing.assert_frame_equal(
+        parallel.get_group_results(), serial.get_group_results()
+    )
+    assert parallel.get_best_config() == serial.get_best_config()
+
+
+def test_invalid_n_jobs(
+    pipeline,
+    annotations,
+    ground_truth,
+    small_search_space,
+):
+    benchmark = PolarizedTreesBenchmark(
+        pipeline=pipeline,
+        annotations=annotations,
+        ground_truth=ground_truth,
+        search_space=small_search_space,
+        strategy="full",
+        verbose=False,
+        n_jobs=0,
+    )
+
+    with pytest.raises(ValueError, match="n_jobs"):
+        benchmark.run()
+
+
+def test_checkpoint_from_other_search_is_ignored(
+    pipeline,
+    annotations,
+    ground_truth,
+    small_search_space,
+    tmp_path,
+):
+    PolarizedTreesBenchmark(
+        pipeline=pipeline,
+        annotations=annotations,
+        ground_truth=ground_truth,
+        search_space=small_search_space,
+        strategy="full",
+        verbose=False,
+        checkpoint_dir=tmp_path,
+        checkpoint_every=2,
+    ).run()
+
+    other = PolarizedTreesBenchmark(
+        pipeline=pipeline,
+        annotations=annotations,
+        ground_truth=ground_truth,
+        search_space={
+            "theta_filter": [0.9],
+            "max_depth": [3],
+        },
+        strategy="full",
+        verbose=False,
+        checkpoint_dir=tmp_path,
+        checkpoint_every=2,
+    ).run()
+
+    assert len(other.get_results()) == 1
+
+
 def test_best_configuration_is_selected(
     pipeline,
     annotations,
@@ -974,3 +1102,201 @@ def test_end_to_end_workflow(
 
     assert results_path.exists()
     assert report_path.exists()
+
+# ---------------------------------------------------------------------
+# Distribution statistics and per-corpus averaging
+# ---------------------------------------------------------------------
+#
+# Four texts in two corpora with known per-text Jaccard values:
+#   corpus A: 0.2, 0.6   -> mean 0.4, median 0.4, min 0.2, max 0.6
+#   corpus B: 0.4, 1.0   -> mean 0.7, median 0.7, min 0.4, max 1.0
+# The configuration-level value is the average of the two corpora.
+
+class VariedPipeline(FakePipeline):
+
+    def run_full_evaluation(
+        self,
+        annotations,
+        ground_truth=None,
+        verbose=False,
+    ):
+        jaccard = [0.2, 0.6, 0.4, 1.0]
+
+        recovery = pd.DataFrame(
+            {
+                "text_id": [1, 2, 3, 4],
+                "k_true": [1, 1, 2, 2],
+                "true_dims": [["gender"]] * 4,
+                "found_dims": [["gender"], ["age"], [], ["gender"]],
+                "jaccard": jaccard,
+                "precision": jaccard,
+                "recall": jaccard,
+                "exact_match": [True, False, False, True],
+            }
+        )
+
+        return {"recovery": recovery}
+
+
+@pytest.fixture
+def varied_annotations():
+    return pd.DataFrame(
+        {
+            "text_id": [1, 2, 3, 4],
+            "rating": [1, 5, 1, 5],
+        }
+    )
+
+
+@pytest.fixture
+def varied_ground_truth():
+    return {i: {"active_dims": ["gender"]} for i in range(1, 5)}
+
+
+@pytest.fixture
+def varied_benchmark(varied_annotations, varied_ground_truth):
+    benchmark = PolarizedTreesBenchmark(
+        pipeline=VariedPipeline(dims=["gender"], scale=5),
+        annotations=varied_annotations,
+        ground_truth=varied_ground_truth,
+        search_space={"theta_filter": [0.2, 0.3]},
+        strategy="full",
+        text_groups={1: "A", 2: "A", 3: "B", 4: "B"},
+        verbose=False,
+    )
+    benchmark.run()
+    return benchmark
+
+
+def test_group_results_have_statistics_per_corpus(varied_benchmark):
+    group_results = varied_benchmark.get_group_results()
+
+    assert len(group_results) == 4
+    assert set(group_results["corpus"]) == {"A", "B"}
+
+    a = group_results[group_results["corpus"] == "A"].iloc[0]
+
+    assert a["n_texts_evaluated"] == 2
+    assert a["jaccard"] == pytest.approx(0.4)
+    assert a["jaccard_median"] == pytest.approx(0.4)
+    assert a["jaccard_q1"] == pytest.approx(0.3)
+    assert a["jaccard_q3"] == pytest.approx(0.5)
+    assert a["jaccard_min"] == pytest.approx(0.2)
+    assert a["jaccard_max"] == pytest.approx(0.6)
+    assert a["jaccard_std"] == pytest.approx(0.2828427, rel=1e-5)
+
+
+def test_results_average_the_per_corpus_statistics(varied_benchmark):
+    row = varied_benchmark.get_results().iloc[0]
+
+    assert row["jaccard"] == pytest.approx(0.55)
+    assert row["jaccard_median"] == pytest.approx(0.55)
+    assert row["jaccard_min"] == pytest.approx(0.3)
+    assert row["jaccard_max"] == pytest.approx(0.8)
+    assert row["jaccard_q1"] == pytest.approx(0.425)
+    assert row["jaccard_q3"] == pytest.approx(0.675)
+    assert row["jaccard_std"] == pytest.approx(
+        (0.2828427 + 0.4242641) / 2, rel=1e-5
+    )
+
+
+def test_statistics_only_for_non_binary_metrics(varied_benchmark):
+    columns = set(varied_benchmark.get_results().columns)
+
+    for metric in ("jaccard", "precision", "recall"):
+        for stat in ("median", "std", "q1", "q3", "min", "max"):
+            assert f"{metric}_{stat}" in columns
+
+    assert "exact_match" in columns
+    assert not any(c.startswith("exact_match_") for c in columns)
+
+
+def test_existing_columns_keep_their_meaning(varied_benchmark):
+    results = varied_benchmark.get_results()
+
+    assert varied_benchmark.get_best_score() == pytest.approx(0.55)
+    assert results["exact_match"].iloc[0] == pytest.approx(0.5)
+
+
+def test_text_results_hold_raw_values(varied_benchmark):
+    text_results = varied_benchmark.get_text_results()
+
+    assert len(text_results) == 8
+    assert {"configuration_id", "corpus", "text_id", "jaccard"} <= set(
+        text_results.columns
+    )
+    assert sorted(text_results["jaccard"].unique()) == [0.2, 0.4, 0.6, 1.0]
+
+
+def test_without_text_groups_all_texts_form_one_group(
+    varied_annotations,
+    varied_ground_truth,
+):
+    benchmark = PolarizedTreesBenchmark(
+        pipeline=VariedPipeline(dims=["gender"], scale=5),
+        annotations=varied_annotations,
+        ground_truth=varied_ground_truth,
+        search_space={"theta_filter": [0.2]},
+        strategy="full",
+        verbose=False,
+    ).run()
+
+    assert set(benchmark.get_group_results()["corpus"]) == {"all"}
+    assert benchmark.get_best_score() == pytest.approx(0.55)
+
+
+def test_text_groups_must_cover_all_texts(
+    varied_annotations,
+    varied_ground_truth,
+):
+    with pytest.raises(ValueError, match="text_groups"):
+        PolarizedTreesBenchmark(
+            pipeline=VariedPipeline(dims=["gender"], scale=5),
+            annotations=varied_annotations,
+            ground_truth=varied_ground_truth,
+            search_space={"theta_filter": [0.2]},
+            text_groups={1: "A"},
+        )
+
+
+def test_keep_text_results_false(
+    varied_annotations,
+    varied_ground_truth,
+):
+    benchmark = PolarizedTreesBenchmark(
+        pipeline=VariedPipeline(dims=["gender"], scale=5),
+        annotations=varied_annotations,
+        ground_truth=varied_ground_truth,
+        search_space={"theta_filter": [0.2]},
+        strategy="full",
+        keep_text_results=False,
+        verbose=False,
+    ).run()
+
+    with pytest.raises(RuntimeError):
+        benchmark.get_text_results()
+
+
+def test_generated_beta_is_kept_in_results(
+    varied_annotations,
+    varied_ground_truth,
+):
+    benchmark = PolarizedTreesBenchmark(
+        pipeline=VariedPipeline(dims=["gender"], scale=5),
+        annotations=varied_annotations,
+        ground_truth=varied_ground_truth,
+        search_space={"variant": ["max", "beta"]},
+        strategy="full",
+        verbose=False,
+    ).run()
+
+    assert "beta" in benchmark.get_results().columns
+    assert "beta" in benchmark.get_best_config()
+
+
+def test_save_group_and_text_results(varied_benchmark, tmp_path):
+    group_path = varied_benchmark.save_group_results(tmp_path / "g.csv")
+    text_path = varied_benchmark.save_text_results(tmp_path / "t.csv")
+
+    assert len(pd.read_csv(group_path)) == 4
+    assert len(pd.read_csv(text_path)) == 8
