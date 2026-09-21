@@ -1,3 +1,45 @@
+## [0.6.1] — 2026-09-21
+
+### Added
+
+- `PolarizedTreesBenchmark`: per-corpus evaluation. The new `text_groups`
+  argument maps each text to a corpus; recovery metrics are then computed
+  per corpus and averaged over corpora (equal weight per corpus).
+- `PolarizedTreesBenchmark`: distribution statistics (`median`, `std`,
+  `q1`, `q3`, `min`, `max`) next to the mean for `jaccard`, `precision`
+  and `recall` (`exact_match` stays a mean, as it is 0/1). The results table
+  gains the corresponding `<metric>_<stat>` columns; existing columns keep
+  their meaning.
+- New benchmark accessors and savers: `get_group_results()` (one row per
+  configuration and corpus), `get_text_results()` (raw per-text recovery
+  values, e.g. for boxplots), `save_group_results()` and
+  `save_text_results()`. The `keep_text_results` argument turns per-text
+  storage off.
+- Benchmark checkpointing: with `checkpoint_dir` set, `run()` saves its
+  progress every `checkpoint_every` configurations (default 50) and resumes
+  from the last checkpoint when re-run, so a crash no longer loses the
+  search. A checkpoint from a different search (other configurations) is
+  ignored. A readable `benchmark_partial_summary.csv` is written next to it.
+- Benchmark parallelism: `n_jobs` evaluates configurations in worker
+  processes (`-1` = all CPUs; default `1`). Results are identical to a serial
+  run and keep configuration order. Each worker holds its own copy of the
+  annotations, so memory grows with `n_jobs`.
+- Tests for checkpoint/resume, parallel-vs-serial equivalence and `n_jobs`
+  validation.
+
+### Changed
+
+- Polarized tree construction is roughly 7–9× faster: nodes are handled as
+  index arrays with per-group rating histograms and a cached nDFU, instead
+  of a pandas `groupby` per dimension per node. Output is unchanged — trees
+  (structure, values and value types) were verified identical to the
+  previous implementation, including with missing values in dimension
+  columns. A full 800-configuration benchmark drops from hours to minutes.
+- `treesbenchmark.ipynb` uses per-corpus evaluation, checkpointing and
+  `n_jobs`, and saves the extra outputs (`benchmark_text_results.csv`,
+  `benchmark_report.json`, `top_configurations.csv`,
+  `fcp_inference_diagnostics.json`).
+
 ## [0.6.0] — 2026-09-04
 
 ### Changed (breaking)
