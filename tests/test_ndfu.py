@@ -49,3 +49,54 @@ def test_high_intensity_single_dim_scores_high_with_real_ndfu():
         # 0.5; only even-cardinality dims (e.g. "orientation") reach ~1.0.
         # 0.4 stays well above the k=0 control's < 0.2 while tolerating both.
         assert score > 0.4
+
+
+# ---------------------------------------------------------------------------
+# The two nDFU code paths must agree: ndfu_score (corpus filter, compute_peg)
+# and _ndfu_from_counts over _histograms (tree-building loop).
+# ---------------------------------------------------------------------------
+
+import numpy as np
+
+from polartox.polarized_tree import _histograms, _ndfu_from_counts, ndfu_score
+
+
+def _via_counts(ratings, scale):
+    ratings = np.asarray(ratings, dtype=float)
+    n = len(ratings)
+    counts = _histograms(np.zeros(n, dtype=np.int64), ratings, 1, scale)[0]
+    return _ndfu_from_counts(tuple(counts.tolist()), n)
+
+
+def test_ndfu_paths_agree_on_random_ratings():
+    pytest.importorskip("ndfu")
+    rng = np.random.default_rng(0)
+    for _ in range(300):
+        ratings = rng.integers(1, 6, size=int(rng.integers(1, 60)))
+        assert _via_counts(ratings, 5) == pytest.approx(ndfu_score(ratings, 5), abs=1e-12)
+
+
+@pytest.mark.parametrize("ratings", [
+    [3],                        # single rating
+    [2] * 10,                   # all identical
+    [1] * 5 + [5] * 5,          # perfectly bimodal
+    [0, 1, 2, 6, 7],            # some ratings outside 1..scale
+    [1.5, 2, 3],                # a non-integer rating
+])
+def test_ndfu_paths_agree_on_edge_cases(ratings):
+    pytest.importorskip("ndfu")
+    assert _via_counts(ratings, 5) == pytest.approx(ndfu_score(ratings, 5), abs=1e-12)
+
+
+def test_ndfu_paths_agree_on_empty_input():
+    pytest.importorskip("ndfu")
+    assert np.isnan(ndfu_score([], 5))
+    assert np.isnan(_via_counts([], 5))
+
+
+def test_ndfu_paths_both_raise_when_every_rating_is_out_of_range():
+    pytest.importorskip("ndfu")
+    with pytest.raises(ValueError):
+        ndfu_score([0, 9], 5)
+    with pytest.raises(ValueError):
+        _via_counts([0, 9], 5)

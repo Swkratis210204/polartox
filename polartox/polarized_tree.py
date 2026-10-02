@@ -7,7 +7,7 @@ algorithm (detect_polarized_subgroups), its small numeric helpers
 built tree and answers questions about it (render, inspect, walk nodes,
 pull a node's/leaf's rating distribution).
 
-Corpus-level orchestration across many texts lives in polarized_trees.py
+Corpus-level orchestration across many texts lives in pipeline.py
 (PolarizedTreesPipeline), which builds and holds PolarizedTree instances
 but never reaches into their internals directly.
 """
@@ -23,6 +23,11 @@ def ndfu_score(ratings, scale):
     if len(ratings) == 0:
         return float("nan")
     return dfu(pdf(list(ratings), list(range(1, scale + 1))))
+
+
+def default_theta_pole(scale):
+    """Ratings >= this count as toxic when no theta_pole is given."""
+    return scale // 2 + 1
 
 
 @lru_cache(maxsize=None)
@@ -95,11 +100,20 @@ def _leaf(ratings, path, ndfu_val, theta_pole, reason):
 def detect_polarized_subgroups(
     data, dims, min_size, h, max_depth, scale,
     theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0,
-    relative_h=False,   # NEW
+    relative_h=False,
     verbose=False, return_tree=False,
 ):
     """
-    ...
+    Greedily split one text's annotators by the dimension with the highest
+    PEG, recursing inside each subgroup until a stopping rule triggers.
+
+    Parameters
+    ----------
+    data : DataFrame
+        One text's rows: a "rating" column plus one column per dimension.
+    dims : list of str
+        Candidate splitting dimensions; a dimension is used at most once
+        per branch.
     min_size : int or callable
         Fixed absolute minimum subgroup size, OR a callable min_size(depth)
         returning a FRACTION of the text's total annotators for that depth
@@ -107,8 +121,35 @@ def detect_polarized_subgroups(
         splits (finding the 1st/2nd true cause) are reliable on large
         groups, while late splits risk mistaking residual noise (from
         imperfect intensity/alpha in the data) for a genuine extra cause.
+        A dimension is skipped at a node if any of its groups is smaller.
+    h : float
+        Gain threshold: a node splits only if its best PEG exceeds h.
+    max_depth : int
+        Nodes deeper than this become leaves (the root is at depth 1).
+    scale : int
+        Rating scale, ratings are integers in [1, scale].
+    theta_pole : int or None
+        Ratings >= theta_pole count as toxic when labeling a leaf's pole.
+        Defaults to scale // 2 + 1.
+    theta_stop : float or None
+        A node with nDFU below this is already unpolarized and becomes a
+        leaf. None disables this rule.
+    variant, beta :
+        PEG formulation: "max", "avg", "min" or "beta" (see compute_peg).
+    relative_h : bool
+        If True, compare best PEG / node nDFU to h instead of the raw PEG.
+    verbose : bool
+        Print each node's nDFU and rating histogram while building.
+    return_tree : bool
+        If True, return (leaves, root) instead of just the leaves.
+
+    Returns
+    -------
+    list of dict, or (list of dict, dict)
+        The leaves (path, n, ndfu, p_tox, pole, stop_reason), and with
+        return_tree=True also the nested root node.
     """
-    theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
+    theta_pole = theta_pole if theta_pole is not None else default_theta_pole(scale)
     n_total = len(data)
     leaves = []
 
@@ -241,7 +282,7 @@ class PolarizedTree:
             theta_pole=theta_pole, theta_stop=theta_stop, variant=variant, beta=beta,
             relative_h=relative_h, verbose=verbose, return_tree=True,
         )
-        resolved_theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
+        resolved_theta_pole = theta_pole if theta_pole is not None else default_theta_pole(scale)
         return cls(root, leaves, text_id=text_id, scale=scale, theta_pole=resolved_theta_pole)
 
     def get_root(self):

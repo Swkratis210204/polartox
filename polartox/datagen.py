@@ -34,6 +34,11 @@ DEFAULT_DIMENSIONS = {
 DEFAULT_DEPTH_WEIGHTS = {0: 0.05, 1: 0.20, 2: 0.30, 3: 0.25, 4: 0.20}
 DEFAULT_INTENSITY_RANGE = (0.3, 1.0)
 
+# Spread (std. dev., in rating points) of the k=0 negative control. Fixed on
+# purpose: it is narrow enough that the control stays a single hump with low
+# nDFU, which is what makes "no active dimension" a valid ground truth.
+CONTROL_SPREAD_RANGE = (0.6, 1.2)
+
 
 class GeneratedDataset:
     """
@@ -134,13 +139,11 @@ class AnnotatorPool:
         P(k active dimensions) for k = 0 .. len(dimensions). Must sum to 1.
     annotators_per_identity : int
         How many annotators share each unique demographic combination.
-    alpha_window : float
-        For texts with 2+ active dimensions, each dimension's alpha is
-        drawn within +/- alpha_window of a shared per-text base value,
-        rather than fully independently. Reduces (does not eliminate) an
-        "absorption" failure mode where a strong dimension's signal buries
-        a much weaker co-active one during detection -- see
-        polartox.polarized_tree for details.
+
+    Texts with k=0 active dimensions are the unimodal negative control:
+    ratings are drawn from a normal distribution around a random peak on
+    the scale, with a spread from CONTROL_SPREAD_RANGE, rounded and clipped
+    to [1, scale]. This range is fixed, not a parameter.
     """
 
     def __init__(
@@ -240,7 +243,7 @@ class AnnotatorPool:
 
     def _unimodal_negative_control(self, rng):
         peak = int(rng.integers(1, self.scale + 1))
-        spread = float(rng.uniform(0.6, 1.2))
+        spread = float(rng.uniform(*CONTROL_SPREAD_RANGE))
         return peak, spread
 
     # ------------------------------------------------------------------
@@ -352,7 +355,7 @@ class AnnotatorPool:
 # Example instantiation
 # ─────────────────────────────────────────────
 
-if __name__ == "__main__":
+def _demo(n_texts=5000):
     pool = AnnotatorPool(
         dimensions=DEFAULT_DIMENSIONS,
         scale=5,
@@ -362,7 +365,11 @@ if __name__ == "__main__":
     )
     pool.summary()
 
-    result = pool.generate_dataset(n_texts=5000, n_annotators_per_text=None, noise=0.05, seed=42)
+    result = pool.generate_dataset(n_texts=n_texts, n_annotators_per_text=None, noise=0.05, seed=42)
     print(f"\nDataset shape: {result.data.shape}")
     print(result.head())
     result.describe_text(0)
+
+
+if __name__ == "__main__":
+    _demo()

@@ -4,8 +4,7 @@ filter polarized texts, build a PolarizedTree per text, aggregate
 corpus-level metrics, optionally enriched with ground truth.
 
 Single-tree construction/inspection lives in polartox.polarized_tree
-(PolarizedTree, detect_polarized_subgroups); re-exported here for
-convenience.
+(PolarizedTree, detect_polarized_subgroups).
 
 Requires: pip install polartox[ndfu]
 """
@@ -13,20 +12,21 @@ Requires: pip install polartox[ndfu]
 import pandas as pd
 import numpy as np
 
-from polartox.polarized_tree import (
-    ndfu_score,
-    print_histogram,
-    compute_peg,
-    detect_polarized_subgroups,
-    render_tree_text,
-    jaccard,
-    PolarizedTree,
-)
+from polartox.polarized_tree import ndfu_score, jaccard, PolarizedTree, default_theta_pole
 
-__all__ = [
-    "ndfu_score", "print_histogram", "compute_peg", "detect_polarized_subgroups",
-    "render_tree_text", "jaccard", "PolarizedTree", "PolarizedTreesPipeline",
-]
+__all__ = ["PolarizedTreesPipeline"]
+
+
+class _DepthSchedule:
+    """frac(depth) = base + step * (depth - 1). A class rather than a lambda
+    so a pipeline using it can be pickled (benchmark n_jobs > 1)."""
+
+    def __init__(self, base, step):
+        self.base = base
+        self.step = step
+
+    def __call__(self, depth):
+        return self.base + self.step * (depth - 1)
 
 
 class PolarizedTreesPipeline:
@@ -69,13 +69,13 @@ class PolarizedTreesPipeline:
         self.max_depth = max_depth
         self.variant = variant
         self.beta = beta
-        self.theta_pole = theta_pole if theta_pole is not None else scale // 2 + 1
+        self.theta_pole = theta_pole if theta_pole is not None else default_theta_pole(scale)
         self.theta_stop = theta_stop
         self.relative_h = relative_h
 
+        self.min_size_frac_schedule = min_size_frac_schedule
         if min_size_frac_schedule is not None:
-            base, step = min_size_frac_schedule
-            self.min_size = lambda depth: base + step * (depth - 1)
+            self.min_size = _DepthSchedule(*min_size_frac_schedule)
             self.min_size_frac = None
         else:
             self.min_size = min_size

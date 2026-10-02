@@ -5,11 +5,11 @@ import os
 import pickle
 import random
 import time
+from collections.abc import Mapping
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
-
 
 DEFAULT_SEARCH_SPACE = {
     "theta_filter": [0.2, 0.3, 0.4],
@@ -21,12 +21,8 @@ DEFAULT_SEARCH_SPACE = {
     "theta_stop": [0.05, 0.10, 0.15],
 }
 
-DEFAULT_METRICS = [
-    "jaccard",
-    "precision",
-    "recall",
-    "exact_match",
-]
+# Also the set of metrics the benchmark accepts.
+DEFAULT_METRICS = ["jaccard", "precision", "recall", "exact_match"]
 
 DEFAULT_SELECTION_METRIC = "jaccard"
 
@@ -87,16 +83,12 @@ class PolarizedTreesBenchmark:
         # Optional {text_id: corpus} mapping. When given, every metric
         # and statistic is computed per corpus and then averaged over
         # corpora. Without it all texts form a single group.
-        self.text_groups = (
-            None if text_groups is None else dict(text_groups)
-        )
+        self.text_groups = None if text_groups is None else dict(text_groups)
         self.keep_text_results = keep_text_results
 
         # When checkpoint_dir is set, run() saves its progress every
         # checkpoint_every configurations and resumes from that file.
-        self.checkpoint_dir = (
-            None if checkpoint_dir is None else Path(checkpoint_dir)
-        )
+        self.checkpoint_dir = None if checkpoint_dir is None else Path(checkpoint_dir)
         self.checkpoint_every = checkpoint_every
 
         # Worker processes used to evaluate configurations. Each worker
@@ -105,40 +97,27 @@ class PolarizedTreesBenchmark:
         self.n_jobs = n_jobs
 
         if search_space is None:
-            self.search_space = {
-                key: list(values)
-                for key, values in DEFAULT_SEARCH_SPACE.items()
-            }
+            self.search_space = {key: list(values) for key, values in DEFAULT_SEARCH_SPACE.items()}
         elif isinstance(search_space, dict):
-            self.search_space = {
-                key: list(values)
-                for key, values in search_space.items()
-            }
+            self.search_space = {key: list(values) for key, values in search_space.items()}
         elif isinstance(search_space, (list, tuple)):
-            self.search_space = [
-                dict(config)
-                for config in search_space
-            ]
+            for i, config in enumerate(search_space):
+                if not isinstance(config, Mapping):
+                    raise TypeError(f"Configuration {i} must be a dictionary.")
+            self.search_space = [dict(config) for config in search_space]
         else:
             raise TypeError(
-                "search_space must be a dictionary or a list "
-                "of configuration dictionaries."
+                "search_space must be a dictionary or a list of configuration dictionaries."
             )
 
         self.strategy = strategy
         self.n_runs = n_runs
         self.seed = seed
 
-        self.metrics = (
-            DEFAULT_METRICS.copy()
-            if metrics is None
-            else list(metrics)
-        )
+        self.metrics = DEFAULT_METRICS.copy() if metrics is None else list(metrics)
 
         self.selection_metric = (
-            DEFAULT_SELECTION_METRIC
-            if selection_metric is None
-            else selection_metric
+            DEFAULT_SELECTION_METRIC if selection_metric is None else selection_metric
         )
 
         self.selection_direction = selection_direction
@@ -158,18 +137,13 @@ class PolarizedTreesBenchmark:
 
     def _validate_inputs(self):
         if not isinstance(self.annotations, pd.DataFrame):
-            raise TypeError(
-                "annotations must be a pandas DataFrame."
-            )
+            raise TypeError("annotations must be a pandas DataFrame.")
 
         required_columns = {"text_id", "rating"}
         missing = required_columns - set(self.annotations.columns)
 
         if missing:
-            raise ValueError(
-                "annotations is missing required columns: "
-                f"{sorted(missing)}"
-            )
+            raise ValueError(f"annotations is missing required columns: {sorted(missing)}")
 
         if self.annotations.empty:
             raise ValueError("annotations cannot be empty.")
@@ -178,29 +152,12 @@ class PolarizedTreesBenchmark:
             raise TypeError("ground_truth must be a dictionary.")
 
         annotation_ids = set(self.annotations["text_id"].unique())
-        ground_truth_ids = set(self.ground_truth.keys())
 
-        if annotation_ids != ground_truth_ids:
-            normalized_ids = set()
-            for text_id in ground_truth_ids:
-                try:
-                    normalized_ids.add(int(text_id))
-                except (TypeError, ValueError):
-                    normalized_ids.add(text_id)
-            missing_ground_truth = annotation_ids - normalized_ids
-        else:
-            missing_ground_truth = annotation_ids - ground_truth_ids
-
-        if missing_ground_truth:
-            raise ValueError(
-                "ground_truth is missing entries for text_ids: "
-                f"{sorted(missing_ground_truth)[:10]}"
-            )
+        # Raises if ground_truth does not cover every annotated text.
+        self._normalized_ground_truth()
 
         if self.strategy not in {"full", "random"}:
-            raise ValueError(
-                "strategy must be either 'full' or 'random'."
-            )
+            raise ValueError("strategy must be either 'full' or 'random'.")
 
         if self.strategy == "random":
             if not isinstance(self.n_runs, int):
@@ -208,43 +165,27 @@ class PolarizedTreesBenchmark:
             if self.n_runs < 1:
                 raise ValueError("n_runs must be at least 1.")
 
-        valid_metrics = {
-            "jaccard",
-            "precision",
-            "recall",
-            "exact_match",
-        }
-
-        invalid_metrics = set(self.metrics) - valid_metrics
+        invalid_metrics = set(self.metrics) - set(DEFAULT_METRICS)
 
         if invalid_metrics:
-            raise ValueError(
-                f"Unknown metrics: {sorted(invalid_metrics)}"
-            )
+            raise ValueError(f"Unknown metrics: {sorted(invalid_metrics)}")
 
         if not self.metrics:
             raise ValueError("At least one metric must be requested.")
 
         if self.text_groups is not None:
-            missing_groups = annotation_ids - {
-                self._as_id(text_id) for text_id in self.text_groups
-            }
+            missing_groups = annotation_ids - {self._as_id(text_id) for text_id in self.text_groups}
 
             if missing_groups:
                 raise ValueError(
-                    "text_groups is missing entries for text_ids: "
-                    f"{sorted(missing_groups)[:10]}"
+                    f"text_groups is missing entries for text_ids: {sorted(missing_groups)[:10]}"
                 )
 
         if self.selection_metric not in self.metrics:
-            raise ValueError(
-                "selection_metric must be included in metrics."
-            )
+            raise ValueError("selection_metric must be included in metrics.")
 
         if self.selection_direction not in {"max", "min"}:
-            raise ValueError(
-                "selection_direction must be 'max' or 'min'."
-            )
+            raise ValueError("selection_direction must be 'max' or 'min'.")
 
         if not isinstance(self.top_k, int):
             raise TypeError("top_k must be an integer.")
@@ -257,28 +198,19 @@ class PolarizedTreesBenchmark:
     def _validate_search_parameters(self):
         signature = inspect.signature(type(self.pipeline).__init__)
 
-        valid_parameters = {
-            name
-            for name in signature.parameters
-            if name != "self"
-        }
+        valid_parameters = {name for name in signature.parameters if name != "self"}
 
         if isinstance(self.search_space, dict):
-            invalid_parameters = (
-                set(self.search_space) - valid_parameters
-            )
+            invalid_parameters = set(self.search_space) - valid_parameters
         else:
             invalid_parameters = set()
 
             for config in self.search_space:
-                invalid_parameters.update(
-                    set(config) - valid_parameters
-                )
+                invalid_parameters.update(set(config) - valid_parameters)
 
         if invalid_parameters:
             raise ValueError(
-                "Unknown pipeline parameters in search_space: "
-                f"{sorted(invalid_parameters)}"
+                f"Unknown pipeline parameters in search_space: {sorted(invalid_parameters)}"
             )
 
         if isinstance(self.search_space, dict):
@@ -287,36 +219,22 @@ class PolarizedTreesBenchmark:
 
             for parameter, values in self.search_space.items():
                 if not isinstance(values, (list, tuple)):
-                    raise TypeError(
-                        f"Search values for '{parameter}' "
-                        "must be a list or tuple."
-                    )
+                    raise TypeError(f"Search values for '{parameter}' must be a list or tuple.")
                 if len(values) == 0:
-                    raise ValueError(
-                        f"Search space for '{parameter}' cannot be empty."
-                    )
+                    raise ValueError(f"Search space for '{parameter}' cannot be empty.")
         else:
             if not self.search_space:
                 raise ValueError("search_space cannot be empty.")
 
             for i, config in enumerate(self.search_space):
-                if not isinstance(config, dict):
-                    raise TypeError(
-                        f"Configuration {i} must be a dictionary."
-                    )
                 if not config:
-                    raise ValueError(
-                        f"Configuration {i} cannot be empty."
-                    )
+                    raise ValueError(f"Configuration {i} cannot be empty.")
 
     def _generate_configurations(self):
         # Explicit configuration list:
         # use the configurations exactly as supplied.
         if isinstance(self.search_space, (list, tuple)):
-            configurations = [
-                dict(config)
-                for config in self.search_space
-            ]
+            configurations = [dict(config) for config in self.search_space]
 
         # Dictionary search space.
         else:
@@ -331,29 +249,17 @@ class PolarizedTreesBenchmark:
             # `beta` is intentionally NOT part of DEFAULT_SEARCH_SPACE.
             # It is generated here conditionally from `variant`.
 
-            if (
-                "variant" in self.search_space
-                and "beta" not in self.search_space
-            ):
-                other_keys = [
-                    key
-                    for key in self.search_space
-                    if key != "variant"
-                ]
+            if "variant" in self.search_space and "beta" not in self.search_space:
+                other_keys = [key for key in self.search_space if key != "variant"]
 
                 base_combinations = itertools.product(
-                    *(
-                        self.search_space[key]
-                        for key in other_keys
-                    )
+                    *(self.search_space[key] for key in other_keys)
                 )
 
                 configurations = []
 
                 for values in base_combinations:
-                    base_config = dict(
-                        zip(other_keys, values)
-                    )
+                    base_config = dict(zip(other_keys, values))
 
                     for variant in self.search_space["variant"]:
 
@@ -364,34 +270,18 @@ class PolarizedTreesBenchmark:
                             beta_values = [0.5, 1.0, 2.0]
 
                         else:
-                            raise ValueError(
-                                f"Unknown variant '{variant}'."
-                            )
+                            raise ValueError(f"Unknown variant '{variant}'.")
 
                         for beta in beta_values:
-                            configurations.append(
-                                {
-                                    **base_config,
-                                    "variant": variant,
-                                    "beta": beta,
-                                }
-                            )
+                            configurations.append({**base_config, "variant": variant, "beta": beta})
 
             # Ordinary dictionary search space.
             else:
                 keys = list(self.search_space)
 
-                combinations = itertools.product(
-                    *(
-                        self.search_space[key]
-                        for key in keys
-                    )
-                )
+                combinations = itertools.product(*(self.search_space[key] for key in keys))
 
-                configurations = [
-                    dict(zip(keys, values))
-                    for values in combinations
-                ]
+                configurations = [dict(zip(keys, values)) for values in combinations]
 
         # Apply search strategy.
         if self.strategy == "full":
@@ -400,15 +290,9 @@ class PolarizedTreesBenchmark:
         else:
             rng = random.Random(self.seed)
 
-            n = min(
-                self.n_runs,
-                len(configurations),
-            )
+            n = min(self.n_runs, len(configurations))
 
-            selected = rng.sample(
-                configurations,
-                n,
-            )
+            selected = rng.sample(configurations, n)
 
         return selected
 
@@ -421,7 +305,7 @@ class PolarizedTreesBenchmark:
         params = {}
 
         for name, parameter in signature.parameters.items():
-            if name == "self":
+            if name == "self" or name in config:
                 continue
 
             if hasattr(self.pipeline, name):
@@ -429,9 +313,7 @@ class PolarizedTreesBenchmark:
             elif parameter.default is not inspect.Parameter.empty:
                 params[name] = parameter.default
             else:
-                raise ValueError(
-                    f"Cannot determine value for pipeline parameter '{name}'."
-                )
+                raise ValueError(f"Cannot determine value for pipeline parameter '{name}'.")
 
         params.update(config)
         return type(self.pipeline)(**params)
@@ -442,21 +324,13 @@ class PolarizedTreesBenchmark:
         if set(self.ground_truth) == annotation_ids:
             return self.ground_truth
 
-        normalized = {}
-
-        for text_id, value in self.ground_truth.items():
-            try:
-                text_id = int(text_id)
-            except (TypeError, ValueError):
-                pass
-            normalized[text_id] = value
+        normalized = {self._as_id(text_id): value for text_id, value in self.ground_truth.items()}
 
         missing = annotation_ids - set(normalized)
 
         if missing:
             raise ValueError(
-                "ground_truth is missing entries for text_ids: "
-                f"{sorted(missing)[:10]}"
+                f"ground_truth is missing entries for text_ids: {sorted(missing)[:10]}"
             )
 
         return normalized
@@ -466,16 +340,10 @@ class PolarizedTreesBenchmark:
             return value.item()
 
         if isinstance(value, dict):
-            return {
-                key: self._python_value(val)
-                for key, val in value.items()
-            }
+            return {key: self._python_value(val) for key, val in value.items()}
 
         if isinstance(value, (list, tuple)):
-            return [
-                self._python_value(val)
-                for val in value
-            ]
+            return [self._python_value(val) for val in value]
 
         return value
 
@@ -515,11 +383,7 @@ class PolarizedTreesBenchmark:
         if not isinstance(self.search_space, dict):
             return sorted(extras)
 
-        position = (
-            columns.index("variant") + 1
-            if "variant" in columns
-            else len(columns)
-        )
+        position = columns.index("variant") + 1 if "variant" in columns else len(columns)
 
         return columns[:position] + extras + columns[position:]
 
@@ -527,39 +391,26 @@ class PolarizedTreesBenchmark:
         candidate = self._build_pipeline(config)
 
         output = candidate.run_full_evaluation(
-            self.annotations,
-            ground_truth=self._normalized_ground_truth(),
-            verbose=False,
+            self.annotations, ground_truth=self._normalized_ground_truth(), verbose=False
         )
 
         recovery = output["recovery"]
 
         if self.text_groups is None:
-            labels = pd.Series(
-                "all",
-                index=recovery.index,
-            )
+            labels = pd.Series("all", index=recovery.index)
         else:
             labels = recovery["text_id"].map(
-                {
-                    self._as_id(text_id): group
-                    for text_id, group in self.text_groups.items()
-                }
+                {self._as_id(text_id): group for text_id, group in self.text_groups.items()}
             )
 
             if labels.isna().any():
-                raise ValueError(
-                    "text_groups does not cover every evaluated text."
-                )
+                raise ValueError("text_groups does not cover every evaluated text.")
 
         # One row per corpus: mean and statistics of the per-text values.
         group_rows = []
 
         for name, part in recovery.groupby(labels, sort=False):
-            group_row = {
-                GROUP_COLUMN: name,
-                "n_texts_evaluated": len(part),
-            }
+            group_row = {GROUP_COLUMN: name, "n_texts_evaluated": len(part)}
 
             for metric in self.metrics:
                 values = part[metric].astype(float)
@@ -567,9 +418,7 @@ class PolarizedTreesBenchmark:
 
                 if metric in STAT_METRICS:
                     for stat, function in STATS.items():
-                        group_row[f"{metric}_{stat}"] = float(
-                            function(values)
-                        )
+                        group_row[f"{metric}_{stat}"] = float(function(values))
 
             group_rows.append(group_row)
 
@@ -586,13 +435,7 @@ class PolarizedTreesBenchmark:
         if self.keep_text_results:
             wanted = [
                 column
-                for column in [
-                    "text_id",
-                    "k_true",
-                    "true_dims",
-                    "found_dims",
-                    *self.metrics,
-                ]
+                for column in ["text_id", "k_true", "true_dims", "found_dims", *self.metrics]
                 if column in recovery.columns
             ]
 
@@ -630,8 +473,7 @@ class PolarizedTreesBenchmark:
         os.replace(temp, path)
 
         pd.DataFrame(rows).to_csv(
-            self.checkpoint_dir / "benchmark_partial_summary.csv",
-            index=False,
+            self.checkpoint_dir / "benchmark_partial_summary.csv", index=False
         )
 
     def _load_checkpoint(self, configurations):
@@ -652,9 +494,7 @@ class PolarizedTreesBenchmark:
 
         if state.get("configurations") != configurations:
             if self.verbose:
-                print(
-                    "Checkpoint belongs to a different search; ignoring it."
-                )
+                print("Checkpoint belongs to a different search; ignoring it.")
             return None
 
         return state
@@ -682,9 +522,7 @@ class PolarizedTreesBenchmark:
             os.environ.setdefault(variable, "1")
 
         executor = ProcessPoolExecutor(
-            max_workers=workers,
-            initializer=_init_worker,
-            initargs=(self,),
+            max_workers=workers, initializer=_init_worker, initargs=(self,)
         )
 
         try:
@@ -721,21 +559,13 @@ class PolarizedTreesBenchmark:
         # computed here or in worker processes.
         outputs = self._evaluate(pending)
 
-        for i, (config, output) in enumerate(
-            zip(pending, outputs), start=done + 1
-        ):
+        for i, (config, output) in enumerate(zip(pending, outputs), start=done + 1):
             row, config_group_rows, text_frame = output
             row["configuration_id"] = i
             rows.append(row)
 
             for group_row in config_group_rows:
-                group_rows.append(
-                    {
-                        "configuration_id": i,
-                        **config,
-                        **group_row,
-                    }
-                )
+                group_rows.append({"configuration_id": i, **config, **group_row})
 
             if text_frame is not None:
                 text_frame.insert(0, "configuration_id", i)
@@ -743,10 +573,7 @@ class PolarizedTreesBenchmark:
 
             if self.verbose:
                 score = row[self.selection_metric]
-                print(
-                    f"[{i}/{total}] "
-                    f"{self.selection_metric}={score:.4f}"
-                )
+                print(f"[{i}/{total}] {self.selection_metric}={score:.4f}")
 
             if (
                 self.checkpoint_dir is not None
@@ -754,9 +581,7 @@ class PolarizedTreesBenchmark:
                 and i % self.checkpoint_every == 0
                 and i < total
             ):
-                self._save_checkpoint(
-                    configurations, rows, group_rows, text_frames
-                )
+                self._save_checkpoint(configurations, rows, group_rows, text_frames)
 
                 if self.verbose:
                     print(f"Checkpoint saved at {i}/{total}.")
@@ -767,79 +592,50 @@ class PolarizedTreesBenchmark:
         parameter_columns = self._parameter_columns(configurations)
         value_columns = self._value_columns()
 
-        results = results[
-            [
-                "configuration_id",
-                *parameter_columns,
-                *value_columns,
-            ]
-        ]
+        results = results[["configuration_id", *parameter_columns, *value_columns]]
 
         results = results.sort_values(
-            by=self.selection_metric,
-            ascending=self.selection_direction == "min",
+            by=self.selection_metric, ascending=self.selection_direction == "min"
         ).reset_index(drop=True)
 
         results["rank"] = range(1, len(results) + 1)
 
-        results = results[
-            [
-                "rank",
-                "configuration_id",
-                *parameter_columns,
-                *value_columns,
-            ]
-        ]
+        results = results[["rank", "configuration_id", *parameter_columns, *value_columns]]
 
-        rank_of = dict(
-            zip(results["configuration_id"], results["rank"])
-        )
+        rank_of = dict(zip(results["configuration_id"], results["rank"]))
 
         group_results = pd.DataFrame(group_rows)
-        group_results.insert(
-            0,
-            "rank",
-            group_results["configuration_id"].map(rank_of),
-        )
-        group_results = group_results[
-            [
-                "rank",
-                "configuration_id",
-                *parameter_columns,
-                GROUP_COLUMN,
-                "n_texts_evaluated",
-                *value_columns,
+        group_results.insert(0, "rank", group_results["configuration_id"].map(rank_of))
+        group_results = (
+            group_results[
+                [
+                    "rank",
+                    "configuration_id",
+                    *parameter_columns,
+                    GROUP_COLUMN,
+                    "n_texts_evaluated",
+                    *value_columns,
+                ]
             ]
-        ].sort_values(
-            "rank",
-            kind="stable",
-        ).reset_index(drop=True)
+            .sort_values("rank", kind="stable")
+            .reset_index(drop=True)
+        )
 
         self.group_results_ = group_results
 
         if text_frames:
-            text_results = pd.concat(
-                text_frames,
-                ignore_index=True,
+            text_results = pd.concat(text_frames, ignore_index=True)
+            text_results.insert(0, "rank", text_results["configuration_id"].map(rank_of))
+            self.text_results_ = text_results.sort_values("rank", kind="stable").reset_index(
+                drop=True
             )
-            text_results.insert(
-                0,
-                "rank",
-                text_results["configuration_id"].map(rank_of),
-            )
-            self.text_results_ = text_results.sort_values(
-                "rank",
-                kind="stable",
-            ).reset_index(drop=True)
         else:
             self.text_results_ = None
 
         self.results_ = results
         best_row = results.iloc[0]
 
-        self.best_score_ = float(
-            best_row[self.selection_metric]
-        )
+        self.best_score_ = float(best_row[self.selection_metric])
 
         self.best_config_ = {
             parameter: self._python_value(best_row[parameter])
@@ -849,9 +645,7 @@ class PolarizedTreesBenchmark:
 
         # Store the selected pipeline so the user does not need
         # to reconstruct it manually from best_config.
-        self.best_pipeline_ = self._build_pipeline(
-            self.best_config_
-        )
+        self.best_pipeline_ = self._build_pipeline(self.best_config_)
 
         self.top_configs_ = results.head(self.top_k).copy()
 
@@ -905,23 +699,15 @@ class PolarizedTreesBenchmark:
         if k is None:
             k = self.top_k
 
-        print(
-            f"Configurations evaluated: {len(self.results_)}"
-        )
-        print(
-            f"Selection metric: {self.selection_metric}"
-        )
-        print(
-            f"Best score: {self.best_score_:.4f}"
-        )
+        print(f"Configurations evaluated: {len(self.results_)}")
+        print(f"Selection metric: {self.selection_metric}")
+        print(f"Best score: {self.best_score_:.4f}")
         print("\nBest configuration:")
 
         for parameter, value in self.best_config_.items():
             print(f"  {parameter}: {value}")
 
-        print(
-            f"\nRuntime: {self.runtime_:.2f} seconds"
-        )
+        print(f"\nRuntime: {self.runtime_:.2f} seconds")
         print("\nTop configurations:")
 
         return self.get_top_configs(k)
@@ -930,12 +716,6 @@ class PolarizedTreesBenchmark:
         """Return the complete benchmark report as a dictionary."""
         if self.results_ is None:
             raise RuntimeError("Run the benchmark first.")
-
-        parameter_space = (
-            self.search_space
-            if isinstance(self.search_space, dict)
-            else self.search_space
-        )
 
         report = {
             "benchmark": {
@@ -949,16 +729,9 @@ class PolarizedTreesBenchmark:
                 "total_configurations": len(self.results_),
                 "runtime_seconds": self.runtime_,
             },
-            "search_space": parameter_space,
-            "best_configuration": {
-                "config": self.best_config_,
-                "score": self.best_score_,
-            },
-            "top_configurations": (
-                self.get_top_configs().to_dict(
-                    orient="records"
-                )
-            ),
+            "search_space": self.search_space,
+            "best_configuration": {"config": self.best_config_, "score": self.best_score_},
+            "top_configurations": (self.get_top_configs().to_dict(orient="records")),
         }
 
         return self._python_value(report)
@@ -982,8 +755,7 @@ class PolarizedTreesBenchmark:
         """Return raw per-text recovery values for every configuration."""
         if self.text_results_ is None:
             raise RuntimeError(
-                "No per-text results. Run the benchmark with "
-                "keep_text_results=True."
+                "No per-text results. Run the benchmark with keep_text_results=True."
             )
         return self.text_results_.copy()
 
@@ -1005,11 +777,6 @@ class PolarizedTreesBenchmark:
         path = Path(path)
 
         with open(path, "w", encoding="utf-8") as f:
-            json.dump(
-                report,
-                f,
-                indent=2,
-                ensure_ascii=False,
-            )
+            json.dump(report, f, indent=2, ensure_ascii=False)
 
         return path

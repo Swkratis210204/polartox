@@ -24,5 +24,30 @@ jobs:
       - name: Install dependencies
         run: pip install ".[dev]"
 
+      # Floating dependencies: the golden-snapshot comparison skips itself here
+      # when the installed versions differ from the ones it was made with.
       - name: Run tests
-        run: pytest tests/
+        run: pytest tests/ -ra
+
+  # Pinned to the versions recorded in tests/golden_snapshot.json ("_versions").
+  # POLARTOX_REQUIRE_GOLDEN turns a version mismatch into a failure, so the
+  # golden-snapshot comparison can never be silently skipped in this job.
+  # When the golden file is regenerated, update these pins to match.
+  tests-pinned:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies at the golden-snapshot versions
+        run: pip install ".[dev]" ndfu==0.9.3 numpy==2.4.2 pandas==2.3.3 scikit-learn==1.9.0
+
+      - name: Run tests
+        env:
+          POLARTOX_REQUIRE_GOLDEN: "1"
+        run: pytest tests/ -ra
