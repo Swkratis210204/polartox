@@ -21,7 +21,9 @@ Ground truth is required for recovery-based model selection. Once the best confi
 
 ## Notebooks
 
-There are two notebooks.
+There are three notebooks, run in this order: `datasetdemo.ipynb`, `treesbenchmark.ipynb`, `pegcomparison.ipynb`.
+
+What the notebooks share lives in [`benchmark_config.py`](benchmark_config.py): the corpus settings, the data and results folders (`DATA_DIR`, `RESULTS_DIR`), `load_corpus` / `load_benchmark_corpora` (read the saved datasets), and `check_polartox()` (prints which `polartox` and library versions are running, and stops if it is not the current package). Each notebook only has to find that file first.
 
 ### `datasetdemo.ipynb`
 
@@ -38,21 +40,31 @@ The datasets are generated **once** and reused throughout the benchmark, so all 
 
 ### `treesbenchmark.ipynb`
 
-This notebook performs the complete benchmark workflow shown above.
+This notebook runs the hyperparameter search and saves its results. It stops there.
 
 It:
 
 - loads the fixed synthetic datasets;
 - defines the benchmark inputs;
-- runs `PolarizedTreesBenchmark`;
-- searches the paper's hyperparameter space;
-- selects the best configuration using the synthetic ground truth;
-- evaluates the selected configuration on the individual benchmark corpora;
-- runs the selected pipeline on an unseen corpus without ground truth;
-- reports the resulting F, C, and P outputs;
-- saves the benchmark and inference results.
+- runs `PolarizedTreesBenchmark` over the paper's hyperparameter space, with recovery measured against the synthetic ground truth;
+- saves the complete results, the report, the top 20 configurations (`top_configurations.csv`), and a summary of which PEG formulations the top 20 use (`top20_formulations.csv`).
 
-The `treesbenchmark.ipynb` notebook serves **two purposes**: it is a runnable demonstration of the `PolarizedTreesBenchmark` API, and it is also the actual experimental workflow used to obtain the configurations and results reported in the paper.
+It serves **two purposes**: it is a runnable demonstration of the `PolarizedTreesBenchmark` API, and it is the experimental workflow used to select the configurations reported in the paper.
+
+### `pegcomparison.ipynb`
+
+This notebook shows how the PEG formulations change the trees.
+
+It:
+
+- opens the top-20 table saved by `treesbenchmark.ipynb` and lets you choose rows by position;
+- keeps every setting of a chosen row fixed except the PEG formulation, and runs all five (`max`, `avg`, `min`, `mean`, `harmonic`) on the three benchmark corpora and on the unseen corpus;
+- gives one **overview** per formulation: recovery (checked against the benchmark's own saved numbers) and tree shape (retention, leaves, depth, annotators per leaf, residual nDFU, top-split PEG, indeterminate leaves);
+- splits recovery **by the true number of active dimensions** of each text (k), which is where the formulations differ most;
+- computes the **ARI** between formulations, overall and by k: whether two of them split the annotators of a text into the same groups;
+- shows F, C and P for every formulation on the unseen corpus;
+- shows **the same text under every formulation**: the texts on which the formulations disagree most, with the true structure, a one-line summary per formulation and the trees themselves;
+- saves everything to `benchmark_results/peg_comparison/`.
 
 ## What Can Be Changed?
 
@@ -117,14 +129,16 @@ The notebooks assume the following structure:
     │   └── inference_unseen_ground_truth.json
     │
     ├── benchmark_results/
-    │   └── ...
+    │   ├── ...                       (written by treesbenchmark.ipynb)
+    │   └── peg_comparison/           (written by pegcomparison.ipynb)
     │
     ├── synthetic_benchmark_bundle/   (and a .zip of it: a copy of benchmark_data/
     │                                  for sharing, created by datasetdemo.ipynb)
     │
     └── notebooks/
         ├── datasetdemo.ipynb
-        └── treesbenchmark.ipynb
+        ├── treesbenchmark.ipynb
+        └── pegcomparison.ipynb
 
 ## Running the Benchmark
 
@@ -136,35 +150,43 @@ Run the notebooks in order:
             ↓
     treesbenchmark.ipynb
             ↓
-    benchmark_results/
+    benchmark_results/   (top_configurations.csv, ...)
+            ↓
+    pegcomparison.ipynb
+            ↓
+    benchmark_results/peg_comparison/
 
 First run `datasetdemo.ipynb` to generate the fixed synthetic datasets.
 
-Then run `treesbenchmark.ipynb` to reproduce the benchmark, select the best configuration, and run the final inference.
+Then run `treesbenchmark.ipynb` to reproduce the search and save the top configurations, and finally `pegcomparison.ipynb` to compare the PEG formulations on them.
 
 The full benchmark can be computationally expensive because it evaluates a large hyperparameter search. Existing results can be inspected without rerunning the complete search.
 
-> **Note.** The files currently in `benchmark_results/` come from an earlier search space: the PEG variants `max`, `avg` and an older `beta` (the harmonic mean of max and avg only). They predate the `min`, `mean` and `harmonic` formulations and the current default grid, so they are not what the present package would produce. Rerun `treesbenchmark.ipynb` to regenerate them.
+> **Note.** The search results in `benchmark_results/` (`benchmark_*.csv`, `benchmark_report.json`, `top_configurations.csv`, `top20_formulations.csv`) come from the current search (800 random configurations of the 3,240, seed 0). A few older files from the earlier version of the notebook are still in that folder (`selected_configuration*`, `fcp_*`, `summary_results_extra.csv`); they come from the earlier search and are not produced by the current notebooks.
 
 ## Outputs
 
-`treesbenchmark.ipynb` saves:
+`treesbenchmark.ipynb` saves, in `benchmark_results/`:
 
-- results for the evaluated configurations;
-- the selected best configuration;
-- the best score;
-- the top-performing configurations;
-- recovery results for the selected configuration on A/B/C;
-- inference outputs **F**, **C**, and **P**;
-- inference diagnostics;
-- benchmark and inference reports.
+- results for the evaluated configurations (`benchmark_configuration_summary.csv`, `benchmark_results.csv`, `benchmark_text_results.csv`);
+- the report, with the settings, the search space, the best configuration and the top configurations (`benchmark_report.json`);
+- the top 20 configurations (`top_configurations.csv`);
+- how many of the top 20 use each PEG formulation (`top20_formulations.csv`).
 
-These outputs provide the reproducible record of both **model selection** and **final inference**.
+`pegcomparison.ipynb` saves, in `benchmark_results/peg_comparison/`:
+
+- the chosen settings (`selected_settings.csv`);
+- every number of every run and corpus (`per_run.csv`), the overview table (`overview_A_B_C.csv`) and the by-k tables (`recovery_by_k.csv`, `ari_by_k.csv`);
+- the ARI between formulations, as matrices and per text (`ari_*.csv`);
+- the inference outputs **F**, **C** and **P** for every formulation (`F_*.csv`, `C_*.csv`, `P_*.csv`).
+
+These outputs provide the reproducible record of **model selection** and of the **PEG comparison**.
 
 ## Next Steps
 
 1. Run `datasetdemo.ipynb` to generate the fixed synthetic datasets.
-2. Run `treesbenchmark.ipynb` to reproduce the benchmark and model selection.
-3. Inspect `benchmark_results/` for the selected configuration and evaluation results.
-4. For a different experiment, modify the search space, strategy, metrics, or other benchmark settings and rerun the notebook.
-5. For new annotation data, use the selected pipeline for ground-truth-free inference and inspect its **F**, **C**, and **P** outputs and diagnostics.
+2. Run `treesbenchmark.ipynb` to reproduce the search and save the top configurations.
+3. Run `pegcomparison.ipynb` to compare the PEG formulations on the best configurations.
+4. Inspect `benchmark_results/` and `benchmark_results/peg_comparison/`.
+5. For a different experiment, modify the search space, strategy, metrics, or other benchmark settings and rerun the notebooks.
+6. For new annotation data, use a chosen pipeline for ground-truth-free inference and inspect its **F**, **C**, and **P** outputs and diagnostics.

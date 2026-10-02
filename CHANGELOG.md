@@ -11,6 +11,12 @@
   any of the three is 0). `beta` weights avg against max and min with
   weights (1, beta^2, 1), so the default `beta=1` is the plain harmonic mean;
   the other variants ignore `beta`.
+- Comparing trees: `PolarizedTree.leaf_labels(dataset)` (the leaf each annotator
+  of the text ends up in), `adjusted_rand_index(labels_a, labels_b)` (the adjusted
+  Rand index of two partitions, the same definition as scikit-learn's, without
+  depending on it) and `pairwise_ari(pipelines, dataset)` (the mean ARI between
+  the trees of different pipelines over the texts they all analysed, e.g. the
+  same settings with different PEG formulations).
 - `check_variant` and `PEG_VARIANTS` in `polartox.polarized_tree`. An unknown
   variant now raises `ValueError` at construction of `PolarizedTreesPipeline`
   and at the start of `detect_polarized_subgroups` (before, only at the first

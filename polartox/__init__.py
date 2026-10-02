@@ -7,11 +7,12 @@ from polartox.datagen import (
 
 from polartox.polarized_tree import (
     PolarizedTree,
+    adjusted_rand_index,
     detect_polarized_subgroups,
     render_tree_text,
 )
 
-from polartox.pipeline import PolarizedTreesPipeline
+from polartox.pipeline import PolarizedTreesPipeline, pairwise_ari
 
 from polartox.benchmark import (
     PolarizedTreesBenchmark,
@@ -27,6 +28,8 @@ __all__ = [
     "DEFAULT_INTENSITY_RANGE",
     "PolarizedTree",
     "PolarizedTreesPipeline",
+    "adjusted_rand_index",
+    "pairwise_ari",
     "detect_polarized_subgroups",
     "render_tree_text",
     "PolarizedTreesBenchmark",

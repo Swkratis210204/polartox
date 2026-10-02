@@ -9,14 +9,56 @@ Single-tree construction/inspection lives in polartox.polarized_tree
 Requires: pip install polartox[ndfu]
 """
 
+import itertools
+
 import pandas as pd
 import numpy as np
 
 from polartox.polarized_tree import (
     ndfu_score, jaccard, PolarizedTree, default_theta_pole, check_variant,
+    adjusted_rand_index,
 )
 
-__all__ = ["PolarizedTreesPipeline"]
+__all__ = ["PolarizedTreesPipeline", "pairwise_ari"]
+
+
+def pairwise_ari(pipelines, dataset):
+    """How much do different pipelines agree on the groups of annotators?
+
+    `pipelines` maps a name to a PolarizedTreesPipeline that has built its trees
+    on `dataset` (run_full_evaluation or build_all_trees); typically the same
+    settings with a different PEG formulation. For every text that all of them
+    analysed, the trees' leaves partition the text's annotators, and the
+    adjusted Rand index (1 = same groups, about 0 = chance) compares two
+    partitions.
+
+    Returns (matrix, per_text): the mean ARI of every pair over those texts as a
+    names x names DataFrame (1.0 on the diagonal), and the per-text values as a
+    long DataFrame with columns text_id, a, b, ari.
+    """
+    names = list(pipelines)
+    shared = sorted(set.intersection(*(set(p.trees_) for p in pipelines.values())))
+
+    wanted = set(shared)
+    texts = {text_id: rows for text_id, rows in dataset.groupby("text_id", sort=False) if text_id in wanted}
+    labels = {
+        name: {text_id: pipelines[name].trees_[text_id].leaf_labels(texts[text_id]) for text_id in shared}
+        for name in names
+    }
+    per_text = pd.DataFrame(
+        [
+            {"text_id": text_id, "a": a, "b": b,
+             "ari": adjusted_rand_index(labels[a][text_id], labels[b][text_id])}
+            for text_id in shared
+            for a, b in itertools.combinations(names, 2)
+        ],
+        columns=["text_id", "a", "b", "ari"],
+    )
+
+    matrix = pd.DataFrame(1.0, index=names, columns=names)
+    for (a, b), group in per_text.groupby(["a", "b"]):
+        matrix.loc[a, b] = matrix.loc[b, a] = group["ari"].mean()
+    return matrix, per_text
 
 
 class _DepthSchedule:

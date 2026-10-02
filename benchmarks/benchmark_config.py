@@ -1,12 +1,28 @@
 """
 Shared configuration for the Polarized Trees synthetic benchmark.
 
-This module is the single source of truth for the synthetic benchmark
-settings used by both the dataset-generation notebook and the benchmark
-notebook.
+This module is the single source of truth for what the three notebooks
+(datasetdemo, treesbenchmark, pegcomparison) share:
+
+* the synthetic benchmark settings (dimensions, corpora, seeds);
+* the data and results folders (DATA_DIR, RESULTS_DIR);
+* check_polartox(), which reports which polartox is running;
+* load_corpus() / load_benchmark_corpora(), which read the saved datasets.
 """
 
+import json
+from pathlib import Path
+
+import pandas as pd
+
 from polartox.datagen import DEFAULT_DIMENSIONS
+
+
+# Folders. This file lives in the benchmarks folder, which is the notebooks'
+# project root.
+PROJECT_ROOT = Path(__file__).resolve().parent
+DATA_DIR = PROJECT_ROOT / "benchmark_data"
+RESULTS_DIR = PROJECT_ROOT / "benchmark_results"
 
 
 # Synthetic annotation environment
@@ -77,3 +93,42 @@ INFERENCE_CONFIG = {
 
 BENCHMARK_CORPORA = [cfg["name"] for cfg in CORPUS_CONFIGS]
 INFERENCE_CORPUS = INFERENCE_CONFIG["name"]
+
+
+def check_polartox():
+    """Print which polartox and which library versions are in use, and stop if
+    this is not the current polartox. Call it at the top of a notebook: its
+    results are only meaningful for the current package."""
+    import importlib.metadata as md
+
+    import polartox
+
+    try:
+        from polartox.polarized_tree import PEG_VARIANTS
+    except ImportError as error:
+        raise ImportError(
+            "Not the current polartox (no PEG_VARIANTS). "
+            "From the repository root run: pip install -e ."
+        ) from error
+
+    print("polartox", md.version("polartox"), "imported from", polartox.__file__)
+    print("PEG formulations:", PEG_VARIANTS)
+    for name in ("numpy", "pandas", "ndfu", "scikit-learn"):
+        print(f"{name} {md.version(name)}")
+
+    assert set(PEG_VARIANTS) == {"max", "avg", "min", "mean", "harmonic"}
+
+
+def load_corpus(name):
+    """The annotations and per-text ground truth that datasetdemo.ipynb saved."""
+    dataset = pd.read_csv(DATA_DIR / f"{name}_dataset.csv")
+
+    with open(DATA_DIR / f"{name}_ground_truth.json", encoding="utf-8") as f:
+        ground_truth = {int(text_id): value for text_id, value in json.load(f).items()}
+
+    return dataset, ground_truth
+
+
+def load_benchmark_corpora():
+    """{name: (dataset, ground_truth)} for the model-selection corpora A, B and C."""
+    return {name: load_corpus(name) for name in BENCHMARK_CORPORA}

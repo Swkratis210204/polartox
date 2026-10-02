@@ -97,8 +97,9 @@ Inference on unseen data
 
 The [`treesbenchmark.ipynb`](benchmarks/notebooks/treesbenchmark.ipynb) notebook
 serves both as a runnable demonstration of `PolarizedTreesBenchmark` and as
-the experimental workflow used to obtain the configurations and results
-reported in the paper.
+the experimental workflow used to select the configurations reported in the
+paper; [`pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb) then
+compares the PEG formulations on the best of them.
 
 See [`benchmarks/README.md`](benchmarks/README.md) for the complete
 benchmark workflow and reproducibility instructions.
@@ -128,8 +129,11 @@ with `pip install polartox`, so they use the *released* package; use
 - [`benchmarks/notebooks/datasetdemo.ipynb`](benchmarks/notebooks/datasetdemo.ipynb)
   — generate the fixed synthetic benchmark corpora.
 - [`benchmarks/notebooks/treesbenchmark.ipynb`](benchmarks/notebooks/treesbenchmark.ipynb)
-  — hyperparameter search, model selection, and paper reproducibility
-  (`PolarizedTreesBenchmark`).
+  — hyperparameter search and saved results, including the top 20
+  configurations (`PolarizedTreesBenchmark`).
+- [`benchmarks/notebooks/pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb)
+  — takes settings from that top 20 and compares the five PEG formulations:
+  recovery, inference without ground truth, and tree shape.
 
 ## Tools
 
@@ -165,6 +169,12 @@ The pipeline identifies:
 
 When ground truth is available, recovery metrics such as Jaccard,
 precision, recall, and exact match can also be computed.
+
+To see how much two configurations disagree, for example the same settings with
+two different PEG formulations, `pairwise_ari(pipelines, dataset)` returns the
+mean adjusted Rand index between their trees: how similarly they split the
+annotators of each text into groups (1 = the same groups, about 0 = chance).
+`PolarizedTree.leaf_labels(dataset)` gives the group of every annotator.
 
 ### PEG formulations (`variant`)
 
