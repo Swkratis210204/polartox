@@ -5,6 +5,17 @@
 - `variant="min"` (PEGmin): PEG measured against the *least* polarized
   subgroup, `|nDFU(node) - min_v nDFU(v)|`. Accepted by `compute_peg`,
   `detect_polarized_subgroups`, `PolarizedTree.build` and the pipeline.
+- `variant="mean"` (PEGmean): the arithmetic mean of PEGmax, PEGavg and
+  PEGmin.
+- `variant="harmonic"`: the harmonic mean of PEGmax, PEGavg and PEGmin (0 if
+  any of the three is 0). `beta` weights avg against max and min with
+  weights (1, beta^2, 1), so the default `beta=1` is the plain harmonic mean;
+  the other variants ignore `beta`.
+- `check_variant` and `PEG_VARIANTS` in `polartox.polarized_tree`. An unknown
+  variant now raises `ValueError` at construction of `PolarizedTreesPipeline`
+  and at the start of `detect_polarized_subgroups` (before, only at the first
+  split), and `PolarizedTreesBenchmark.run()` builds every pipeline before
+  evaluating any, so a bad setting fails at the start of a long search.
 
 ### Changed
 
@@ -14,10 +25,52 @@
   `mean_prg` → `mean_peg` and `mean_top_split_prg` → `mean_top_split_peg`.
 - **Breaking rename: `variant="var"` → `variant="avg"`** (PRGvar → PEGavg,
   the size-weighted average over subgroups). `"var"` now raises `ValueError`.
-- `DEFAULT_SEARCH_SPACE` now includes `variant="min"` (paired with
-  `beta=1.0`), so the default benchmark grows from 3,240 to **3,888 valid
-  configurations**. Pass `search_space={"variant": ["max", "avg", "beta"],
-  ...}` to reproduce the paper's original space.
+- **Breaking: `variant="beta"` is replaced by `variant="harmonic"`.** The old
+  PEGbeta was the (beta-weighted) harmonic mean of PEGmax and PEGavg only; it
+  no longer exists, and `variant="beta"` raises `ValueError` naming the
+  replacement. Results saved with the old `beta` variant used a different
+  formula. The default `variant` of `compute_peg`, `detect_polarized_subgroups`,
+  `PolarizedTree.build` and `PolarizedTreesPipeline` is now `"harmonic"`.
+- `DEFAULT_SEARCH_SPACE` now searches the five formulations `max`, `avg`,
+  `min`, `mean` and `harmonic`: 648 settings x 5 = **3,240 valid
+  configurations**. `beta` is no longer generated from `variant`; it appears
+  in the results only if it is part of the search space. Configurations are
+  now enumerated in search-space key order, so a `random` search with a given
+  seed samples different configurations than before.
+- **Breaking: `polartox.pipeline` now exports only `PolarizedTreesPipeline`.**
+  The tree helpers it used to re-export (`compute_peg`, `print_histogram`,
+  `detect_polarized_subgroups`, `render_tree_text`) are imported from
+  `polartox.polarized_tree`; the top-level `polartox` imports are unchanged.
+- `PolarizedTreesBenchmark`: a non-dict entry in an explicit configuration list
+  now raises `TypeError: Configuration i must be a dictionary` at construction
+  (before, a bare `'int' object is not iterable`).
+- `polartox.datagen`: the fixed spread range of the `k=0` negative control is the
+  named constant `CONTROL_SPREAD_RANGE` (values unchanged, generated data
+  identical); the module's demo is the function `_demo`.
+
+### Fixed
+
+- A pipeline built with `min_size_frac_schedule` can be pickled (it held a
+  lambda before), so it works with `PolarizedTreesBenchmark(n_jobs > 1)`. The
+  schedule is kept as `pipeline.min_size_frac_schedule`.
+- `PolarizedTreesBenchmark` no longer refuses to rebuild a pipeline whose
+  constructor takes a required parameter that is not stored as an attribute,
+  when the search configuration supplies that parameter.
+- Documentation: the data-generator README no longer passes the removed
+  `alpha_window` argument (removed in 0.3.1), and the PEG name is
+  "Polarization Explanation Gain" throughout.
+
+### Tests and CI
+
+- New regression suite: a golden snapshot of the real pipeline and benchmark
+  (`tests/golden_snapshot.json`, skipped when the recorded `ndfu`, numpy,
+  pandas and scikit-learn versions differ; `POLARTOX_REQUIRE_GOLDEN=1` makes
+  that a failure), hand-computed tests for the five PEG formulations,
+  edge-case tests (stopping rules, empty summaries, benchmark validation and
+  checkpoints), and a size-weighting test with unequal subgroups.
+- CI: an additional job pinned to the golden file's library versions on
+  Python 3.12 with `POLARTOX_REQUIRE_GOLDEN=1`, next to the existing
+  Python 3.9 to 3.12 matrix.
 
 ## [0.6.1] — 2026-09-21
 

@@ -44,7 +44,6 @@ pool = AnnotatorPool(
     intensity_range=DEFAULT_INTENSITY_RANGE,
     depth_weights=DEFAULT_DEPTH_WEIGHTS,
     annotators_per_identity=10,
-    alpha_window=0.15,
 )
 
 pool.summary()
@@ -72,9 +71,12 @@ For every text:
 -   Annotators then receive ratings from the resulting distributions.
 -   `noise` can replace an annotation with a random rating.
 
-A text with `k=0` is a non-demographic negative control. When `k>0`, the
-active dimensions are the ground truth that Polarized Trees can later
-try to recover.
+A text with `k=0` is a non-demographic negative control: its ratings are
+drawn from a single-peaked (normal) distribution around a random peak on the
+scale, with a spread between 0.6 and 1.2 rating points, rounded and clipped
+to the scale. That range is fixed on purpose (`CONTROL_SPREAD_RANGE`): it
+keeps the control unimodal. When `k>0`, the active dimensions are the ground
+truth that Polarized Trees can later try to recover.
 
 ## Ground truth
 
@@ -90,6 +92,9 @@ For `k > 0`, this includes:
     "alpha": {...},
 }
 ```
+
+For `k = 0`, `active_dims` is an empty list and the entry holds the control's
+`peak` and `spread` instead of `lean` and `alpha`.
 
 The most important field for evaluating Polarized Trees is:
 
@@ -131,7 +136,6 @@ AnnotatorPool(
     intensity_range,
     depth_weights,
     annotators_per_identity,
-    alpha_window=0.15,
 )
 ```
 
@@ -142,8 +146,6 @@ AnnotatorPool(
 -   `depth_weights`: probability of each possible number of active
     dimensions.
 -   `annotators_per_identity`: annotators created for each identity.
--   `alpha_window`: limits the difference in strength between co-active
-    dimensions.
 
 The package provides reference configurations through
 `DEFAULT_DIMENSIONS`, `DEFAULT_DEPTH_WEIGHTS`, and

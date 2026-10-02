@@ -22,7 +22,9 @@ polartox/
 ├── polarized_trees/   pipeline / corpus-level Polarized Trees demos and research materials
 ├── Dices/             real-data (DICES-350/990) end-to-end inference notebook
 ├── benchmarks/        synthetic benchmark and paper reproducibility code
-├── tests/             package and benchmark tests
+├── tests/             package, benchmark and regression tests
+├── website/           project website (GitHub Pages)
+├── .github/workflows/ CI (tests) and website deployment
 ├── CHANGELOG.md
 ├── LICENSE
 ├── README.md
@@ -110,7 +112,9 @@ benchmark workflow and reproducibility instructions.
   tree construction, F/C/P, and inference without ground truth. See
   [`Dices/README.md`](Dices/README.md).
 
-**Component demos, one workflow step at a time (synthetic data):**
+**Component demos, one workflow step at a time (synthetic data).** They start
+with `pip install polartox`, so they use the *released* package; use
+`pip install -e .` from a clone to run them against this repository:
 
 - [`data_gen/datagen_demo.ipynb`](data_gen/datagen_demo.ipynb) — generate
   synthetic annotation data with known polarization ground truth
@@ -162,6 +166,28 @@ The pipeline identifies:
 When ground truth is available, recovery metrics such as Jaccard,
 precision, recall, and exact match can also be computed.
 
+### PEG formulations (`variant`)
+
+At every node the tree splits on the dimension with the highest **PEG**
+(Polarization Explanation Gain): how much of the node's polarization (its
+nDFU) a split explains. PEG compares the node's nDFU with its subgroups'
+nDFU. Three base formulations differ in which subgroup they compare against,
+and two combine them:
+
+| `variant` | PEG is the absolute gap between the node's nDFU and ... |
+|---|---|
+| `max` | the nDFU of the most polarized subgroup (PEGmax) |
+| `avg` | the size-weighted average nDFU of the subgroups (PEGavg) |
+| `min` | the nDFU of the least polarized subgroup (PEGmin) |
+| `mean` | the arithmetic mean of PEGmax, PEGavg and PEGmin |
+| `harmonic` | the harmonic mean of PEGmax, PEGavg and PEGmin (0 if any of them is 0); the default |
+
+`beta` (default 1) only matters for `harmonic`: it weights `avg` against `max`
+and `min` with weights (1, beta^2, 1), so `beta=1` is the plain harmonic
+mean. An unknown `variant` raises `ValueError` immediately. The older names
+`beta` (the harmonic mean of max and avg only) and `var` (now `avg`) no
+longer exist.
+
 ## `polartox.benchmark`
 
 `PolarizedTreesBenchmark` provides systematic hyperparameter search and model
@@ -176,21 +202,22 @@ The benchmark:
 5. returns the best configuration and pipeline;
 6. provides the complete results, top configurations, and reports.
 
-The default search space is the configuration space used in the paper plus
-the `min` PEG variant, and contains **3,888 valid configurations**.
-
-The valid PEG variant/beta combinations are:
-
-```text
-max  → beta = 1.0
-avg  → beta = 1.0
-min  → beta = 1.0
-beta → beta = 0.5, 1.0, 2.0
-```
+The default search space contains **3,240 valid configurations**: 648
+settings of the other hyperparameters times the five PEG formulations
+(`max`, `avg`, `min`, `mean`, `harmonic`). `beta` is not searched; it only
+weights `avg` inside `harmonic` (default 1.0) and can be added to a custom
+search space like any other parameter.
 
 Both `full` and `random` search are supported. Users can also customize the
 search space, number of runs, seed, metrics, selection metric, and selection
 direction.
+
+Long searches can run in parallel (`n_jobs`), save their progress and resume
+(`checkpoint_dir`, `checkpoint_every`), and evaluate several corpora at once:
+`text_groups` maps each text to a corpus, and the metrics are then computed
+per corpus and averaged with equal weight per corpus. Every pipeline is built
+before the first evaluation, so an invalid setting fails immediately and not
+halfway through a search.
 
 ## Testing
 
@@ -205,6 +232,22 @@ To run the benchmark tests specifically:
 ```bash
 python -m pytest tests/test_benchmark.py -v
 ```
+
+The suite includes a **golden-snapshot regression test**
+(`tests/test_regression.py`): the real pipeline and benchmark are run on a
+fixed seeded corpus and compared with `tests/golden_snapshot.json`. Those
+numbers depend on the versions of `ndfu`, numpy, pandas and scikit-learn
+(random streams and float arithmetic), which the golden file records. When
+the installed versions differ, the test is skipped with a message saying so;
+set `POLARTOX_REQUIRE_GOLDEN=1` to make that a failure instead.
+
+Continuous integration (`.github/workflows/python-package.yml`) runs the
+suite on Python 3.9 to 3.12 with the latest dependencies (golden test
+skipped), and a second job pinned to the golden file's versions with
+`POLARTOX_REQUIRE_GOLDEN=1`, so the comparison always runs somewhere.
+Regenerate the golden file only for an intended behaviour change, with
+`python tests/_snapshot.py tests/golden_snapshot.json`, and update the pins in
+the workflow to match.
 
 ## nDFU
 

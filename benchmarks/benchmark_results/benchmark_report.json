@@ -33,7 +33,7 @@
     ],
     "variant": [
       "max",
-      "var",
+      "avg",
       "beta"
     ],
     "h": [
@@ -718,7 +718,7 @@
       "theta_filter": 0.2,
       "min_size_frac": 0.03,
       "max_depth": 6,
-      "variant": "var",
+      "variant": "avg",
       "beta": 1.0,
       "h": 0.1,
       "relative_h": true,

@@ -279,7 +279,7 @@
         distribution is. <strong>Polarized Trees</strong> then recursively
         splits annotators by socio-demographic dimension &mdash; gender,
         politics, age, whatever the study collected &mdash; searching for the
-        split that most reduces that bimodality, until each remaining
+        split that explains the most of that bimodality, until each remaining
         subgroup agrees with itself.
       </p>
       <p>
@@ -310,7 +310,7 @@
         <div class="n num">02</div>
         <div>
           <h3>Split</h3>
-          <p>Score every remaining candidate dimension by <strong>PEG</strong> (Polarization Reduction Gain) and take the one that reduces bimodality the most.</p>
+          <p>Score every remaining candidate dimension by <strong>PEG</strong> (Polarization Explanation Gain) and take the one that explains the most bimodality. PEG can be measured against the most or least polarized subgroup, their size-weighted average, or a mean or harmonic combination of the three (<code>variant</code>).</p>
         </div>
       </div>
       <div class="step">
@@ -331,7 +331,7 @@
         <div class="n num">05</div>
         <div>
           <h3>Summarize</h3>
-          <p>Across every tree in the corpus: <strong>F</strong> (which dimensions split most), <strong>C</strong> (how consistently a subgroup lands on one pole), <strong>P</strong> (how much each split actually reduced polarization).</p>
+          <p>Across every tree in the corpus: <strong>F</strong> (which dimensions split most), <strong>C</strong> (how consistently a subgroup lands on one pole), <strong>P</strong> (how much polarization each split explains).</p>
         </div>
       </div>
     </div>
@@ -365,7 +365,7 @@ dataset, ground_truth = pool.generate_dataset(
       <div class="modcard">
         <div><span class="path">polartox.polarized_tree</span></div>
         <span class="status">stable</span>
-        <p class="desc">The single-tree building block. Build and inspect one text's tree directly &mdash; no corpus, no pipeline &mdash; and get its structure back as a real object, not a name-spaced dict.</p>
+        <p class="desc">The single-tree building block. Build and inspect one text's tree directly &mdash; no corpus, no pipeline &mdash; and query its structure through a small API (<code>render</code>, <code>inspect</code>, <code>find_node</code>, ...).</p>
         <pre class="code"><span class="c1"># build one tree, print it, walk its nodes</span>
 <span class="kw">from</span> polartox.polarized_tree <span class="kw">import</span> PolarizedTree
 
@@ -459,8 +459,8 @@ best = bench.get_best_pipeline()</pre>
 hist = pdf(ratings, range(<span class="st">1</span>, scale + <span class="st">1</span>))
 score = dfu(hist)  <span class="c1"># 0 = agreement, ~1 = split</span></pre>
         <p>
-          <strong>PEG</strong> (Polarization Reduction Gain) then measures
-          how much a candidate split would <em>reduce</em> that bimodality if
+          <strong>PEG</strong> (Polarization Explanation Gain) then measures
+          how much of that bimodality a candidate split would <em>explain</em> if
           taken, and <code>theta_pole</code> sets the rating cutoff a leaf's
           individual ratings must clear to count toward its
           <span class="pole toxic">toxic</span> majority vote.

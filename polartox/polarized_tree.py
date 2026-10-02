@@ -57,9 +57,36 @@ def print_histogram(ratings, scale, label="ratings", indent=0, width=30):
         print(f"{pad}  {rating}: {'#' * round(width * count / peak)} ({count})")
 
 
-def compute_peg(node_ratings, groups, scale, variant="beta", beta=1.0):
-    """PEGmax, PEGavg, PEGmin, or PEGbeta (harmonic mean of max and avg --
-    recommended default)."""
+PEG_VARIANTS = ("max", "avg", "min", "mean", "harmonic")
+
+_REMOVED_VARIANTS = {
+    "var": "use 'avg', the size-weighted average",
+    "beta": "the max/avg-only PEGbeta was replaced by 'harmonic', the harmonic mean "
+            "of max, avg and min",
+}
+
+
+def check_variant(variant):
+    """Raise ValueError unless `variant` is one of PEG_VARIANTS."""
+    if variant in PEG_VARIANTS:
+        return
+    options = ", ".join(repr(v) for v in PEG_VARIANTS)
+    removed = _REMOVED_VARIANTS.get(variant) if isinstance(variant, str) else None
+    hint = f" ({variant!r} no longer exists: {removed})" if removed else ""
+    raise ValueError(f"variant must be one of {options}, got {variant!r}{hint}")
+
+
+def compute_peg(node_ratings, groups, scale, variant="harmonic", beta=1.0):
+    """PEG of splitting a node into `groups` (group -> ratings).
+
+    Three base formulations compare the node's nDFU with its subgroups':
+    "max" (the most polarized subgroup), "avg" (the size-weighted average)
+    and "min" (the least polarized subgroup). "mean" is their arithmetic mean
+    and "harmonic" their harmonic mean (0 if any of the three is 0). In
+    "harmonic", beta weights avg against max and min (weights 1, beta**2, 1),
+    so the default beta=1 is the plain harmonic mean; the other variants
+    ignore beta.
+    """
     global_ndfu = ndfu_score(node_ratings, scale)
     group_ndfus = {v: ndfu_score(r, scale) for v, r in groups.items()}
     n = len(node_ratings)
@@ -81,11 +108,15 @@ def _combine_peg(global_ndfu, group_ndfus, sizes, n, variant, beta):
         peg = peg_avg
     elif variant == "min":
         peg = peg_min
-    elif variant == "beta":
-        denom = beta**2 * peg_max + peg_avg
-        peg = (1 + beta**2) * peg_max * peg_avg / denom if denom > 0 else 0.0
+    elif variant == "mean":
+        peg = (peg_max + peg_avg + peg_min) / 3
+    elif variant == "harmonic":
+        if peg_max > 0 and peg_avg > 0 and peg_min > 0:
+            peg = (2 + beta**2) / (1 / peg_max + beta**2 / peg_avg + 1 / peg_min)
+        else:
+            peg = 0.0
     else:
-        raise ValueError("variant must be 'max', 'avg', 'min', or 'beta'")
+        check_variant(variant)
     return peg
 
 
@@ -99,7 +130,7 @@ def _leaf(ratings, path, ndfu_val, theta_pole, reason):
 
 def detect_polarized_subgroups(
     data, dims, min_size, h, max_depth, scale,
-    theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0,
+    theta_pole=None, theta_stop=0.15, variant="harmonic", beta=1.0,
     relative_h=False,
     verbose=False, return_tree=False,
 ):
@@ -135,7 +166,9 @@ def detect_polarized_subgroups(
         A node with nDFU below this is already unpolarized and becomes a
         leaf. None disables this rule.
     variant, beta :
-        PEG formulation: "max", "avg", "min" or "beta" (see compute_peg).
+        PEG formulation: "max", "avg", "min", "mean" or "harmonic", and the
+        beta weight used by "harmonic" (see compute_peg). An unknown variant
+        raises ValueError immediately, even if no node ever needs a split.
     relative_h : bool
         If True, compare best PEG / node nDFU to h instead of the raw PEG.
     verbose : bool
@@ -149,6 +182,7 @@ def detect_polarized_subgroups(
         The leaves (path, n, ndfu, p_tox, pole, stop_reason), and with
         return_tree=True also the nested root node.
     """
+    check_variant(variant)
     theta_pole = theta_pole if theta_pole is not None else default_theta_pole(scale)
     n_total = len(data)
     leaves = []
@@ -275,7 +309,7 @@ class PolarizedTree:
 
     @classmethod
     def build(cls, data, dims, min_size, h, max_depth, scale,
-              theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0,
+              theta_pole=None, theta_stop=0.15, variant="harmonic", beta=1.0,
               relative_h=False, text_id=None, verbose=False):
         leaves, root = detect_polarized_subgroups(
             data, dims, min_size, h, max_depth, scale,

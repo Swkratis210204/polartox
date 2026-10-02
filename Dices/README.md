@@ -18,14 +18,23 @@ F/C/P and diagnostics only — the same ground-truth-free outputs
   — the full workflow: load and preprocess DICES-350/990, keep the four
   SCD dimensions plus `Q3_bias_overall`, validate/EDA the annotation-level
   data, compute nDFU per item, run `PolarizedTreesPipeline` in inference
-  mode using the five configurations selected during synthetic model
-  selection (see [`../benchmarks/README.md`](../benchmarks/README.md)),
+  mode using the three highest-performing configurations from the synthetic
+  model selection (see [`../benchmarks/README.md`](../benchmarks/README.md)),
   and report F/C/P and diagnostics for each configuration.
-- `DICES-350_diagnostics_all_configs.csv` / `DICES-990_diagnostics_all_configs.csv`
-  — the saved diagnostics table (retention rate, mean leaves/depth,
-  residual nDFU, top-split PEG, indeterminate rate) for each of the five
-  selected configurations, on each dataset.
+- `dices_polarized_trees_results/` — the saved results, as `csv_tables/` and
+  `latex_tables/`. For each dataset (`DICES-350`, `DICES-990`) there is one
+  F, C and P table per configuration (`config_1_F`, `config_1_C`, `config_1_P`,
+  ... `config_3_P`), plus `<dataset>_diagnostics_hyperparameters` (the three
+  configurations) and `<dataset>_diagnostics_metrics` (retention rate, mean
+  leaves/depth, residual nDFU, top-split PEG, indeterminate rate).
 - `dices990_polarized_tree.png` — an example recovered tree from DICES-990.
+
+> **Note.** The notebook still sets `variant="beta"`, the earlier PEG
+> formulation (the harmonic mean of max and avg only), which the current
+> package no longer accepts (`variant` is now one of `max`, `avg`, `min`,
+> `mean`, `harmonic`). It has to be updated, and the experiments rerun, before
+> it can run with the current package. The saved results were produced with
+> the earlier formulation.
 
 ## Why this notebook exists
 

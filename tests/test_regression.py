@@ -178,8 +178,8 @@ def test_negative_control_spread_stays_in_the_fixed_range():
 def test_peg_variants_with_unequal_group_sizes():
     from polartox.polarized_tree import compute_peg, ndfu_score
 
-    big = [1] * 25 + [5] * 25          # 50 ratings, polarized (high nDFU)
-    small = [3] * 10                   # 10 ratings, unimodal (nDFU 0)
+    big = [1] * 20 + [2] * 10 + [5] * 20     # 50 ratings, polarized (nDFU 1)
+    small = [5] * 8 + [4] * 2                # 10 ratings, unimodal (nDFU 0)
     groups = {"a": big, "b": small}
     node = big + small
 
@@ -190,10 +190,13 @@ def test_peg_variants_with_unequal_group_sizes():
     peg_max = abs(g - max(na, nb))
     peg_avg = abs(g - weighted_avg)
     peg_min = abs(g - min(na, nb))
+    assert min(peg_max, peg_avg, peg_min) > 0.1       # no base is 0, so harmonic is defined
 
     assert compute_peg(node, groups, 5, "max")[0] == pytest.approx(peg_max)
     assert compute_peg(node, groups, 5, "avg")[0] == pytest.approx(peg_avg)
     assert compute_peg(node, groups, 5, "min")[0] == pytest.approx(peg_min)
+    assert compute_peg(node, groups, 5, "mean")[0] == pytest.approx((peg_max + peg_avg + peg_min) / 3)
     for beta in (0.5, 1.0, 2.0):
-        expected = (1 + beta**2) * peg_max * peg_avg / (beta**2 * peg_max + peg_avg)
-        assert compute_peg(node, groups, 5, "beta", beta)[0] == pytest.approx(expected)
+        # weighted harmonic mean, weights (max, avg, min) = (1, beta^2, 1)
+        expected = (2 + beta**2) / (1 / peg_max + beta**2 / peg_avg + 1 / peg_min)
+        assert compute_peg(node, groups, 5, "harmonic", beta)[0] == pytest.approx(expected)

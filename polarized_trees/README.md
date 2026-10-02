@@ -34,8 +34,7 @@ pipe = PolarizedTreesPipeline(
     theta_filter=0.3,
     min_size_frac=0.03,
     max_depth=8,
-    variant="beta",
-    beta=1.0,
+    variant="harmonic",
     h=0.15,
     relative_h=True,
     theta_stop=0.10,
@@ -75,8 +74,8 @@ For each text, the method follows the same basic process:
    Only texts whose nDFU exceeds `theta_filter` are analyzed.
 
 3. **Find the best split.**  
-   Candidate demographic dimensions are scored using Polarization Reduction
-   Gain (PEG). The dimension with the strongest reduction is selected.
+   Candidate demographic dimensions are scored using Polarization Explanation
+   Gain (PEG). The dimension with the strongest gain is selected.
 
 4. **Grow the tree.**  
    The process is repeated recursively, producing increasingly specific
@@ -92,8 +91,6 @@ For each text, the method follows the same basic process:
 6. **Summarize the corpus.**  
    The resulting trees are aggregated into Dimension Frequency (F), Subgroup
    Pole Consistency (C), and Subgroup PEG (P).
-
-![Example polarized tree](polarized_tree.png)
 
 The important intuition is that the method does not only ask **whether a text
 is polarized**. It asks **which demographic dimensions and subgroups explain
@@ -114,7 +111,8 @@ Shows how consistently an intersectional subgroup is associated with the
 
 ### Subgroup PEG (P)
 
-Shows the average polarization reduction associated with a subgroup's split.
+Shows the average PEG of the split that creates a subgroup, that is, how much
+of the polarization that split explains.
 Higher values indicate a stronger contribution to the discovered explanation.
 
 ### Diagnostics
@@ -135,9 +133,9 @@ is unavailable.
 | `theta_filter` | Minimum nDFU required to analyze a text |
 | `min_size_frac` | Minimum subgroup size relative to the text |
 | `max_depth` | Maximum tree depth |
-| `variant` | PEG formulation: `max`, `avg`, `min`, or `beta` |
-| `beta` | Controls the PEGβ formulation |
-| `h` | Minimum required polarization reduction |
+| `variant` | PEG formulation: `max`, `avg`, `min`, `mean` (mean of the three) or `harmonic` (harmonic mean of the three) |
+| `beta` | Weight of `avg` in `harmonic` (default 1, the plain harmonic mean); ignored by the other variants |
+| `h` | Minimum PEG required to make a split |
 | `relative_h` | Expresses `h` relative to the node's remaining polarization |
 | `theta_stop` | Stops splitting when remaining polarization is already low |
 

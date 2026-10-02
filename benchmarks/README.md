@@ -66,9 +66,13 @@ The benchmark is not restricted to the settings used in the paper. Users can cus
 - **selection metric** — the metric used to select the best configuration;
 - **selection direction** — whether higher or lower values are preferred;
 - **pipeline settings** — including dimensions and scale;
-- **annotations and ground truth** — allowing the benchmark to be used with other datasets.
+- **annotations and ground truth** — allowing the benchmark to be used with other datasets;
+- **parallelism** — `n_jobs` worker processes (`-1` for all CPUs);
+- **checkpointing** — `checkpoint_dir` and `checkpoint_every` save progress, so an interrupted search resumes where it stopped;
+- **per-corpus evaluation** — `text_groups` maps each text to a corpus; metrics are computed per corpus and averaged with equal weight per corpus, which is how `treesbenchmark.ipynb` combines the A, B and C corpora;
+- **per-text results** — `keep_text_results` keeps the raw per-text recovery values (e.g. for boxplots).
 
-The package default search space corresponds to the paper and contains **3,240 valid configurations**. For the reported benchmark, **800 configurations are randomly sampled** and ranked according to mean Jaccard across the three synthetic benchmark corpora.
+The package default search space contains **3,240 valid configurations**: 648 settings of the other hyperparameters times the five PEG formulations (`max`, `avg`, `min`, `mean`, `harmonic`). For the reported benchmark, **800 configurations are randomly sampled** and ranked according to mean Jaccard across the three synthetic benchmark corpora.
 
 The default settings can be replaced with a custom search space, evaluation strategy, metrics, and selection criterion for other experiments.
 
@@ -115,6 +119,9 @@ The notebooks assume the following structure:
     ├── benchmark_results/
     │   └── ...
     │
+    ├── synthetic_benchmark_bundle/   (and a .zip of it: a copy of benchmark_data/
+    │                                  for sharing, created by datasetdemo.ipynb)
+    │
     └── notebooks/
         ├── datasetdemo.ipynb
         └── treesbenchmark.ipynb
@@ -136,6 +143,8 @@ First run `datasetdemo.ipynb` to generate the fixed synthetic datasets.
 Then run `treesbenchmark.ipynb` to reproduce the benchmark, select the best configuration, and run the final inference.
 
 The full benchmark can be computationally expensive because it evaluates a large hyperparameter search. Existing results can be inspected without rerunning the complete search.
+
+> **Note.** The files currently in `benchmark_results/` come from an earlier search space: the PEG variants `max`, `avg` and an older `beta` (the harmonic mean of max and avg only). They predate the `min`, `mean` and `harmonic` formulations and the current default grid, so they are not what the present package would produce. Rerun `treesbenchmark.ipynb` to regenerate them.
 
 ## Outputs
 

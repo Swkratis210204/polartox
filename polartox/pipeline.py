@@ -12,7 +12,9 @@ Requires: pip install polartox[ndfu]
 import pandas as pd
 import numpy as np
 
-from polartox.polarized_tree import ndfu_score, jaccard, PolarizedTree, default_theta_pole
+from polartox.polarized_tree import (
+    ndfu_score, jaccard, PolarizedTree, default_theta_pole, check_variant,
+)
 
 __all__ = ["PolarizedTreesPipeline"]
 
@@ -51,7 +53,7 @@ class PolarizedTreesPipeline:
 
     def __init__(self, dims, scale, theta_filter, h, max_depth,
              min_size=None, min_size_frac=0.03, min_size_frac_schedule=None,
-             variant="beta", beta=1.0, theta_pole=None, theta_stop=0.15,
+             variant="harmonic", beta=1.0, theta_pole=None, theta_stop=0.15,
              relative_h=False):
         """
         min_size_frac_schedule : (base, step) tuple or None
@@ -61,7 +63,15 @@ class PolarizedTreesPipeline:
             through deep in the tree (too loose) or blocks legitimate late
             splits in texts with 3+ true causes (too strict) -- see project
             notes for the k=2 vs k=3/4 tradeoff this resolves.
+        variant : str
+            PEG formulation: "max", "avg", "min", "mean" or "harmonic" (see
+            polartox.polarized_tree.compute_peg). Checked here, so a typo
+            fails at construction and not at the first split.
+        beta : float
+            Weight of avg in "harmonic" (default 1: plain harmonic mean of
+            max, avg and min); ignored by the other variants.
         """
+        check_variant(variant)
         self.dims = list(dims)
         self.scale = scale
         self.theta_filter = theta_filter

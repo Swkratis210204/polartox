@@ -140,12 +140,25 @@ def test_unknown_pipeline_parameter_in_search_space_is_rejected(
         make_benchmark(pipeline, annotations, ground_truth, search_space={"nope": [1]})
 
 
-def test_unknown_variant_is_rejected_when_configurations_are_generated(
-        pipeline, annotations, ground_truth):
-    bench = make_benchmark(pipeline, annotations, ground_truth,
-                           search_space={"variant": ["bogus"]})
-    with pytest.raises(ValueError, match="Unknown variant 'bogus'"):
-        bench.configurations()
+def test_unknown_variant_fails_before_any_configuration_is_evaluated(
+        annotations, ground_truth, monkeypatch):
+    real = PolarizedTreesPipeline(dims=["gender"], scale=5, theta_filter=0.3, h=0.1, max_depth=3)
+    bench = PolarizedTreesBenchmark(
+        real, annotations, ground_truth, strategy="full", verbose=False,
+        search_space={"variant": ["max", "bogus"], "h": [0.1, 0.2]})
+    monkeypatch.setattr(bench, "_run_one_configuration",
+                        lambda config: pytest.fail("a configuration was evaluated"))
+    with pytest.raises(ValueError, match="variant must be one of.*'bogus'"):
+        bench.run()
+
+
+def test_old_beta_variant_in_a_search_is_rejected_by_the_real_pipeline(
+        annotations, ground_truth):
+    real = PolarizedTreesPipeline(dims=["gender"], scale=5, theta_filter=0.3, h=0.1, max_depth=3)
+    bench = PolarizedTreesBenchmark(real, annotations, ground_truth, strategy="full",
+                                    verbose=False, search_space={"variant": ["beta"]})
+    with pytest.raises(ValueError, match="'beta' no longer exists"):
+        bench.run()
 
 
 # ---------------------------------------------------------------------

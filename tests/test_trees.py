@@ -72,10 +72,14 @@ def test_compute_peg_variants_differ():
     peg_max, _, _ = compute_peg(node_ratings, groups, SCALE, variant="max")
     peg_avg, _, _ = compute_peg(node_ratings, groups, SCALE, variant="avg")
     peg_min, _, _ = compute_peg(node_ratings, groups, SCALE, variant="min")
-    peg_beta, _, _ = compute_peg(node_ratings, groups, SCALE, variant="beta", beta=1.0)
-    # beta should sit between max and avg (harmonic mean property), not necessarily
-    # strictly between numerically but should be a valid, finite number
-    assert all(np.isfinite(v) for v in [peg_max, peg_avg, peg_min, peg_beta])
+    peg_mean, _, _ = compute_peg(node_ratings, groups, SCALE, variant="mean")
+    peg_harmonic, _, _ = compute_peg(node_ratings, groups, SCALE, variant="harmonic")
+    values = [peg_max, peg_avg, peg_min, peg_mean, peg_harmonic]
+    assert all(np.isfinite(v) for v in values)
+    # mean and harmonic are means of max/avg/min, so they stay between the extremes,
+    # and the harmonic mean never exceeds the arithmetic mean
+    low, high = min(peg_max, peg_avg, peg_min), max(peg_max, peg_avg, peg_min)
+    assert low - 1e-12 <= peg_harmonic <= peg_mean + 1e-12 <= high + 2e-12
 
 
 def test_compute_peg_min_uses_least_polarized_group():
@@ -102,7 +106,7 @@ def test_detect_polarized_subgroups_finds_known_structure():
     leaves, root = detect_polarized_subgroups(
         text_data, dims=["gender", "politics", "age"],
         min_size=10, h=0.05, max_depth=4, scale=SCALE,
-        theta_stop=0.1, variant="beta", beta=1.0, return_tree=True,
+        theta_stop=0.1, variant="harmonic", beta=1.0, return_tree=True,
     )
     found_dims = {d for leaf in leaves for d, v in leaf["path"]}
     assert found_dims == {"gender", "politics"}
@@ -186,7 +190,7 @@ def built_tree():
     tree = PolarizedTree.build(
         text_data, dims=["gender", "politics", "age"],
         min_size=10, h=0.05, max_depth=4, scale=SCALE,
-        theta_stop=0.1, variant="beta", beta=1.0, text_id=0,
+        theta_stop=0.1, variant="harmonic", beta=1.0, text_id=0,
     )
     return tree, dataset
 
@@ -197,12 +201,12 @@ def test_polarized_tree_build_matches_detect_polarized_subgroups():
     leaves, root = detect_polarized_subgroups(
         text_data, dims=["gender", "politics", "age"],
         min_size=10, h=0.05, max_depth=4, scale=SCALE,
-        theta_stop=0.1, variant="beta", beta=1.0, return_tree=True,
+        theta_stop=0.1, variant="harmonic", beta=1.0, return_tree=True,
     )
     tree = PolarizedTree.build(
         text_data, dims=["gender", "politics", "age"],
         min_size=10, h=0.05, max_depth=4, scale=SCALE,
-        theta_stop=0.1, variant="beta", beta=1.0, text_id=0,
+        theta_stop=0.1, variant="harmonic", beta=1.0, text_id=0,
     )
     assert tree.get_root() == root
     assert tree.get_leaves() == leaves

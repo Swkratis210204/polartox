@@ -448,8 +448,9 @@ def test_default_search_space_has_paper_configuration_count(
 
     configurations = benchmark.configurations()
 
-    # The paper search space (3,240) plus the `min` variant: 3,888.
-    assert len(configurations) == 3888
+    # 3 x 3 x 3 x 4 x 2 x 3 = 648 settings, times the 5 PEG formulations.
+    assert len(configurations) == 648 * 5 == 3240
+    assert len({tuple(sorted(c.items())) for c in configurations}) == 3240
 
 
 def test_default_search_space_matches_paper_dimensions(
@@ -480,7 +481,7 @@ def test_default_search_space_matches_paper_dimensions(
 
     assert set(
         config["variant"] for config in configurations
-    ) == {"max", "avg", "min", "beta"}
+    ) == {"max", "avg", "min", "mean", "harmonic"}
 
     assert set(
         config["h"] for config in configurations
@@ -495,7 +496,7 @@ def test_default_search_space_matches_paper_dimensions(
     ) == {0.05, 0.10, 0.15}
 
 
-def test_default_search_space_has_correct_conditional_beta_values(
+def test_default_search_space_does_not_search_over_beta(
     pipeline,
     annotations,
     ground_truth,
@@ -509,44 +510,11 @@ def test_default_search_space_has_correct_conditional_beta_values(
 
     configurations = benchmark.configurations()
 
-    beta_by_variant = {
-        variant: {
-            config["beta"]
-            for config in configurations
-            if config["variant"] == variant
-        }
-        for variant in {"max", "avg", "min", "beta"}
-    }
+    assert "beta" not in DEFAULT_SEARCH_SPACE
+    assert all("beta" not in config for config in configurations)
 
-    assert beta_by_variant["max"] == {1.0}
-    assert beta_by_variant["avg"] == {1.0}
-    assert beta_by_variant["min"] == {1.0}
-    assert beta_by_variant["beta"] == {0.5, 1.0, 2.0}
-
-
-def test_default_search_space_contains_only_valid_variant_beta_pairs(
-    pipeline,
-    annotations,
-    ground_truth,
-):
-    benchmark = PolarizedTreesBenchmark(
-        pipeline=pipeline,
-        annotations=annotations,
-        ground_truth=ground_truth,
-        strategy="full",
-    )
-
-    configurations = benchmark.configurations()
-
-    for config in configurations:
-        if config["variant"] in {"max", "avg", "min"}:
-            assert config["beta"] == 1.0
-        elif config["variant"] == "beta":
-            assert config["beta"] in {0.5, 1.0, 2.0}
-        else:
-            pytest.fail(
-                f"Unexpected variant: {config['variant']}"
-            )
+    for variant in ("max", "avg", "min", "mean", "harmonic"):
+        assert sum(c["variant"] == variant for c in configurations) == 648
 
 
 def test_default_search_space_is_used_when_not_provided(
@@ -1278,21 +1246,27 @@ def test_keep_text_results_false(
         benchmark.get_text_results()
 
 
-def test_generated_beta_is_kept_in_results(
+def test_beta_is_only_a_result_column_when_it_is_searched(
     varied_annotations,
     varied_ground_truth,
 ):
-    benchmark = PolarizedTreesBenchmark(
-        pipeline=VariedPipeline(dims=["gender"], scale=5),
-        annotations=varied_annotations,
-        ground_truth=varied_ground_truth,
-        search_space={"variant": ["max", "beta"]},
-        strategy="full",
-        verbose=False,
-    ).run()
+    def run(search_space):
+        return PolarizedTreesBenchmark(
+            pipeline=VariedPipeline(dims=["gender"], scale=5),
+            annotations=varied_annotations,
+            ground_truth=varied_ground_truth,
+            search_space=search_space,
+            strategy="full",
+            verbose=False,
+        ).run()
 
-    assert "beta" in benchmark.get_results().columns
-    assert "beta" in benchmark.get_best_config()
+    without = run({"variant": ["max", "harmonic"]})
+    assert "beta" not in without.get_results().columns
+    assert "beta" not in without.get_best_config()
+
+    with_beta = run({"variant": ["harmonic"], "beta": [0.5, 1.0, 2.0]})
+    assert set(with_beta.get_results()["beta"]) == {0.5, 1.0, 2.0}
+    assert "beta" in with_beta.get_best_config()
 
 
 def test_save_group_and_text_results(varied_benchmark, tmp_path):

@@ -36,7 +36,8 @@ tree.inspect(dataset, show_distributions=True)  # full walk + histograms
 
 ## API
 
-- `PolarizedTree.build(data, dims, min_size, h, max_depth, scale, theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0, relative_h=False, text_id=None)` — runs the splitting algorithm and returns a built tree.
+- `PolarizedTree.build(data, dims, min_size, h, max_depth, scale, theta_pole=None, theta_stop=0.15, variant="harmonic", beta=1.0, relative_h=False, text_id=None)` — runs the splitting algorithm and returns a built tree.
+  `variant` selects the PEG formulation: `max`, `avg`, `min`, `mean` or `harmonic` (the default); see the PEG table in the [main README](../README.md#peg-formulations-variant).
 - `get_root()` / `get_leaves()` — the raw node-dict structures.
 - `n_leaves`, `depth` — quick size/shape properties.
 - `internal_nodes()` — generator over every non-leaf node, `(depth, split_dim, peg, path, node)`.

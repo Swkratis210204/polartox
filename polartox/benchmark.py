@@ -15,7 +15,7 @@ DEFAULT_SEARCH_SPACE = {
     "theta_filter": [0.2, 0.3, 0.4],
     "min_size_frac": [0.02, 0.03, 0.05],
     "max_depth": [4, 6, 8],
-    "variant": ["max", "avg", "min", "beta"],
+    "variant": ["max", "avg", "min", "mean", "harmonic"],
     "h": [0.05, 0.10, 0.15, 0.20],
     "relative_h": [False, True],
     "theta_stop": [0.05, 0.10, 0.15],
@@ -236,52 +236,11 @@ class PolarizedTreesBenchmark:
         if isinstance(self.search_space, (list, tuple)):
             configurations = [dict(config) for config in self.search_space]
 
-        # Dictionary search space.
+        # Dictionary search space: every combination of the listed values.
         else:
-            # The paper search space has a conditional relationship
-            # between `variant` and `beta`.
-            #
-            #   max  -> beta = 1.0
-            #   avg  -> beta = 1.0
-            #   min  -> beta = 1.0
-            #   beta -> beta = 0.5, 1.0, 2.0
-            #
-            # `beta` is intentionally NOT part of DEFAULT_SEARCH_SPACE.
-            # It is generated here conditionally from `variant`.
-
-            if "variant" in self.search_space and "beta" not in self.search_space:
-                other_keys = [key for key in self.search_space if key != "variant"]
-
-                base_combinations = itertools.product(
-                    *(self.search_space[key] for key in other_keys)
-                )
-
-                configurations = []
-
-                for values in base_combinations:
-                    base_config = dict(zip(other_keys, values))
-
-                    for variant in self.search_space["variant"]:
-
-                        if variant in {"max", "avg", "min"}:
-                            beta_values = [1.0]
-
-                        elif variant == "beta":
-                            beta_values = [0.5, 1.0, 2.0]
-
-                        else:
-                            raise ValueError(f"Unknown variant '{variant}'.")
-
-                        for beta in beta_values:
-                            configurations.append({**base_config, "variant": variant, "beta": beta})
-
-            # Ordinary dictionary search space.
-            else:
-                keys = list(self.search_space)
-
-                combinations = itertools.product(*(self.search_space[key] for key in keys))
-
-                configurations = [dict(zip(keys, values)) for values in combinations]
+            keys = list(self.search_space)
+            combinations = itertools.product(*(self.search_space[key] for key in keys))
+            configurations = [dict(zip(keys, values)) for values in combinations]
 
         # Apply search strategy.
         if self.strategy == "full":
@@ -367,7 +326,7 @@ class PolarizedTreesBenchmark:
         return columns
 
     def _parameter_columns(self, configurations):
-        """Search-space keys, plus generated keys such as `beta`."""
+        """Search-space keys, plus any extra keys used by explicit configurations."""
         if isinstance(self.search_space, dict):
             columns = list(self.search_space)
         else:
@@ -535,6 +494,10 @@ class PolarizedTreesBenchmark:
 
         if not configurations:
             raise RuntimeError("No configurations were generated.")
+
+        # Constructing a pipeline validates its settings: fail now, not mid-run.
+        for config in configurations:
+            self._build_pipeline(config)
 
         start = time.time()
         rows = []

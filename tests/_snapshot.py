@@ -28,7 +28,9 @@ BASE = dict(dims=list(DEFAULT_DIMENSIONS), scale=5, theta_filter=0.3, h=0.15,
             max_depth=6, theta_stop=0.1)
 
 PIPELINES = {
-    "beta_rel": dict(variant="beta", relative_h=True, min_size_frac=0.03),
+    "harmonic_rel": dict(variant="harmonic", relative_h=True, min_size_frac=0.03),
+    "harmonic_beta2": dict(variant="harmonic", beta=2.0, min_size_frac=0.03),
+    "mean": dict(variant="mean", min_size_frac=0.03),
     "max": dict(variant="max", min_size_frac=0.05),
     "avg": dict(variant="avg", min_size_frac=0.02),
     "min": dict(variant="min", min_size_frac=0.03),
@@ -40,7 +42,7 @@ SEARCH_SPACE = {
     "theta_filter": [0.2, 0.3],
     "min_size_frac": [0.03, 0.05],
     "max_depth": [4, 6],
-    "variant": ["max", "beta"],
+    "variant": ["max", "mean", "harmonic"],
 }
 
 
@@ -94,9 +96,9 @@ def build_snapshot():
         snap[name + "_trees"] = {str(t): [tree.get_root(), tree.get_leaves()]
                                  for t, tree in list(pipe.trees_.items())[:3]}
 
-    # Unbalanced subgroups: size weighting (PEGavg, PEGbeta) only matters here.
+    # Unbalanced subgroups: size weighting (PEGavg and every formulation built on it) only matters here.
     unbalanced = make_corpus(n_annotators_per_text=90, seed=5)
-    for name in ("beta_rel", "avg", "min", "schedule"):
+    for name in ("harmonic_rel", "avg", "min", "mean", "schedule"):
         snap[name + "_unbalanced"] = PolarizedTreesPipeline(
             **BASE, **PIPELINES[name]).run_full_evaluation(
             unbalanced.data, ground_truth=unbalanced.ground_truth, verbose=False)
