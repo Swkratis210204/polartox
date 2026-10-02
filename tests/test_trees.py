@@ -4,7 +4,7 @@ import pytest
 
 from polartox.pipeline import PolarizedTreesPipeline
 from polartox.polarized_tree import (
-    ndfu_score, compute_prg, detect_polarized_subgroups, jaccard, PolarizedTree,
+    ndfu_score, compute_peg, detect_polarized_subgroups, jaccard, PolarizedTree,
 )
 
 SCALE = 5
@@ -40,7 +40,7 @@ def make_toy_dataset(seed=0, n_texts=6, n=180):
 
 
 # ------------------------------------------------------------------
-# ndfu_score / compute_prg
+# ndfu_score / compute_peg
 # ------------------------------------------------------------------
 
 def test_ndfu_score_unimodal_low():
@@ -57,29 +57,39 @@ def test_ndfu_score_empty_is_nan():
     assert np.isnan(ndfu_score([], SCALE))
 
 
-def test_compute_prg_uses_abs_value():
+def test_compute_peg_uses_abs_value():
     """A split that WORSENS the worst-case subgroup should still yield a
-    positive PRG (paper's formula uses absolute value)."""
+    positive PEG (paper's formula uses absolute value)."""
     node_ratings = np.array([3] * 20)
     groups = {"a": np.array([1] * 10), "b": np.array([1, 5] * 5)}
-    prg, global_ndfu, group_ndfus = compute_prg(node_ratings, groups, SCALE, variant="max")
-    assert prg >= 0
+    peg, global_ndfu, group_ndfus = compute_peg(node_ratings, groups, SCALE, variant="max")
+    assert peg >= 0
 
 
-def test_compute_prg_variants_differ():
+def test_compute_peg_variants_differ():
     node_ratings = np.array([1] * 20 + [5] * 20)
     groups = {"a": np.array([1] * 15 + [5] * 5), "b": np.array([1] * 5 + [5] * 15)}
-    prg_max, _, _ = compute_prg(node_ratings, groups, SCALE, variant="max")
-    prg_var, _, _ = compute_prg(node_ratings, groups, SCALE, variant="var")
-    prg_beta, _, _ = compute_prg(node_ratings, groups, SCALE, variant="beta", beta=1.0)
-    # beta should sit between max and var (harmonic mean property), not necessarily
+    peg_max, _, _ = compute_peg(node_ratings, groups, SCALE, variant="max")
+    peg_avg, _, _ = compute_peg(node_ratings, groups, SCALE, variant="avg")
+    peg_min, _, _ = compute_peg(node_ratings, groups, SCALE, variant="min")
+    peg_beta, _, _ = compute_peg(node_ratings, groups, SCALE, variant="beta", beta=1.0)
+    # beta should sit between max and avg (harmonic mean property), not necessarily
     # strictly between numerically but should be a valid, finite number
-    assert all(np.isfinite(v) for v in [prg_max, prg_var, prg_beta])
+    assert all(np.isfinite(v) for v in [peg_max, peg_avg, peg_min, peg_beta])
 
 
-def test_compute_prg_invalid_variant_raises():
+def test_compute_peg_min_uses_least_polarized_group():
+    node_ratings = np.array([1] * 20 + [5] * 20)
+    groups = {"a": np.array([1] * 15 + [5] * 5), "b": np.array([1] * 20)}
+    peg_min, global_ndfu, group_ndfus = compute_peg(node_ratings, groups, SCALE, variant="min")
+    assert peg_min == pytest.approx(abs(global_ndfu - min(group_ndfus.values())))
+    peg_max, _, _ = compute_peg(node_ratings, groups, SCALE, variant="max")
+    assert peg_min >= peg_max
+
+
+def test_compute_peg_invalid_variant_raises():
     with pytest.raises(ValueError):
-        compute_prg(np.array([1, 2, 3]), {"a": np.array([1, 2])}, SCALE, variant="bogus")
+        compute_peg(np.array([1, 2, 3]), {"a": np.array([1, 2])}, SCALE, variant="bogus")
 
 
 # ------------------------------------------------------------------
@@ -230,10 +240,10 @@ def test_polarized_tree_internal_nodes_are_all_non_leaf(built_tree):
     tree, _ = built_tree
     internal = list(tree.internal_nodes())
     assert len(internal) > 0
-    for depth, dim, prg, path, node in internal:
+    for depth, dim, peg, path, node in internal:
         assert node["is_leaf"] is False
         assert node["split_dim"] == dim
-        assert node["prg"] == prg
+        assert node["peg"] == peg
         assert len(path) == depth - 1
 
 
@@ -383,13 +393,13 @@ def test_subgroup_pole_consistency_columns(pipeline_and_data):
     assert "true_lean_match_rate" in C_gt.columns
 
 
-def test_subgroup_prg_columns(pipeline_and_data):
+def test_subgroup_peg_columns(pipeline_and_data):
     pipe, dataset, ground_truth = pipeline_and_data
     pipe.filter_polarized_texts(dataset)
     pipe.build_all_trees(dataset)
-    P = pipe.subgroup_prg()
-    assert set(["n_s", "mean_prg"]).issubset(P.columns)
-    P_gt = pipe.subgroup_prg(ground_truth)
+    P = pipe.subgroup_peg()
+    assert set(["n_s", "mean_peg"]).issubset(P.columns)
+    P_gt = pipe.subgroup_peg(ground_truth)
     assert "mean_true_alpha" in P_gt.columns
 
 
@@ -399,7 +409,7 @@ def test_diagnostics_keys(pipeline_and_data):
     pipe.build_all_trees(dataset)
     diag = pipe.diagnostics()
     expected_keys = {"retention_rate", "mean_leaves", "mean_depth",
-                      "mean_residual_ndfu", "mean_top_split_prg",
+                      "mean_residual_ndfu", "mean_top_split_peg",
                       "indeterminate_rate", "dims_never_used"}
     assert expected_keys.issubset(diag.keys())
     assert 0.0 <= diag["retention_rate"] <= 1.0

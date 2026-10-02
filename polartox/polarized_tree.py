@@ -3,7 +3,7 @@ polartox.polarized_tree -- single-tree construction and inspection.
 
 Everything about ONE text's polarized tree lives here: the splitting
 algorithm (detect_polarized_subgroups), its small numeric helpers
-(ndfu_score, compute_prg), and the PolarizedTree class that wraps a
+(ndfu_score, compute_peg), and the PolarizedTree class that wraps a
 built tree and answers questions about it (render, inspect, walk nodes,
 pull a node's/leaf's rating distribution).
 
@@ -52,32 +52,36 @@ def print_histogram(ratings, scale, label="ratings", indent=0, width=30):
         print(f"{pad}  {rating}: {'#' * round(width * count / peak)} ({count})")
 
 
-def compute_prg(node_ratings, groups, scale, variant="beta", beta=1.0):
-    """PRGmax, PRGvar, or PRGbeta (harmonic mean of both -- recommended default)."""
+def compute_peg(node_ratings, groups, scale, variant="beta", beta=1.0):
+    """PEGmax, PEGavg, PEGmin, or PEGbeta (harmonic mean of max and avg --
+    recommended default)."""
     global_ndfu = ndfu_score(node_ratings, scale)
     group_ndfus = {v: ndfu_score(r, scale) for v, r in groups.items()}
     n = len(node_ratings)
     sizes = {v: len(r) for v, r in groups.items()}
 
-    prg = _combine_prg(global_ndfu, group_ndfus, sizes, n, variant, beta)
-    return prg, global_ndfu, group_ndfus
+    peg = _combine_peg(global_ndfu, group_ndfus, sizes, n, variant, beta)
+    return peg, global_ndfu, group_ndfus
 
 
-def _combine_prg(global_ndfu, group_ndfus, sizes, n, variant, beta):
-    """PRG from precomputed nDFUs; `group_ndfus` and `sizes` map group -> value."""
-    prg_max = abs(global_ndfu - max(group_ndfus.values()))
-    prg_var = abs(global_ndfu - sum(sizes[v] / n * group_ndfus[v] for v in group_ndfus))
+def _combine_peg(global_ndfu, group_ndfus, sizes, n, variant, beta):
+    """PEG from precomputed nDFUs; `group_ndfus` and `sizes` map group -> value."""
+    peg_max = abs(global_ndfu - max(group_ndfus.values()))
+    peg_avg = abs(global_ndfu - sum(sizes[v] / n * group_ndfus[v] for v in group_ndfus))
+    peg_min = abs(global_ndfu - min(group_ndfus.values()))
 
     if variant == "max":
-        prg = prg_max
-    elif variant == "var":
-        prg = prg_var
+        peg = peg_max
+    elif variant == "avg":
+        peg = peg_avg
+    elif variant == "min":
+        peg = peg_min
     elif variant == "beta":
-        denom = beta**2 * prg_max + prg_var
-        prg = (1 + beta**2) * prg_max * prg_var / denom if denom > 0 else 0.0
+        denom = beta**2 * peg_max + peg_avg
+        peg = (1 + beta**2) * peg_max * peg_avg / denom if denom > 0 else 0.0
     else:
-        raise ValueError("variant must be 'max', 'var', or 'beta'")
-    return prg
+        raise ValueError("variant must be 'max', 'avg', 'min', or 'beta'")
+    return peg
 
 
 def _leaf(ratings, path, ndfu_val, theta_pole, reason):
@@ -151,7 +155,7 @@ def detect_polarized_subgroups(
             leaves.append(leaf)
             return leaf
 
-        best_dim, best_prg = None, 0
+        best_dim, best_peg = None, 0
         for dim in remaining_dims:
             codes = coded[dim][0][idx]
             present = codes >= 0
@@ -165,18 +169,18 @@ def detect_polarized_subgroups(
             hists = _histograms(codes[present], ratings[present], k, scale)
             group_ndfus = {g: _ndfu_from_counts(tuple(hists[g].tolist()), int(sizes[g]))
                            for g in keep}
-            prg = _combine_prg(nd, group_ndfus, {g: int(sizes[g]) for g in keep},
+            peg = _combine_peg(nd, group_ndfus, {g: int(sizes[g]) for g in keep},
                                n, variant, beta)
-            if prg > best_prg:
-                best_dim, best_prg = dim, prg
+            if peg > best_peg:
+                best_dim, best_peg = dim, peg
 
         if best_dim is not None and relative_h:
-            comparison_value = best_prg / nd if nd > 0 else 0
+            comparison_value = best_peg / nd if nd > 0 else 0
         else:
-            comparison_value = best_prg
+            comparison_value = best_peg
 
         if best_dim is None or comparison_value <= h:
-            reason = "no dim passed min_size" if best_dim is None else f"best PRG {best_prg:.3f} (relative={comparison_value:.3f}) <= h"
+            reason = "no dim passed min_size" if best_dim is None else f"best PEG {best_peg:.3f} (relative={comparison_value:.3f}) <= h"
             leaf = _leaf(ratings, path, nd, theta_pole, reason)
             leaves.append(leaf)
             return leaf
@@ -185,7 +189,7 @@ def detect_polarized_subgroups(
         children = {v: dfs(child, remaining_next, depth + 1, path + [(best_dim, v)])
                     for v, child in split(idx, best_dim)}
         return {"path": list(path), "n": n, "ndfu": nd, "is_leaf": False,
-                "split_dim": best_dim, "prg": best_prg, "children": children}
+                "split_dim": best_dim, "peg": best_peg, "children": children}
 
     root = dfs(np.arange(n_total), list(dims), 1, [])
     return (leaves, root) if return_tree else leaves
@@ -196,7 +200,7 @@ def render_tree_text(node, label="root", prefix="", is_last=True):
     if node["is_leaf"]:
         print(f"{prefix}{connector}{label} (n={node['n']}, nDFU={node['ndfu']:.3f}) -> [{node['pole']}] p_tox={node['p_tox']:.3f}")
         return
-    print(f"{prefix}{connector}{label} (n={node['n']}, nDFU={node['ndfu']:.3f}) split '{node['split_dim']}' (PRG={node['prg']:.3f})")
+    print(f"{prefix}{connector}{label} (n={node['n']}, nDFU={node['ndfu']:.3f}) split '{node['split_dim']}' (PEG={node['peg']:.3f})")
     child_prefix = prefix + ("    " if is_last else "│   ")
     items = list(node["children"].items())
     for i, (v, child) in enumerate(items):
@@ -256,11 +260,11 @@ class PolarizedTree:
         return max((len(leaf["path"]) for leaf in self.leaves), default=0)
 
     def internal_nodes(self, root=None, depth=1, path=()):
-        """Yield (depth, split_dim, prg, path, node) for every non-leaf node."""
+        """Yield (depth, split_dim, peg, path, node) for every non-leaf node."""
         root = self.root if root is None else root
         if root["is_leaf"]:
             return
-        yield depth, root["split_dim"], root["prg"], path, root
+        yield depth, root["split_dim"], root["peg"], path, root
         for v, child in root["children"].items():
             yield from self.internal_nodes(child, depth + 1, path + ((root["split_dim"], v),))
 
@@ -309,7 +313,7 @@ class PolarizedTree:
             if node["is_leaf"]:
                 print(f"{'  '*depth}  -> LEAF [{node['pole']}] p_tox={node['p_tox']:.3f} ({node['stop_reason']})")
             else:
-                print(f"{'  '*depth}  split on '{node['split_dim']}' (PRG={node['prg']:.3f})")
+                print(f"{'  '*depth}  split on '{node['split_dim']}' (PEG={node['peg']:.3f})")
                 for v, child in node["children"].items():
                     walk(child, path + ((node["split_dim"], v),), depth + 1)
 

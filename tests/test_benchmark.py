@@ -448,8 +448,8 @@ def test_default_search_space_has_paper_configuration_count(
 
     configurations = benchmark.configurations()
 
-    # The paper search space contains 3,240 valid configurations.
-    assert len(configurations) == 3240
+    # The paper search space (3,240) plus the `min` variant: 3,888.
+    assert len(configurations) == 3888
 
 
 def test_default_search_space_matches_paper_dimensions(
@@ -480,7 +480,7 @@ def test_default_search_space_matches_paper_dimensions(
 
     assert set(
         config["variant"] for config in configurations
-    ) == {"max", "var", "beta"}
+    ) == {"max", "avg", "min", "beta"}
 
     assert set(
         config["h"] for config in configurations
@@ -515,11 +515,12 @@ def test_default_search_space_has_correct_conditional_beta_values(
             for config in configurations
             if config["variant"] == variant
         }
-        for variant in {"max", "var", "beta"}
+        for variant in {"max", "avg", "min", "beta"}
     }
 
     assert beta_by_variant["max"] == {1.0}
-    assert beta_by_variant["var"] == {1.0}
+    assert beta_by_variant["avg"] == {1.0}
+    assert beta_by_variant["min"] == {1.0}
     assert beta_by_variant["beta"] == {0.5, 1.0, 2.0}
 
 
@@ -538,7 +539,7 @@ def test_default_search_space_contains_only_valid_variant_beta_pairs(
     configurations = benchmark.configurations()
 
     for config in configurations:
-        if config["variant"] in {"max", "var"}:
+        if config["variant"] in {"max", "avg", "min"}:
             assert config["beta"] == 1.0
         elif config["variant"] == "beta":
             assert config["beta"] in {0.5, 1.0, 2.0}

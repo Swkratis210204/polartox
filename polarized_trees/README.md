@@ -45,7 +45,7 @@ results = pipe.run_full_evaluation(dataset)
 
 results["F"]            # Dimension frequency
 results["C"]            # Subgroup pole consistency
-results["P"]            # Subgroup PRG
+results["P"]            # Subgroup PEG
 results["diagnostics"]  # Inference diagnostics
 ```
 
@@ -76,7 +76,7 @@ For each text, the method follows the same basic process:
 
 3. **Find the best split.**  
    Candidate demographic dimensions are scored using Polarization Reduction
-   Gain (PRG). The dimension with the strongest reduction is selected.
+   Gain (PEG). The dimension with the strongest reduction is selected.
 
 4. **Grow the tree.**  
    The process is repeated recursively, producing increasingly specific
@@ -91,7 +91,7 @@ For each text, the method follows the same basic process:
 
 6. **Summarize the corpus.**  
    The resulting trees are aggregated into Dimension Frequency (F), Subgroup
-   Pole Consistency (C), and Subgroup PRG (P).
+   Pole Consistency (C), and Subgroup PEG (P).
 
 ![Example polarized tree](polarized_tree.png)
 
@@ -112,7 +112,7 @@ polarization, while deeper dimensions refine the explanation.
 Shows how consistently an intersectional subgroup is associated with the
 `toxic` or `civil` pole across texts.
 
-### Subgroup PRG (P)
+### Subgroup PEG (P)
 
 Shows the average polarization reduction associated with a subgroup's split.
 Higher values indicate a stronger contribution to the discovered explanation.
@@ -120,7 +120,7 @@ Higher values indicate a stronger contribution to the discovered explanation.
 ### Diagnostics
 
 `diagnostics()` provides corpus-level information such as retention rate,
-tree size, residual nDFU, top-split PRG, indeterminate leaves, and dimensions
+tree size, residual nDFU, top-split PEG, indeterminate leaves, and dimensions
 that were never selected.
 
 These diagnostics are particularly useful for real data, where ground truth
@@ -135,8 +135,8 @@ is unavailable.
 | `theta_filter` | Minimum nDFU required to analyze a text |
 | `min_size_frac` | Minimum subgroup size relative to the text |
 | `max_depth` | Maximum tree depth |
-| `variant` | PRG formulation: `max`, `var`, or `beta` |
-| `beta` | Controls the PRGβ formulation |
+| `variant` | PEG formulation: `max`, `avg`, `min`, or `beta` |
+| `beta` | Controls the PEGβ formulation |
 | `h` | Minimum required polarization reduction |
 | `relative_h` | Expresses `h` relative to the node's remaining polarization |
 | `theta_stop` | Stops splitting when remaining polarization is already low |
@@ -191,7 +191,7 @@ tree directly, without a pipeline or a corpus -- see
 
 ## Further reading
 
-For the full methodology, PRG definitions, stopping criteria, and method
+For the full methodology, PEG definitions, stopping criteria, and method
 details, see **`polarized_trees.pdf`**.
 
 The results of hyperparameter selection, configuration benchmarking,

@@ -1,4 +1,4 @@
-subgroup,n_s,mean_prg
+subgroup,n_s,mean_peg
 "(('age', '>50'), ('gender', 'male'), ('orientation', 'lgbtq+'))",2,0.6793203040998014
 "(('age', '>50'), ('education', 'high'), ('politics', 'left'))",1,0.6436343140168056
 "(('orientation', 'lgbtq+'),)",12,0.6353365969392201

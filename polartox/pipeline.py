@@ -16,7 +16,7 @@ import numpy as np
 from polartox.polarized_tree import (
     ndfu_score,
     print_histogram,
-    compute_prg,
+    compute_peg,
     detect_polarized_subgroups,
     render_tree_text,
     jaccard,
@@ -24,7 +24,7 @@ from polartox.polarized_tree import (
 )
 
 __all__ = [
-    "ndfu_score", "print_histogram", "compute_prg", "detect_polarized_subgroups",
+    "ndfu_score", "print_histogram", "compute_peg", "detect_polarized_subgroups",
     "render_tree_text", "jaccard", "PolarizedTree", "PolarizedTreesPipeline",
 ]
 
@@ -118,7 +118,7 @@ class PolarizedTreesPipeline:
         """Step 6.1 (F): splitting-dimension frequency by depth."""
         rows = [{"text_id": t, "depth": d, "dim": dim}
                 for t, tree in self.trees_.items()
-                for d, dim, prg, path, node in tree.internal_nodes()]
+                for d, dim, peg, path, node in tree.internal_nodes()]
         if not rows:
             return pd.DataFrame()
         F = pd.DataFrame(rows).pivot_table(index="dim", columns="depth", values="text_id",
@@ -157,19 +157,19 @@ class PolarizedTreesPipeline:
             C["true_lean_match_rate"] = df.groupby("subgroup")["agrees"].mean()
         return C
 
-    def subgroup_prg(self, ground_truth=None):
-        """Step 6.3 (P): mean PRG of the split producing each subgroup."""
+    def subgroup_peg(self, ground_truth=None):
+        """Step 6.3 (P): mean PEG of the split producing each subgroup."""
         rows = []
         for t, tree in self.trees_.items():
-            for d, dim, prg, path, node in tree.internal_nodes():
+            for d, dim, peg, path, node in tree.internal_nodes():
                 for v, child in node["children"].items():
                     if child["is_leaf"]:
                         rows.append({"subgroup": tuple(sorted(path + ((dim, v),))),
-                                     "text_id": t, "dim": dim, "prg": prg})
+                                     "text_id": t, "dim": dim, "peg": peg})
         if not rows:
             return pd.DataFrame()
         df = pd.DataFrame(rows)
-        P = df.groupby("subgroup").agg(n_s=("prg", "count"), mean_prg=("prg", "mean")).sort_values("mean_prg", ascending=False)
+        P = df.groupby("subgroup").agg(n_s=("peg", "count"), mean_peg=("peg", "mean")).sort_values("mean_peg", ascending=False)
 
         if ground_truth is not None:
             def true_alpha(row):
@@ -181,7 +181,7 @@ class PolarizedTreesPipeline:
 
     def diagnostics(self):
         """Ground-truth-free corpus diagnostics (usable on real data)."""
-        n_leaves, depths, residual, top_prgs, indet, used = [], [], [], [], [], set()
+        n_leaves, depths, residual, top_pegs, indet, used = [], [], [], [], [], set()
         for t, tree in self.trees_.items():
             n_leaves.append(tree.n_leaves)
             for leaf in tree.get_leaves():
@@ -189,15 +189,15 @@ class PolarizedTreesPipeline:
                 depths.append(len(leaf["path"]))
                 indet.append(leaf["pole"] == "indeterminate")
             if not tree.get_root()["is_leaf"]:
-                top_prgs.append(tree.get_root()["prg"])
-            used |= {dim for d, dim, prg, path, node in tree.internal_nodes()}
+                top_pegs.append(tree.get_root()["peg"])
+            used |= {dim for d, dim, peg, path, node in tree.internal_nodes()}
         n_total = len(self.overall_ndfu_) or len(self.trees_)
         return {
             "retention_rate": len(self.retained_ids_) / n_total,
             "mean_leaves": float(np.mean(n_leaves)) if n_leaves else np.nan,
             "mean_depth": float(np.mean(depths)) if depths else np.nan,
             "mean_residual_ndfu": float(np.mean(residual)) if residual else np.nan,
-            "mean_top_split_prg": float(np.mean(top_prgs)) if top_prgs else np.nan,
+            "mean_top_split_peg": float(np.mean(top_pegs)) if top_pegs else np.nan,
             "indeterminate_rate": float(np.mean(indet)) if indet else np.nan,
             "dims_never_used": sorted(set(self.dims) - used),
         }
@@ -224,7 +224,7 @@ class PolarizedTreesPipeline:
         results = {
             "F": self.dimension_frequency(ground_truth),
             "C": self.subgroup_pole_consistency(ground_truth),
-            "P": self.subgroup_prg(ground_truth),
+            "P": self.subgroup_peg(ground_truth),
             "diagnostics": self.diagnostics(),
         }
 

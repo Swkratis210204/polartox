@@ -310,7 +310,7 @@
         <div class="n num">02</div>
         <div>
           <h3>Split</h3>
-          <p>Score every remaining candidate dimension by <strong>PRG</strong> (Polarization Reduction Gain) and take the one that reduces bimodality the most.</p>
+          <p>Score every remaining candidate dimension by <strong>PEG</strong> (Polarization Reduction Gain) and take the one that reduces bimodality the most.</p>
         </div>
       </div>
       <div class="step">
@@ -459,7 +459,7 @@ best = bench.get_best_pipeline()</pre>
 hist = pdf(ratings, range(<span class="st">1</span>, scale + <span class="st">1</span>))
 score = dfu(hist)  <span class="c1"># 0 = agreement, ~1 = split</span></pre>
         <p>
-          <strong>PRG</strong> (Polarization Reduction Gain) then measures
+          <strong>PEG</strong> (Polarization Reduction Gain) then measures
           how much a candidate split would <em>reduce</em> that bimodality if
           taken, and <code>theta_pole</code> sets the rating cutoff a leaf's
           individual ratings must clear to count toward its
@@ -505,7 +505,7 @@ score = dfu(hist)  <span class="c1"># 0 = agreement, ~1 = split</span></pre>
     </div>
     <div class="prose">
       <p>
-        The full methodology &mdash; PRG variants, stopping criteria, and the
+        The full methodology &mdash; PEG variants, stopping criteria, and the
         model-selection procedure &mdash; is written up in the accompanying
         paper. Every module has a runnable notebook, including an end-to-end
         run on real conversational-safety annotations (DICES-350/990) with

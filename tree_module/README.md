@@ -39,7 +39,7 @@ tree.inspect(dataset, show_distributions=True)  # full walk + histograms
 - `PolarizedTree.build(data, dims, min_size, h, max_depth, scale, theta_pole=None, theta_stop=0.15, variant="beta", beta=1.0, relative_h=False, text_id=None)` — runs the splitting algorithm and returns a built tree.
 - `get_root()` / `get_leaves()` — the raw node-dict structures.
 - `n_leaves`, `depth` — quick size/shape properties.
-- `internal_nodes()` — generator over every non-leaf node, `(depth, split_dim, prg, path, node)`.
+- `internal_nodes()` — generator over every non-leaf node, `(depth, split_dim, peg, path, node)`.
 - `find_node(path)` — look up the node reached by a sequence of `(dim, value)` splits.
 - `node_ratings(dataset, path=())` — the raw ratings belonging to one node (root by default).
 - `node_distribution(dataset, path=(), indent=0)` — print that node's rating histogram.

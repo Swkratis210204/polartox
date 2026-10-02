@@ -1,3 +1,24 @@
+## [Unreleased]
+
+### Added
+
+- `variant="min"` (PEGmin): PEG measured against the *least* polarized
+  subgroup, `|nDFU(node) - min_v nDFU(v)|`. Accepted by `compute_peg`,
+  `detect_polarized_subgroups`, `PolarizedTree.build` and the pipeline.
+
+### Changed
+
+- **Breaking rename: PRG → PEG.** All PRG names are now PEG:
+  `compute_prg` → `compute_peg`, `PolarizedTreesPipeline.subgroup_prg` →
+  `subgroup_peg`, the node key `"prg"` → `"peg"`, and the output columns
+  `mean_prg` → `mean_peg` and `mean_top_split_prg` → `mean_top_split_peg`.
+- **Breaking rename: `variant="var"` → `variant="avg"`** (PRGvar → PEGavg,
+  the size-weighted average over subgroups). `"var"` now raises `ValueError`.
+- `DEFAULT_SEARCH_SPACE` now includes `variant="min"` (paired with
+  `beta=1.0`), so the default benchmark grows from 3,240 to **3,888 valid
+  configurations**. Pass `search_space={"variant": ["max", "avg", "beta"],
+  ...}` to reproduce the paper's original space.
+
 ## [0.6.1] — 2026-09-21
 
 ### Added

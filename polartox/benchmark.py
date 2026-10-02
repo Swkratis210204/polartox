@@ -15,7 +15,7 @@ DEFAULT_SEARCH_SPACE = {
     "theta_filter": [0.2, 0.3, 0.4],
     "min_size_frac": [0.02, 0.03, 0.05],
     "max_depth": [4, 6, 8],
-    "variant": ["max", "var", "beta"],
+    "variant": ["max", "avg", "min", "beta"],
     "h": [0.05, 0.10, 0.15, 0.20],
     "relative_h": [False, True],
     "theta_stop": [0.05, 0.10, 0.15],
@@ -324,7 +324,8 @@ class PolarizedTreesBenchmark:
             # between `variant` and `beta`.
             #
             #   max  -> beta = 1.0
-            #   var  -> beta = 1.0
+            #   avg  -> beta = 1.0
+            #   min  -> beta = 1.0
             #   beta -> beta = 0.5, 1.0, 2.0
             #
             # `beta` is intentionally NOT part of DEFAULT_SEARCH_SPACE.
@@ -356,7 +357,7 @@ class PolarizedTreesBenchmark:
 
                     for variant in self.search_space["variant"]:
 
-                        if variant in {"max", "var"}:
+                        if variant in {"max", "avg", "min"}:
                             beta_values = [1.0]
 
                         elif variant == "beta":

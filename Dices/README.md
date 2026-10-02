@@ -23,7 +23,7 @@ F/C/P and diagnostics only — the same ground-truth-free outputs
   and report F/C/P and diagnostics for each configuration.
 - `DICES-350_diagnostics_all_configs.csv` / `DICES-990_diagnostics_all_configs.csv`
   — the saved diagnostics table (retention rate, mean leaves/depth,
-  residual nDFU, top-split PRG, indeterminate rate) for each of the five
+  residual nDFU, top-split PEG, indeterminate rate) for each of the five
   selected configurations, on each dataset.
 - `dices990_polarized_tree.png` — an example recovered tree from DICES-990.
 
@@ -37,7 +37,7 @@ to actual annotated conversations — showing what the method actually
 recovers when there is no known answer to check against.
 
 Across both datasets, the trees select `race`, `gender`, and `age` as the
-most frequent splitting dimensions, and the strongest subgroup-level PRG
+most frequent splitting dimensions, and the strongest subgroup-level PEG
 values tend to come from combinations of multiple SCD dimensions rather
 than any single one — see the notebook's own results sections for the
 detailed per-configuration breakdown on DICES-350 and DICES-990.

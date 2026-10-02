@@ -176,14 +176,15 @@ The benchmark:
 5. returns the best configuration and pipeline;
 6. provides the complete results, top configurations, and reports.
 
-The default search space corresponds to the configuration space used in the
-paper and contains **3,240 valid configurations**.
+The default search space is the configuration space used in the paper plus
+the `min` PEG variant, and contains **3,888 valid configurations**.
 
-The valid PRG variant/beta combinations are:
+The valid PEG variant/beta combinations are:
 
 ```text
 max  → beta = 1.0
-var  → beta = 1.0
+avg  → beta = 1.0
+min  → beta = 1.0
 beta → beta = 0.5, 1.0, 2.0
 ```
 
