@@ -3,7 +3,7 @@
 <link rel="canonical" href="https://swkratis210204.github.io/polartox/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Polartox">
-<meta property="og:description" content="An NLP toolkit that explains annotator disagreement instead of averaging it away. Synthetic data generation, Polarized Trees, and hyperparameter benchmarking for annotator polarization research.">
+<meta property="og:description" content="An NLP toolkit that explains annotator disagreement instead of averaging it away. Synthetic data generation, Polarized Trees, hyperparameter benchmarking, and a comparison of the PEG formulations for annotator polarization research.">
 <meta property="og:url" content="https://swkratis210204.github.io/polartox/">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Polartox">
@@ -127,7 +127,7 @@
 
   /* ---------- module grid ---------- */
   .modgrid{display:grid; gap:20px; grid-template-columns:1fr;}
-  @media(min-width:800px){.modgrid{grid-template-columns:1fr 1fr;}}
+  @media(min-width:800px){.modgrid{grid-template-columns:1fr 1fr;} .modcard.wide{grid-column:1 / -1;}}
   .modcard{
     background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:24px;
     display:flex; flex-direction:column; gap:14px; box-shadow:var(--shadow);
@@ -341,8 +341,8 @@
 <section id="modules">
   <div class="wrap">
     <div class="section-head prose">
-      <p class="eyebrow">Four modules</p>
-      <h2>Generate the data you can validate against, build one tree or a corpus of them, then tune it.</h2>
+      <p class="eyebrow">Five modules</p>
+      <h2>Generate the data you can validate against, build one tree or a corpus of them, tune it, then compare the PEG formulations.</h2>
     </div>
     <div class="modgrid">
 
@@ -351,10 +351,15 @@
         <span class="status">stable</span>
         <p class="desc">Synthetic annotator pools with <em>known</em> ground truth &mdash; each text gets <code>k</code> active demographic dimensions with a real toxic/civil lean and intensity, so recovery can be checked against an actual answer.</p>
         <pre class="code"><span class="c1"># build a pool, generate 100 texts with known active dims</span>
-<span class="kw">from</span> polartox.datagen <span class="kw">import</span> AnnotatorPool, DEFAULT_DIMENSIONS
+<span class="kw">from</span> polartox.datagen <span class="kw">import</span> (
+    AnnotatorPool, DEFAULT_DIMENSIONS,
+    DEFAULT_DEPTH_WEIGHTS, DEFAULT_INTENSITY_RANGE,
+)
 
 pool = AnnotatorPool(
     dimensions=DEFAULT_DIMENSIONS, scale=<span class="st">5</span>,
+    intensity_range=DEFAULT_INTENSITY_RANGE,
+    depth_weights=DEFAULT_DEPTH_WEIGHTS,
     annotators_per_identity=<span class="st">10</span>,
 )
 dataset, ground_truth = pool.generate_dataset(
@@ -405,6 +410,20 @@ bench = PolarizedTreesBenchmark(
 )
 bench.run()
 best = bench.get_best_pipeline()</pre>
+      </div>
+
+      <div class="modcard wide">
+        <div><span class="path">polartox.peg_comparison</span></div>
+        <span class="status">stable</span>
+        <p class="desc">The last step of the chain: take the benchmark's best settings, hold everything fixed except the PEG formulation (<code>max</code>, <code>avg</code>, <code>min</code>, <code>mean</code>, <code>harmonic</code>), and compare. Which formulation recovers the true dimensions, what do its trees look like, and do two formulations split the annotators into the same groups (adjusted Rand index)? Ground truth is required, as for the benchmark.</p>
+        <pre class="code"><span class="c1"># the best settings, one formulation at a time</span>
+<span class="kw">from</span> polartox <span class="kw">import</span> PEGComparison
+
+cmp = PEGComparison.from_benchmark(bench)   <span class="c1"># corpora, dims, scale</span>
+cmp.run(bench.top_configs_.head(<span class="st">3</span>))
+cmp.overview()       <span class="c1"># recovery and tree shape per formulation</span>
+cmp.ari_matrix()     <span class="c1"># do they split annotators the same way?</span>
+cmp.disagreement()   <span class="c1"># the texts on which they differ most</span></pre>
       </div>
 
     </div>
@@ -486,8 +505,8 @@ score = dfu(hist)  <span class="c1"># 0 = agreement, ~1 = split</span></pre>
         <div class="l">randomly sampled &amp; ranked by mean Jaccard</div>
       </div>
       <div class="stat">
-        <div class="v num">0.86</div>
-        <div class="l">mean Jaccard, default benchmark corpus (k=1&ndash;4)</div>
+        <div class="v num">0.89</div>
+        <div class="l">mean Jaccard of the best configuration, over the three benchmark corpora</div>
       </div>
       <div class="stat">
         <div class="v num">0&ndash;4</div>
@@ -518,6 +537,8 @@ score = dfu(hist)  <span class="c1"># 0 = agreement, ~1 = split</span></pre>
       <a href="https://github.com/Swkratis210204/polartox/blob/main/tree_module/polarized_tree_demo.ipynb">Notebook &mdash; one tree, directly</a>
       <a href="https://github.com/Swkratis210204/polartox/blob/main/polarized_trees/trees_demo.ipynb">Notebook &mdash; full pipeline &amp; F/C/P</a>
       <a href="https://github.com/Swkratis210204/polartox/blob/main/benchmarks/notebooks/treesbenchmark.ipynb">Notebook &mdash; hyperparameter benchmark</a>
+      <a href="https://github.com/Swkratis210204/polartox/blob/main/peg_comparison/peg_comparison_demo.ipynb">Notebook &mdash; comparing the PEG formulations</a>
+      <a href="https://github.com/Swkratis210204/polartox/blob/main/benchmarks/notebooks/pegcomparison.ipynb">Notebook &mdash; PEG comparison on the benchmark</a>
       <a href="https://github.com/Swkratis210204/polartox/blob/main/Dices/DICES_polarized_trees_end_to_end.ipynb">Notebook &mdash; real-data inference (DICES)</a>
     </div>
   </div>
