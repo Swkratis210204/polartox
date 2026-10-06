@@ -1,13 +1,14 @@
 """
 Shared configuration for the Polarized Trees synthetic benchmark.
 
-This module is the single source of truth for what the three notebooks
-(datasetdemo, treesbenchmark, pegcomparison) share:
+This module is the single source of truth for what the notebooks
+(datasetdemo, treesbenchmark, resultsexploration, pegcomparison) share:
 
 * the synthetic benchmark settings (dimensions, corpora, seeds);
 * the data and results folders (DATA_DIR, RESULTS_DIR);
 * check_polartox(), which reports which polartox is running;
-* load_corpus() / load_benchmark_corpora(), which read the saved datasets.
+* load_corpus() / load_benchmark_corpora(), which read the saved datasets;
+* load_benchmark_dataset(), the corpora A, B and C as one benchmark input.
 """
 
 import json
@@ -132,3 +133,21 @@ def load_corpus(name):
 def load_benchmark_corpora():
     """{name: (dataset, ground_truth)} for the model-selection corpora A, B and C."""
     return {name: load_corpus(name) for name in BENCHMARK_CORPORA}
+
+
+def load_benchmark_dataset():
+    """The corpora A, B and C as one benchmark input: (annotations, ground_truth,
+    text_groups). Text ids are renumbered so that they are unique across the
+    corpora, and text_groups maps every new id to its corpus."""
+    parts, ground_truth, text_groups = [], {}, {}
+    offset = 0
+
+    for name, (dataset, truth) in load_benchmark_corpora().items():
+        id_map = {old: offset + i for i, old in enumerate(sorted(dataset["text_id"].unique()))}
+
+        parts.append(dataset.assign(text_id=dataset["text_id"].map(id_map)))
+        ground_truth.update({id_map[old]: entry for old, entry in truth.items()})
+        text_groups.update({new: name for new in id_map.values()})
+        offset += len(id_map)
+
+    return pd.concat(parts, ignore_index=True), ground_truth, text_groups

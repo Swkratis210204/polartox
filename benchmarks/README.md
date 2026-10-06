@@ -21,9 +21,9 @@ Ground truth is required for recovery-based model selection. Once the best confi
 
 ## Notebooks
 
-There are three notebooks, run in this order: `datasetdemo.ipynb`, `treesbenchmark.ipynb`, `pegcomparison.ipynb`.
+There are four notebooks, run in this order: **a)** `datasetdemo.ipynb` (the data), **b)** `treesbenchmark.ipynb` (run the benchmark, get the results), **c)** `resultsexploration.ipynb` (explore the results) and **d)** `pegcomparison.ipynb` (compare the PEG formulations).
 
-What the notebooks share lives in [`benchmark_config.py`](benchmark_config.py): the corpus settings, the data and results folders (`DATA_DIR`, `RESULTS_DIR`), `load_corpus` / `load_benchmark_corpora` (read the saved datasets), and `check_polartox()` (prints which `polartox` and library versions are running, and stops if it is not the current package). Each notebook only has to find that file first.
+What the notebooks share lives in [`benchmark_config.py`](benchmark_config.py): the corpus settings, the data and results folders (`DATA_DIR`, `RESULTS_DIR`), `load_corpus` / `load_benchmark_corpora` / `load_benchmark_dataset` (read the saved datasets, separately or as one benchmark input), and `check_polartox()` (prints which `polartox` and library versions are running, and stops if it is not the current package). Each notebook only has to find that file first.
 
 ### `datasetdemo.ipynb`
 
@@ -47,9 +47,24 @@ It:
 - loads the fixed synthetic datasets;
 - defines the benchmark inputs;
 - runs `PolarizedTreesBenchmark` over the paper's hyperparameter space, with recovery measured against the synthetic ground truth;
-- saves the complete results, the report, the top 20 configurations (`top_configurations.csv`), and a summary of which PEG formulations the top 20 use (`top20_formulations.csv`).
+- saves the complete results, the report and the top 20 configurations (`top_configurations.csv`).
 
 It serves **two purposes**: it is a runnable demonstration of the `PolarizedTreesBenchmark` API, and it is the experimental workflow used to select the configurations reported in the paper.
+
+### `resultsexploration.ipynb`
+
+This notebook explores what the search found. It only reads the saved results, and every section is one question, so more can be added.
+
+It:
+
+- summarises **the search**: the configurations evaluated, the search space, and the distribution of the mean Jaccard;
+- shows **the top 20** with every metric (means, and the distribution over the texts: median, std, quartiles, min, max), and the same **per corpus** (A, B, C, overall);
+- counts **which PEG formulations are in the top 20**, and how each did over everything that was evaluated;
+- shows **how much each hyperparameter matters**: the mean and best Jaccard for every value;
+- looks at **`relative_h`** more closely: the sample, and a controlled experiment with everything fixed except `relative_h` and `h`, each mode at its best `h`, and what `h` does to the trees;
+- asks whether **the same settings work on A, B and C**: how hard each corpus is, how well the configurations correlate between corpora, and the best configuration of each;
+- shows **recovery by the true number of active dimensions** (k) for the best configuration of each formulation;
+- saves the tables to `benchmark_results/exploration/`.
 
 ### `pegcomparison.ipynb`
 
@@ -57,7 +72,7 @@ This notebook shows how the PEG formulations change the trees. The comparison it
 
 It:
 
-- opens the top-20 table saved by `treesbenchmark.ipynb` and lets you choose rows by position;
+- opens the top-20 table saved by `treesbenchmark.ipynb` (shown in full by `resultsexploration.ipynb`) and lets you choose rows by position;
 - keeps every setting of a chosen row fixed except the PEG formulation, and runs all five (`max`, `avg`, `min`, `mean`, `harmonic`) on the three benchmark corpora and on the unseen corpus;
 - gives one **overview** per formulation: recovery (checked against the benchmark's own saved numbers) and tree shape (retention, leaves, depth, annotators per leaf, residual nDFU, top-split PEG, indeterminate leaves);
 - splits recovery **by the true number of active dimensions** of each text (k), which is where the formulations differ most;
@@ -130,6 +145,7 @@ The notebooks assume the following structure:
     │
     ├── benchmark_results/
     │   ├── ...                       (written by treesbenchmark.ipynb)
+    │   ├── exploration/              (written by resultsexploration.ipynb)
     │   └── peg_comparison/           (written by pegcomparison.ipynb)
     │
     ├── synthetic_benchmark_bundle/   (and a .zip of it: a copy of benchmark_data/
@@ -138,6 +154,7 @@ The notebooks assume the following structure:
     └── notebooks/
         ├── datasetdemo.ipynb
         ├── treesbenchmark.ipynb
+        ├── resultsexploration.ipynb
         └── pegcomparison.ipynb
 
 ## Running the Benchmark
@@ -152,17 +169,21 @@ Run the notebooks in order:
             ↓
     benchmark_results/   (top_configurations.csv, ...)
             ↓
+    resultsexploration.ipynb
+            ↓
+    benchmark_results/exploration/
+            ↓
     pegcomparison.ipynb
             ↓
     benchmark_results/peg_comparison/
 
 First run `datasetdemo.ipynb` to generate the fixed synthetic datasets.
 
-Then run `treesbenchmark.ipynb` to reproduce the search and save the top configurations, and finally `pegcomparison.ipynb` to compare the PEG formulations on them.
+Then run `treesbenchmark.ipynb` to reproduce the search and save the top configurations, `resultsexploration.ipynb` to explore the results, and finally `pegcomparison.ipynb` to compare the PEG formulations on the best configurations. `pegcomparison.ipynb` only needs the output of `treesbenchmark.ipynb`, so the exploration can be skipped.
 
 The full benchmark can be computationally expensive because it evaluates a large hyperparameter search. Existing results can be inspected without rerunning the complete search.
 
-> **Note.** The search results in `benchmark_results/` (`benchmark_*.csv`, `benchmark_report.json`, `top_configurations.csv`, `top20_formulations.csv`) come from the current search (800 random configurations of the 3,240, seed 0). A few older files from the earlier version of the notebook are still in that folder (`selected_configuration*`, `fcp_*`, `summary_results_extra.csv`); they come from the earlier search and are not produced by the current notebooks.
+> **Note.** The search results in `benchmark_results/` (`benchmark_*.csv`, `benchmark_report.json`, `top_configurations.csv`) come from the current search (800 random configurations of the 3,240, seed 0). A few older files from the earlier version of the notebook are still in that folder (`selected_configuration*`, `fcp_*`, `summary_results_extra.csv`, `top20_formulations.csv`, `top20_findings.md`); they are not produced by the current notebooks (`top20_formulations.csv` is now written by `resultsexploration.ipynb`, to `exploration/`).
 
 ## Outputs
 
@@ -170,8 +191,15 @@ The full benchmark can be computationally expensive because it evaluates a large
 
 - results for the evaluated configurations (`benchmark_configuration_summary.csv`, `benchmark_results.csv`, `benchmark_text_results.csv`);
 - the report, with the settings, the search space, the best configuration and the top configurations (`benchmark_report.json`);
-- the top 20 configurations (`top_configurations.csv`);
-- how many of the top 20 use each PEG formulation (`top20_formulations.csv`).
+- the top 20 configurations (`top_configurations.csv`).
+
+`resultsexploration.ipynb` saves, in `benchmark_results/exploration/`:
+
+- how many of the top 20 use each PEG formulation (`top20_formulations.csv`);
+- the effect of every hyperparameter value (`hyperparameter_effects.csv`);
+- the top 20 per corpus, one file per metric (`top20_by_corpus_*.csv`);
+- the best configuration of each corpus (`best_per_corpus.csv`) and recovery by k (`recovery_by_k.csv`);
+- the `relative_h` experiment (`relative_h_*.csv`).
 
 `pegcomparison.ipynb` saves, in `benchmark_results/peg_comparison/`:
 
@@ -186,7 +214,8 @@ These outputs provide the reproducible record of **model selection** and of the 
 
 1. Run `datasetdemo.ipynb` to generate the fixed synthetic datasets.
 2. Run `treesbenchmark.ipynb` to reproduce the search and save the top configurations.
-3. Run `pegcomparison.ipynb` to compare the PEG formulations on the best configurations.
-4. Inspect `benchmark_results/` and `benchmark_results/peg_comparison/`.
-5. For a different experiment, modify the search space, strategy, metrics, or other benchmark settings and rerun the notebooks.
-6. For new annotation data, use a chosen pipeline for ground-truth-free inference and inspect its **F**, **C**, and **P** outputs and diagnostics.
+3. Run `resultsexploration.ipynb` to explore the results.
+4. Run `pegcomparison.ipynb` to compare the PEG formulations on the best configurations.
+5. Inspect `benchmark_results/`, `benchmark_results/exploration/` and `benchmark_results/peg_comparison/`.
+6. For a different experiment, modify the search space, strategy, metrics, or other benchmark settings and rerun the notebooks.
+7. For new annotation data, use a chosen pipeline for ground-truth-free inference and inspect its **F**, **C**, and **P** outputs and diagnostics.

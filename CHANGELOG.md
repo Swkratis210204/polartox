@@ -13,6 +13,12 @@
   row reproduces the numbers the benchmark saved. Ground truth is required,
   as for the benchmark. A runnable demo and a README are in `peg_comparison/`,
   and `benchmarks/notebooks/pegcomparison.ipynb` now uses it.
+- `benchmarks/`: the exploration of the benchmark results is its own notebook,
+  `resultsexploration.ipynb` (the top 20 with every metric and per corpus, the
+  effect of each hyperparameter, a controlled `relative_h` experiment, recovery by
+  corpus and by k). `treesbenchmark.ipynb` now only runs and saves the search and
+  `pegcomparison.ipynb` only compares the formulations. The workflow is four
+  notebooks: dataset, benchmark, results exploration, PEG comparison.
 - `polartox.benchmark.normalize_ground_truth` and `as_text_id`: the validation of
   the ground truth against the annotations that the benchmark did internally,
   now shared with `PEGComparison`.

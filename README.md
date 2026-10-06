@@ -100,8 +100,10 @@ Inference on unseen data
 The [`treesbenchmark.ipynb`](benchmarks/notebooks/treesbenchmark.ipynb) notebook
 serves both as a runnable demonstration of `PolarizedTreesBenchmark` and as
 the experimental workflow used to select the configurations reported in the
-paper; [`pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb) then
-compares the PEG formulations on the best of them.
+paper; [`resultsexploration.ipynb`](benchmarks/notebooks/resultsexploration.ipynb)
+then explores its results, and
+[`pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb) compares the PEG
+formulations on the best of them.
 
 See [`benchmarks/README.md`](benchmarks/README.md) for the complete
 benchmark workflow and reproducibility instructions.
@@ -136,6 +138,9 @@ with `pip install polartox`, so they use the *released* package; use
 - [`peg_comparison/peg_comparison_demo.ipynb`](peg_comparison/peg_comparison_demo.ipynb)
   — the chain from synthetic corpora to a comparison of the PEG formulations
   (`PEGComparison`), small enough to run in a minute.
+- [`benchmarks/notebooks/resultsexploration.ipynb`](benchmarks/notebooks/resultsexploration.ipynb)
+  — explores the saved results: the top 20 (per corpus), which formulations and
+  hyperparameters matter, `relative_h`, recovery by corpus and by k.
 - [`benchmarks/notebooks/pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb)
   — takes settings from that top 20 and compares the five PEG formulations:
   recovery, inference without ground truth, and tree shape.
