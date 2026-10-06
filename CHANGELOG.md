@@ -1,7 +1,21 @@
-## [Unreleased]
+## [0.8.0]
 
 ### Added
 
+- `polartox.peg_comparison` (`PEGComparison`): compares the PEG formulations on the
+  same corpora with everything else fixed. `run(settings)` takes the non-PEG
+  settings as a dict, a list of dicts or a DataFrame such as
+  `PolarizedTreesBenchmark.top_configs_`; `overview()`, `recovery_by_k()`,
+  `ari_matrix()`, `ari_by_k()`, `disagreement()`, `text_summary()`,
+  `show_text()` and `save()` report on the runs;
+  `PEGComparison.from_benchmark(benchmark)` takes the corpora, `dims` and `scale`
+  of a benchmark and `check_against_benchmark(table)` checks that a chosen
+  row reproduces the numbers the benchmark saved. Ground truth is required,
+  as for the benchmark. A runnable demo and a README are in `peg_comparison/`,
+  and `benchmarks/notebooks/pegcomparison.ipynb` now uses it.
+- `polartox.benchmark.normalize_ground_truth` and `as_text_id`: the validation of
+  the ground truth against the annotations that the benchmark did internally,
+  now shared with `PEGComparison`.
 - `variant="min"` (PEGmin): PEG measured against the *least* polarized
   subgroup, `|nDFU(node) - min_v nDFU(v)|`. Accepted by `compute_peg`,
   `detect_polarized_subgroups`, `PolarizedTree.build` and the pipeline.
@@ -16,7 +30,8 @@
   Rand index of two partitions, the same definition as scikit-learn's, without
   depending on it) and `pairwise_ari(pipelines, dataset)` (the mean ARI between
   the trees of different pipelines over the texts they all analysed, e.g. the
-  same settings with different PEG formulations).
+  same settings with different PEG formulations). `adjusted_rand_index` and
+  `pairwise_ari` live in `polartox.peg_comparison` (exported from `polartox`).
 - `check_variant` and `PEG_VARIANTS` in `polartox.polarized_tree`. An unknown
   variant now raises `ValueError` at construction of `PolarizedTreesPipeline`
   and at the start of `detect_polarized_subgroups` (before, only at the first

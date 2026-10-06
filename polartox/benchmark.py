@@ -41,6 +41,34 @@ STATS = {
 
 GROUP_COLUMN = "corpus"
 
+def as_text_id(text_id):
+    """A text id as an int when it is one (JSON keys and CSV values arrive as strings)."""
+    try:
+        return int(text_id)
+    except (TypeError, ValueError):
+        return text_id
+
+
+def normalize_ground_truth(annotations, ground_truth):
+    """`ground_truth` keyed like the annotations' text ids, or ValueError if it
+    does not cover every annotated text."""
+    annotation_ids = set(annotations["text_id"].unique())
+
+    if set(ground_truth) == annotation_ids:
+        return ground_truth
+
+    normalized = {as_text_id(text_id): value for text_id, value in ground_truth.items()}
+
+    missing = annotation_ids - set(normalized)
+
+    if missing:
+        raise ValueError(
+            f"ground_truth is missing entries for text_ids: {sorted(missing)[:10]}"
+        )
+
+    return normalized
+
+
 # Set once per worker process by _init_worker (see n_jobs in run()).
 _WORKER_BENCHMARK = None
 
@@ -278,21 +306,7 @@ class PolarizedTreesBenchmark:
         return type(self.pipeline)(**params)
 
     def _normalized_ground_truth(self):
-        annotation_ids = set(self.annotations["text_id"].unique())
-
-        if set(self.ground_truth) == annotation_ids:
-            return self.ground_truth
-
-        normalized = {self._as_id(text_id): value for text_id, value in self.ground_truth.items()}
-
-        missing = annotation_ids - set(normalized)
-
-        if missing:
-            raise ValueError(
-                f"ground_truth is missing entries for text_ids: {sorted(missing)[:10]}"
-            )
-
-        return normalized
+        return normalize_ground_truth(self.annotations, self.ground_truth)
 
     def _python_value(self, value):
         if hasattr(value, "item"):
@@ -306,12 +320,7 @@ class PolarizedTreesBenchmark:
 
         return value
 
-    @staticmethod
-    def _as_id(text_id):
-        try:
-            return int(text_id)
-        except (TypeError, ValueError):
-            return text_id
+    _as_id = staticmethod(as_text_id)
 
     def _value_columns(self):
         """Metric columns in output order: mean, then its statistics."""

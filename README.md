@@ -20,6 +20,7 @@ polartox/
 ├── data_gen/          synthetic-data generation demos and materials
 ├── tree_module/       single-tree (PolarizedTree) demo
 ├── polarized_trees/   pipeline / corpus-level Polarized Trees demos and research materials
+├── peg_comparison/    comparing the PEG formulations: demo and README
 ├── Dices/             real-data (DICES-350/990) end-to-end inference notebook
 ├── benchmarks/        synthetic benchmark and paper reproducibility code
 ├── tests/             package, benchmark and regression tests
@@ -40,7 +41,8 @@ It provides:
 - `polartox.datagen` — synthetic annotator-pool generation;
 - `polartox.polarized_tree` — single-tree construction (`PolarizedTree`, `detect_polarized_subgroups`);
 - `polartox.pipeline` — corpus-level orchestration (`PolarizedTreesPipeline`);
-- `polartox.benchmark` — hyperparameter search and model selection.
+- `polartox.benchmark` — hyperparameter search and model selection;
+- `polartox.peg_comparison` — comparison of the PEG formulations on the same corpora (`PEGComparison`, `pairwise_ari`).
 
 ### `data_gen/`
 
@@ -131,6 +133,9 @@ with `pip install polartox`, so they use the *released* package; use
 - [`benchmarks/notebooks/treesbenchmark.ipynb`](benchmarks/notebooks/treesbenchmark.ipynb)
   — hyperparameter search and saved results, including the top 20
   configurations (`PolarizedTreesBenchmark`).
+- [`peg_comparison/peg_comparison_demo.ipynb`](peg_comparison/peg_comparison_demo.ipynb)
+  — the chain from synthetic corpora to a comparison of the PEG formulations
+  (`PEGComparison`), small enough to run in a minute.
 - [`benchmarks/notebooks/pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb)
   — takes settings from that top 20 and compares the five PEG formulations:
   recovery, inference without ground truth, and tree shape.
@@ -143,6 +148,7 @@ with `pip install polartox`, so they use the *released* package; use
 | `polartox.polarized_tree` | Single-tree construction (`PolarizedTree`, `detect_polarized_subgroups`) | Stable |
 | `polartox.pipeline` | Corpus-level orchestration (`PolarizedTreesPipeline`) | Stable |
 | `polartox.benchmark` | Hyperparameter search and model selection for Polarized Trees | Stable |
+| `polartox.peg_comparison` | Comparison of the PEG formulations: recovery, tree shape, ARI | Stable |
 
 ## `polartox.datagen`
 
@@ -171,10 +177,12 @@ When ground truth is available, recovery metrics such as Jaccard,
 precision, recall, and exact match can also be computed.
 
 To see how much two configurations disagree, for example the same settings with
-two different PEG formulations, `pairwise_ari(pipelines, dataset)` returns the
-mean adjusted Rand index between their trees: how similarly they split the
-annotators of each text into groups (1 = the same groups, about 0 = chance).
+two different PEG formulations, `pairwise_ari(pipelines, dataset)`
+(`polartox.peg_comparison`) returns the mean adjusted Rand index between their
+trees: how similarly they split the annotators of each text into groups
+(1 = the same groups, about 0 = chance).
 `PolarizedTree.leaf_labels(dataset)` gives the group of every annotator.
+`PEGComparison` does the whole comparison, see below.
 
 ### PEG formulations (`variant`)
 
@@ -228,6 +236,27 @@ Long searches can run in parallel (`n_jobs`), save their progress and resume
 per corpus and averaged with equal weight per corpus. Every pipeline is built
 before the first evaluation, so an invalid setting fails immediately and not
 halfway through a search.
+
+## `polartox.peg_comparison`
+
+`PEGComparison` compares the PEG formulations on the same corpora with
+everything else held fixed: for every chosen setting and corpus it runs one
+pipeline per formulation, and reports recovery and tree shape per formulation
+(`overview`, `recovery_by_k`), whether two formulations split the annotators the
+same way (`ari_matrix`, `ari_by_k`, the adjusted Rand index), and the texts on
+which they disagree most (`disagreement`, `show_text`). Ground truth is
+required, as for the benchmark, and the settings can come straight from
+`PolarizedTreesBenchmark.top_configs_`:
+
+```python
+from polartox import PEGComparison
+
+comparison = PEGComparison.from_benchmark(benchmark)    # corpora, dims, scale
+comparison.run(benchmark.top_configs_.head(3))          # each row with every formulation
+comparison.overview()
+```
+
+See [`peg_comparison/README.md`](peg_comparison/README.md).
 
 ## Testing
 

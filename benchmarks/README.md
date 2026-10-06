@@ -53,7 +53,7 @@ It serves **two purposes**: it is a runnable demonstration of the `PolarizedTree
 
 ### `pegcomparison.ipynb`
 
-This notebook shows how the PEG formulations change the trees.
+This notebook shows how the PEG formulations change the trees. The comparison itself is `polartox.peg_comparison` (`PEGComparison`); the notebook chooses the settings, calls it and displays the tables. A small, self-contained version of the same workflow is [`peg_comparison/peg_comparison_demo.ipynb`](../peg_comparison/peg_comparison_demo.ipynb).
 
 It:
 
@@ -176,7 +176,7 @@ The full benchmark can be computationally expensive because it evaluates a large
 `pegcomparison.ipynb` saves, in `benchmark_results/peg_comparison/`:
 
 - the chosen settings (`selected_settings.csv`);
-- every number of every run and corpus (`per_run.csv`), the overview table (`overview_A_B_C.csv`) and the by-k tables (`recovery_by_k.csv`, `ari_by_k.csv`);
+- every number of every run and corpus (`per_run.csv`), the overview table (`overview.csv`) and the by-k tables (`recovery_by_k.csv`, `ari_by_k.csv`);
 - the ARI between formulations, as matrices and per text (`ari_*.csv`);
 - the inference outputs **F**, **C** and **P** for every formulation (`F_*.csv`, `C_*.csv`, `P_*.csv`).
 

@@ -291,49 +291,6 @@ def jaccard(a, b):
     return len(a & b) / len(a | b)
 
 
-def adjusted_rand_index(labels_a, labels_b):
-    """Adjusted Rand index between two partitions of the same items.
-
-    `labels_a[i]` and `labels_b[i]` are the groups item i belongs to in the two
-    partitions (any hashable labels; only which items share a label matters).
-    1 means identical partitions, about 0 means no more agreement than chance,
-    and negative values mean less than chance. Two partitions that each put all
-    items in a single group count as identical (1.0).
-
-    Same definition as sklearn.metrics.adjusted_rand_score, which polartox does
-    not depend on.
-    """
-    a = np.asarray(labels_a)
-    b = np.asarray(labels_b)
-    if a.ndim != 1 or a.shape != b.shape:
-        raise ValueError("labels_a and labels_b must be one-dimensional and of equal length")
-
-    n = len(a)
-    if n < 2:
-        return 1.0
-
-    _, codes_a = np.unique(a, return_inverse=True)
-    _, codes_b = np.unique(b, return_inverse=True)
-    table = np.zeros((codes_a.max() + 1, codes_b.max() + 1), dtype=np.int64)
-    np.add.at(table, (codes_a, codes_b), 1)
-
-    sum_squares = int((table ** 2).sum())
-    rows = int((table.sum(axis=1) ** 2).sum())
-    columns = int((table.sum(axis=0) ** 2).sum())
-
-    # Ordered pairs of items: together in both / only in b / only in a / in neither.
-    both = sum_squares - n
-    only_b = columns - sum_squares
-    only_a = rows - sum_squares
-    neither = n * n - only_a - only_b - sum_squares
-
-    if only_a == 0 and only_b == 0:
-        return 1.0
-    return 2.0 * (both * neither - only_a * only_b) / (
-        (both + only_a) * (only_a + neither) + (both + only_b) * (only_b + neither)
-    )
-
-
 class PolarizedTree:
     """
     One text's polarized tree: the nested split structure (root) plus the
@@ -403,7 +360,7 @@ class PolarizedTree:
 
         Rows are those of `dataset` belonging to this text, in their original
         order, so the labels of two trees built for the same text can be
-        compared with `adjusted_rand_index`.
+        compared with `polartox.peg_comparison.adjusted_rand_index`.
         """
         rows = dataset
         if self.text_id is not None and "text_id" in dataset.columns:

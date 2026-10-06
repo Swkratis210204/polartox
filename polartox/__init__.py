@@ -7,12 +7,11 @@ from polartox.datagen import (
 
 from polartox.polarized_tree import (
     PolarizedTree,
-    adjusted_rand_index,
     detect_polarized_subgroups,
     render_tree_text,
 )
 
-from polartox.pipeline import PolarizedTreesPipeline, pairwise_ari
+from polartox.pipeline import PolarizedTreesPipeline
 
 from polartox.benchmark import (
     PolarizedTreesBenchmark,
@@ -20,6 +19,8 @@ from polartox.benchmark import (
     DEFAULT_METRICS,
     DEFAULT_SELECTION_METRIC,
 )
+
+from polartox.peg_comparison import PEGComparison, adjusted_rand_index, pairwise_ari
 
 __all__ = [
     "AnnotatorPool",
@@ -32,6 +33,7 @@ __all__ = [
     "pairwise_ari",
     "detect_polarized_subgroups",
     "render_tree_text",
+    "PEGComparison",
     "PolarizedTreesBenchmark",
     "DEFAULT_SEARCH_SPACE",
     "DEFAULT_METRICS",
