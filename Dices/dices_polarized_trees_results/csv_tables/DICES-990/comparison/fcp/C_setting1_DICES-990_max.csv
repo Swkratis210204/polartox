@@ -1,0 +1,103 @@
+subgroup,n_s,frac_toxic,frac_civil
+"(('gender', 'Man'), ('race', 'Black'))",45,0.28888888888888886,0.7111111111111111
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Asian'))",39,0.3076923076923077,0.6923076923076923
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'Asian'))",36,0.3888888888888889,0.6111111111111112
+"(('gender', 'Woman'), ('race', 'Black'))",31,0.3548387096774194,0.6451612903225806
+"(('race', 'Hispanic/Latino'),)",27,0.0,1.0
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'White'))",26,0.11538461538461539,0.8846153846153846
+"(('age', 'Gen Z'), ('gender', 'Woman'))",24,0.041666666666666664,0.9583333333333334
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'Asian'))",23,0.21739130434782608,0.782608695652174
+"(('age', 'Millennial'), ('race', 'Hispanic/Latino'))",22,0.09090909090909091,0.9090909090909091
+"(('gender', 'Woman'), ('race', 'Hispanic/Latino'))",20,0.3,0.7
+"(('age', 'Gen Z'), ('gender', 'Man'))",20,0.65,0.35
+"(('gender', 'Man'), ('race', 'Hispanic/Latino'))",18,0.3333333333333333,0.6666666666666666
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'White'))",17,0.29411764705882354,0.7058823529411765
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Asian'))",15,0.26666666666666666,0.7333333333333333
+"(('age', 'Gen Z'), ('gender', 'Woman'), ('race', 'Asian'))",15,0.0,1.0
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'White'))",14,0.35714285714285715,0.6428571428571429
+"(('age', 'Gen Z'), ('gender', 'Man'), ('race', 'Asian'))",13,0.6153846153846154,0.38461538461538464
+"(('race', 'White'),)",13,0.07692307692307693,0.9230769230769231
+"(('gender', 'Man'), ('race', 'White'))",13,0.15384615384615385,0.8461538461538461
+"(('age', 'Gen Z'), ('race', 'Asian'))",12,0.08333333333333333,0.9166666666666666
+"(('gender', 'Woman'), ('race', 'White'))",11,0.0,1.0
+"(('age', 'Gen X+'),)",10,0.4,0.6
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'Black'))",10,0.2,0.8
+"(('gender', 'Man'), ('race', 'Asian'))",10,0.3,0.7
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'White'))",9,0.0,1.0
+"(('gender', 'Woman'), ('race', 'Asian'))",9,0.1111111111111111,0.8888888888888888
+"(('education', 'High School or Below'), ('race', 'White'))",9,0.2222222222222222,0.7777777777777778
+"(('age', 'Millennial'), ('race', 'Asian'))",9,0.2222222222222222,0.7777777777777778
+(),8,0.0,1.0
+"(('age', 'Gen X+'), ('race', 'Asian'))",8,0.625,0.375
+"(('age', 'Millennial'), ('race', 'Black'))",7,0.0,1.0
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'White'))",7,0.42857142857142855,0.5714285714285714
+"(('age', 'Gen X+'), ('gender', 'Man'))",7,0.14285714285714285,0.8571428571428571
+"(('race', 'Asian'),)",6,0.16666666666666666,0.8333333333333334
+"(('age', 'Gen X+'), ('race', 'White'))",6,0.5,0.5
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Asian'))",6,0.5,0.5
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Asian'))",6,0.0,1.0
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Man'))",6,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Asian'))",6,0.0,1.0
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('race', 'White'))",5,0.0,1.0
+"(('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",5,0.2,0.8
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Black'))",5,0.6,0.4
+"(('age', 'Gen X+'), ('education', 'High School or Below'))",5,0.8,0.2
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Woman'))",5,0.4,0.6
+"(('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'White'))",4,0.5,0.5
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'White'))",4,0.25,0.75
+"(('gender', 'Man'),)",4,0.25,0.75
+"(('race', 'Black'),)",4,0.25,0.75
+"(('age', 'Millennial'), ('gender', 'Man'))",4,0.0,1.0
+"(('age', 'Millennial'), ('gender', 'Woman'))",4,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'White'))",4,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Asian'))",4,0.25,0.75
+"(('age', 'Millennial'), ('race', 'White'))",4,0.0,1.0
+"(('age', 'Gen Z'), ('race', 'White'))",4,0.0,1.0
+"(('education', 'Degree+'), ('race', 'White'))",4,0.0,1.0
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",4,0.5,0.5
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Asian'))",4,0.0,1.0
+"(('age', 'Gen X+'), ('education', 'Degree+'))",3,0.0,1.0
+"(('age', 'Gen X+'), ('race', 'Hispanic/Latino'))",3,0.0,1.0
+"(('education', 'High School or Below'), ('gender', 'Woman'))",3,0.6666666666666666,0.3333333333333333
+"(('education', 'High School or Below'), ('gender', 'Man'))",3,0.3333333333333333,0.6666666666666666
+"(('education', 'Degree+'), ('race', 'Hispanic/Latino'))",3,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Hispanic/Latino'))",3,0.3333333333333333,0.6666666666666666
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",3,0.0,1.0
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",3,0.0,1.0
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Black'))",3,0.0,1.0
+"(('age', 'Gen Z'),)",3,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Asian'))",3,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Man'))",3,0.3333333333333333,0.6666666666666666
+"(('age', 'Gen X+'), ('gender', 'Woman'))",3,0.6666666666666666,0.3333333333333333
+"(('education', 'High School or Below'), ('race', 'Asian'))",3,1.0,0.0
+"(('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Asian'))",2,0.5,0.5
+"(('age', 'Millennial'), ('education', 'High School or Below'))",2,0.0,1.0
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Asian'))",2,0.0,1.0
+"(('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Black'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('gender', 'Woman'), ('race', 'White'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('race', 'Hispanic/Latino'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'))",2,0.0,1.0
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('race', 'White'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('race', 'White'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('race', 'Asian'))",2,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Man'))",2,0.0,1.0
+"(('age', 'Millennial'),)",2,0.5,0.5
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Black'))",2,0.0,1.0
+"(('age', 'Gen Z'), ('education', 'High School or Below'))",1,1.0,0.0
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Asian'))",1,0.0,1.0
+"(('age', 'Gen X+'), ('education', 'High School or Below'), ('gender', 'Woman'))",1,1.0,0.0
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('race', 'Asian'))",1,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Black'))",1,0.0,1.0
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('gender', 'Man'), ('race', 'White'))",1,0.0,1.0
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('gender', 'Man'))",1,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'))",1,1.0,0.0
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('race', 'Asian'))",1,0.0,1.0
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",1,1.0,0.0
+"(('education', 'Degree+'), ('gender', 'Woman'))",1,0.0,1.0
+"(('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",1,0.0,1.0
+"(('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Asian'))",1,1.0,0.0
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",1,1.0,0.0
+"(('education', 'High School or Below'), ('race', 'Hispanic/Latino'))",1,0.0,1.0
+"(('education', 'High School or Below'), ('race', 'Black'))",1,0.0,1.0

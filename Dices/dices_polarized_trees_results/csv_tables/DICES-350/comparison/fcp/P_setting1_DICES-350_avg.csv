@@ -1,0 +1,30 @@
+subgroup,n_s,mean_peg
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",1,0.6666666666666667
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",1,0.6666666666666667
+"(('gender', 'Man'), ('race', 'Asian'))",1,0.3833333333333334
+"(('gender', 'Woman'), ('race', 'Asian'))",1,0.3833333333333334
+"(('race', 'Asian'),)",3,0.3659999136286017
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Hispanic/Latino'))",1,0.32371794871794873
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('race', 'Hispanic/Latino'))",1,0.32371794871794873
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('race', 'Hispanic/Latino'))",1,0.32371794871794873
+"(('race', 'Black'),)",5,0.3112276091117526
+"(('race', 'Hispanic/Latino'),)",4,0.31104813818485927
+"(('race', 'White'),)",6,0.30310310530878115
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'Asian'))",2,0.21904761904761905
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Asian'))",2,0.21904761904761905
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Black'))",1,0.1857142857142857
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Black'))",1,0.1857142857142857
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'Asian'))",2,0.17142857142857143
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Asian'))",2,0.17142857142857143
+"(('age', 'Gen X+'), ('gender', 'Man'))",1,0.16459627329192544
+"(('age', 'Gen X+'), ('gender', 'Woman'))",1,0.16459627329192544
+"(('age', 'Millennial'),)",1,0.1363054095166929
+"(('age', 'Gen Z'),)",1,0.1363054095166929
+"(('age', 'Gen Z'), ('race', 'Asian'))",2,0.13533333333333336
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Black'))",1,0.09722222222222224
+"(('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Black'))",1,0.09722222222222224
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('race', 'Hispanic/Latino'))",1,0.08333333333333343
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('race', 'Hispanic/Latino'))",1,0.08333333333333343
+"(('age', 'Gen Z'), ('race', 'Hispanic/Latino'))",1,0.06532356532356537
+"(('age', 'Millennial'), ('race', 'Hispanic/Latino'))",1,0.06532356532356537
+"(('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'Black'))",1,0.05000000000000002

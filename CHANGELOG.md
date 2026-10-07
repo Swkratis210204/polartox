@@ -1,3 +1,71 @@
+## [0.8.1]
+
+### Added
+
+- `PEGComparison` works **without ground truth**. A corpus may be the annotations
+  alone, `(annotations, ground_truth)`, or a mix of both (`truth_corpora` lists the
+  ones that have it). Without ground truth it analyses the trees themselves:
+  - `per_run()`, `overview()` and the new `per_text()`: retention, leaves, depth (the
+    deepest leaf, and the mean over leaves), annotators per leaf, residual nDFU
+    (unweighted and weighted by annotators), the share of nDFU the splits explained,
+    the PEG of all splits and of the first, indeterminate leaves, trees that never
+    split, trees that split on two or more dimensions, the dimensions used per tree and
+    the dimensions never used;
+  - `retention_curve()` (the texts kept for every `theta_filter`),
+    `depth_distribution(cumulative=)` and `dimension_usage()` (per dimension: the share
+    of trees that split on it, the share whose first split it is, the splits per tree);
+  - `similarity(measure, setting)`: how close the trees of two runs are, as a matrix over
+    the formulations of a setting or, without `setting`, over every (setting,
+    formulation). Measures: `"ari"` and `"nmi"` (the adjusted Rand index and the
+    normalized mutual information of the groups the leaves make of the annotators),
+    `"dims"` (the dimensions the trees split on) and `"first_split"`.
+    `dims_agreement()` and `first_split_agreement()` are shortcuts;
+  - `fcp()` (the F, C and P tables of a run), `fcp_comparison()` (F, C or P of all the
+    formulations side by side) and `subgroup_overlap()` (do they find the same
+    subgroups?);
+  - `disagreement()`, `text_summary()` and `show_text()` work without ground truth.
+- `polartox.normalized_mutual_information` (the same definition as scikit-learn's, without
+  depending on it) and `polartox.tree_statistics(pipeline)` (the structure of the trees a
+  pipeline has built, with no ground truth needed).
+- `benchmarks/notebooks/resultsexploration.ipynb`: the exploration of the benchmark
+  results (the top 20 with every metric and per corpus, the effect of each
+  hyperparameter, a controlled `relative_h` experiment, recovery by corpus and by k), and
+  `benchmark_config.load_benchmark_dataset()`. The workflow is four notebooks: dataset,
+  benchmark, results exploration, PEG comparison.
+- New tests for the analysis without ground truth, the similarity measures (the NMI is
+  checked against scikit-learn) and the side-by-side F, C and P.
+
+### Changed
+
+- **`PEGComparison` no longer requires ground truth** (0.8.0 raised `TypeError` for
+  annotations without it). `recovery_by_k()`, `ari_by_k()` and `check_against_benchmark()`
+  need it and raise `RuntimeError` when no corpus has it.
+- `per_run()` and `overview()` have more columns (see above). `overview(corpora=None)`
+  averages over the corpora (all, or the ones you name), sums the numbers of texts, and
+  averages the recovery columns over the corpora that have ground truth.
+- `ari_matrix()` is now a shortcut for `similarity("ari", setting)` (same values).
+- `save()` writes more: the per-text table, the retention curve, per setting the dimension
+  usage, the depth distribution and the similarity matrices (ARI, NMI, dimensions, first
+  split), and the F, C and P tables of every run in `fcp/`.
+- `run()` raises a `ValueError` that names the setting and the corpus when a
+  `theta_filter` keeps no text.
+- `benchmarks/`: `treesbenchmark.ipynb` only runs and saves the search,
+  `pegcomparison.ipynb` only compares the formulations, and the inspection of the results
+  moved to `resultsexploration.ipynb` (which writes `top20_formulations.csv`, into
+  `benchmark_results/exploration/`).
+- The DICES notebook (`Dices/`) is rebuilt on `PEGComparison`: one configuration of the
+  synthetic benchmark, run once per PEG formulation with everything else fixed, then the
+  formulations compared (the shape of the trees, ARI, NMI, dimensions and first split
+  between them, F, C and P side by side), an example text that every formulation splits
+  more than once with the tree of each, and the results and figures saved. The qualitative
+  analysis is removed. It needs polartox >= 0.8.1.
+
+### Fixed
+
+- The DICES notebook no longer sets `variant="beta"` (which the package rejects since
+  0.8.0) and no longer force-reinstalls polartox from PyPI in its first cell, which
+  replaced an editable install.
+
 ## [0.8.0]
 
 ### Added
@@ -13,12 +81,6 @@
   row reproduces the numbers the benchmark saved. Ground truth is required,
   as for the benchmark. A runnable demo and a README are in `peg_comparison/`,
   and `benchmarks/notebooks/pegcomparison.ipynb` now uses it.
-- `benchmarks/`: the exploration of the benchmark results is its own notebook,
-  `resultsexploration.ipynb` (the top 20 with every metric and per corpus, the
-  effect of each hyperparameter, a controlled `relative_h` experiment, recovery by
-  corpus and by k). `treesbenchmark.ipynb` now only runs and saves the search and
-  `pegcomparison.ipynb` only compares the formulations. The workflow is four
-  notebooks: dataset, benchmark, results exploration, PEG comparison.
 - `polartox.benchmark.normalize_ground_truth` and `as_text_id`: the validation of
   the ground truth against the annotations that the benchmark did internally,
   now shared with `PEGComparison`.

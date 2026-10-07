@@ -246,12 +246,15 @@ halfway through a search.
 
 `PEGComparison` compares the PEG formulations on the same corpora with
 everything else held fixed: for every chosen setting and corpus it runs one
-pipeline per formulation, and reports recovery and tree shape per formulation
-(`overview`, `recovery_by_k`), whether two formulations split the annotators the
-same way (`ari_matrix`, `ari_by_k`, the adjusted Rand index), and the texts on
-which they disagree most (`disagreement`, `show_text`). Ground truth is
-required, as for the benchmark, and the settings can come straight from
-`PolarizedTreesBenchmark.top_configs_`:
+pipeline per formulation. **Ground truth is optional.** Without it (real data) it
+reports the trees themselves: retention, leaves, depth, group size, residual nDFU,
+split PEG, the dimensions used, the trees that split on several dimensions, how
+close the trees of two formulations are (`similarity`: the adjusted Rand index or the
+normalized mutual information of the groups they make of the annotators, the
+dimensions they split on, their first split) and the F, C and P tables of every
+formulation. With ground truth it adds recovery of the true dimensions, also by the
+true number of active dimensions (`recovery_by_k`). The settings can come straight
+from `PolarizedTreesBenchmark.top_configs_`:
 
 ```python
 from polartox import PEGComparison

@@ -1,0 +1,90 @@
+subgroup,n_s,mean_peg
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('race', 'Hispanic/Latino'))",1,0.75
+"(('gender', 'Woman'), ('race', 'Asian'))",1,0.75
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'White'))",3,0.611111111111111
+"(('race', 'Black'),)",2,0.5570146276595744
+"(('age', 'Millennial'), ('race', 'Asian'))",4,0.5546536796536797
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",7,0.5284580498866214
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",1,0.523809523809524
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Asian'))",22,0.5204545454545454
+"(('age', 'Gen Z'), ('race', 'Asian'))",20,0.5190893134643135
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'Asian'))",22,0.5187229437229437
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",6,0.5000000000000001
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Black'))",1,0.5
+"(('age', 'Millennial'), ('education', 'High School or Below'))",1,0.4999999999999999
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'White'))",6,0.4898018648018648
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Asian'))",6,0.48333333333333334
+"(('education', 'High School or Below'), ('race', 'Black'))",6,0.47518182300790995
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",7,0.4714285714285715
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",4,0.466468253968254
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Hispanic/Latino'))",8,0.46189331501831504
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",11,0.4510822510822511
+"(('age', 'Gen X+'), ('gender', 'Woman'))",2,0.449404761904762
+"(('age', 'Millennial'), ('race', 'Hispanic/Latino'))",8,0.43751456876456873
+"(('age', 'Millennial'), ('race', 'White'))",11,0.41324744773942634
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",10,0.41
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('race', 'Hispanic/Latino'))",11,0.40768398268398265
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('race', 'Asian'))",11,0.40214810442083165
+"(('education', 'High School or Below'), ('race', 'White'))",2,0.39522058823529416
+"(('age', 'Gen Z'), ('gender', 'Woman'), ('race', 'White'))",1,0.39393939393939387
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Black'))",6,0.3888888888888889
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'White'))",4,0.38750000000000007
+"(('education', 'High School or Below'), ('race', 'Hispanic/Latino'))",2,0.38531468531468527
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Black'))",17,0.38207282913165264
+"(('age', 'Gen X+'), ('education', 'Degree+'), ('race', 'Black'))",6,0.3815776815776815
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",19,0.37781954887218044
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('race', 'White'))",3,0.37777777777777777
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Black'))",12,0.3771825396825397
+"(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'White'))",12,0.37545648795648795
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'White'))",14,0.36904761904761907
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'Black'))",7,0.36735962450248166
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",19,0.35877192982456146
+"(('age', 'Gen X+'), ('gender', 'Man'))",1,0.35714285714285715
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'White'))",21,0.3571050642479214
+"(('age', 'Gen Z'), ('gender', 'Woman'), ('race', 'Asian'))",5,0.35238095238095235
+"(('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'Asian'))",2,0.35
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",15,0.34777777777777785
+"(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Asian'))",9,0.3467372134038801
+"(('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Asian'))",3,0.3444444444444445
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('gender', 'Man'), ('race', 'White'))",8,0.3416666666666667
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'Black'))",6,0.3408730158730158
+"(('age', 'Gen Z'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",13,0.339010989010989
+"(('education', 'Degree+'), ('gender', 'Man'), ('race', 'Asian'))",1,0.3333333333333334
+"(('age', 'Millennial'), ('race', 'Black'))",9,0.3260739098458397
+"(('age', 'Gen X+'), ('race', 'White'))",4,0.32568993506493504
+"(('age', 'Gen Z'), ('gender', 'Man'), ('race', 'Asian'))",4,0.325
+"(('gender', 'Man'), ('race', 'White'))",6,0.3206531654807517
+"(('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Black'))",6,0.3157407407407407
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('race', 'Black'))",2,0.3153846153846154
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('race', 'Black'))",2,0.3153846153846154
+"(('age', 'Gen X+'), ('race', 'Asian'))",1,0.3125
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",4,0.3125
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",19,0.3114035087719299
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Black'))",5,0.30999999999999994
+"(('race', 'White'),)",3,0.3061274781325067
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('race', 'White'))",3,0.30370370370370375
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",1,0.29999999999999993
+"(('age', 'Millennial'), ('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Asian'))",3,0.29999999999999993
+"(('age', 'Millennial'), ('gender', 'Man'), ('race', 'Asian'))",5,0.29952380952380947
+"(('gender', 'Woman'), ('race', 'Black'))",4,0.2986111111111111
+"(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'White'))",7,0.29523809523809524
+"(('age', 'Gen Z'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'White'))",11,0.29090909090909095
+"(('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'Black'))",6,0.2903439153439153
+"(('age', 'Millennial'), ('education', 'Degree+'), ('race', 'White'))",4,0.2881944444444444
+"(('age', 'Gen X+'), ('race', 'Black'))",8,0.2834998152432363
+"(('gender', 'Man'), ('race', 'Black'))",4,0.27596825644492984
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Black'))",6,0.271031746031746
+"(('gender', 'Man'), ('race', 'Hispanic/Latino'))",1,0.26666666666666666
+"(('age', 'Gen Z'), ('gender', 'Man'), ('race', 'White'))",1,0.26666666666666666
+"(('education', 'Degree+'), ('race', 'Asian'))",2,0.26033163265306125
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Man'), ('race', 'Asian'))",9,0.26018518518518513
+"(('age', 'Gen Z'), ('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",9,0.25
+"(('age', 'Gen Z'), ('race', 'Hispanic/Latino'))",2,0.2416666666666667
+"(('gender', 'Man'), ('race', 'Asian'))",1,0.2413793103448276
+"(('age', 'Millennial'), ('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Asian'))",6,0.24027777777777778
+"(('age', 'Gen Z'), ('race', 'Black'))",2,0.2039473684210526
+"(('education', 'High School or Below'), ('gender', 'Man'), ('race', 'White'))",5,0.1976190476190476
+"(('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'White'))",5,0.1976190476190476
+"(('education', 'High School or Below'), ('gender', 'Woman'), ('race', 'Hispanic/Latino'))",5,0.18857142857142856
+"(('education', 'High School or Below'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",1,0.14285714285714285
+"(('education', 'Degree+'), ('gender', 'Woman'), ('race', 'Black'))",1,0.11111111111111109

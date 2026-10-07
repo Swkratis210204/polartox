@@ -20,7 +20,13 @@ from polartox.benchmark import (
     DEFAULT_SELECTION_METRIC,
 )
 
-from polartox.peg_comparison import PEGComparison, adjusted_rand_index, pairwise_ari
+from polartox.peg_comparison import (
+    PEGComparison,
+    adjusted_rand_index,
+    normalized_mutual_information,
+    pairwise_ari,
+    tree_statistics,
+)
 
 __all__ = [
     "AnnotatorPool",
@@ -31,6 +37,8 @@ __all__ = [
     "PolarizedTreesPipeline",
     "adjusted_rand_index",
     "pairwise_ari",
+    "normalized_mutual_information",
+    "tree_statistics",
     "detect_polarized_subgroups",
     "render_tree_text",
     "PEGComparison",

@@ -8,33 +8,46 @@ of annotators, with four socio-demographic (SCD) dimensions per annotator
 
 Unlike the rest of the repository's demos, **this is real annotation data,
 not synthetic**: there is no known ground truth, so recovery metrics
-(jaccard/precision/recall/exact match) are not used here. The output is
-F/C/P and diagnostics only — the same ground-truth-free outputs
-`PolarizedTreesPipeline` produces on any real dataset.
+(jaccard/precision/recall/exact match) are not used here. The analysis has two
+parts, both ground-truth-free: a **comparison of the PEG formulations** on the trees
+they build (`polartox.peg_comparison`), and the **F/C/P tables** of every
+formulation.
 
 ## Contents
 
 - [`DICES_polarized_trees_end_to_end.ipynb`](DICES_polarized_trees_end_to_end.ipynb)
   — the full workflow: load and preprocess DICES-350/990, keep the four
   SCD dimensions plus `Q3_bias_overall`, validate/EDA the annotation-level
-  data, compute nDFU per item, run `PolarizedTreesPipeline` in inference
-  mode using the three highest-performing configurations from the synthetic
-  model selection (see [`../benchmarks/README.md`](../benchmarks/README.md)),
-  and report F/C/P and diagnostics for each configuration.
-- `dices_polarized_trees_results/` — the saved results, as `csv_tables/` and
-  `latex_tables/`. For each dataset (`DICES-350`, `DICES-990`) there is one
-  F, C and P table per configuration (`config_1_F`, `config_1_C`, `config_1_P`,
-  ... `config_3_P`), plus `<dataset>_diagnostics_hyperparameters` (the three
-  configurations) and `<dataset>_diagnostics_metrics` (retention rate, mean
-  leaves/depth, residual nDFU, top-split PEG, indeterminate rate).
+  data, compute nDFU per item, then run the configuration selected on the synthetic
+  benchmark (see [`../benchmarks/README.md`](../benchmarks/README.md)) once per PEG
+  formulation (`max`, `avg`, `min`, `mean`, `harmonic`), **everything else fixed**,
+  through `PEGComparison`. It then:
+  - compares the formulations overall: retention, leaves, depth (also by depth,
+    accumulated), annotators per leaf, residual nDFU, split PEG, indeterminate
+    leaves, the trees that never split, the share of polarized texts whose tree
+    splits on more than one dimension, and which dimensions are used;
+  - measures how close the trees of any two formulations are: ARI and NMI of the
+    groups they make of the annotators, the dimensions they split on, and their
+    first split;
+  - compares F, C and P between the formulations, side by side, and whether the
+    formulations find the same subgroups; each formulation's own tables follow;
+  - shows the texts on which the formulations disagree most, and a text that every
+    formulation splits more than once (depth 2 or more in all five), with the tree
+    each builds;
+  - saves everything, tables and figures.
+- `dices_polarized_trees_results/` — the saved results: `csv_tables/`, `latex_tables/`
+  and `figures/`. For each dataset (`DICES-350`, `DICES-990`): the overview of the
+  comparison (`<dataset>_overview`), F, C and P side by side
+  (`fcp_comparison_F`, `_C`, `_P`), and the comparison tables in
+  `csv_tables/<dataset>/comparison/` (per text, retention curve, dimension usage,
+  similarity matrices, and the F, C and P tables of every formulation in `fcp/`).
 - `dices990_polarized_tree.png` — an example recovered tree from DICES-990.
 
-> **Note.** The notebook still sets `variant="beta"`, the earlier PEG
-> formulation (the harmonic mean of max and avg only), which the current
-> package no longer accepts (`variant` is now one of `max`, `avg`, `min`,
-> `mean`, `harmonic`). It has to be updated, and the experiments rerun, before
-> it can run with the current package. The saved results were produced with
-> the earlier formulation.
+> **Note.** The notebook needs `polartox >= 0.8.1` (`pip install -e .` from the
+> repository root). Files in `dices_polarized_trees_results/` that are not listed above
+> (`config_<n>_F/C/P`, `<dataset>_diagnostics_*`, and the `config_<n>_<formulation>_*`
+> files of an earlier version of the notebook) are from earlier runs and are not
+> produced any more.
 
 ## Why this notebook exists
 
@@ -45,11 +58,8 @@ the configuration selected on synthetic corpora and applies it, unmodified,
 to actual annotated conversations — showing what the method actually
 recovers when there is no known answer to check against.
 
-Across both datasets, the trees select `race`, `gender`, and `age` as the
-most frequent splitting dimensions, and the strongest subgroup-level PEG
-values tend to come from combinations of multiple SCD dimensions rather
-than any single one — see the notebook's own results sections for the
-detailed per-configuration breakdown on DICES-350 and DICES-990.
+See the notebook's own results sections for the comparison of the formulations and
+the F, C and P tables on DICES-350 and DICES-990.
 
 ## Method documentation
 

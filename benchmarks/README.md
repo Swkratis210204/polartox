@@ -17,7 +17,7 @@ The benchmark consists of four main stages:
 3. **Evaluation** — each configuration is fitted, used to predict active SCD dimensions, and evaluated against the available ground truth using the requested metrics.
 4. **Selection & Output** — configurations are ranked, the best configuration and pipeline are identified, and the benchmark results are reported and saved.
 
-Ground truth is required for recovery-based model selection. Once the best configuration has been selected, the resulting pipeline can be applied to new annotation data without ground truth.
+Ground truth is required for recovery-based model selection (the comparison of the PEG formulations, `polartox.peg_comparison`, works with or without it). Once the best configuration has been selected, the resulting pipeline can be applied to new annotation data without ground truth.
 
 ## Notebooks
 
