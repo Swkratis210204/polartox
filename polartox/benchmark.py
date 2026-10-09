@@ -15,7 +15,7 @@ DEFAULT_SEARCH_SPACE = {
     "theta_filter": [0.2, 0.3, 0.4],
     "min_size_frac": [0.02, 0.03, 0.05],
     "max_depth": [4, 6, 8],
-    "variant": ["max", "avg", "min", "mean", "harmonic"],
+    "variant": ["max", "weighted", "min", "mean", "harmonic"],
     "h": [0.05, 0.10, 0.15, 0.20],
     "relative_h": [False, True],
     "theta_stop": [0.05, 0.10, 0.15],

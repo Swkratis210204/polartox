@@ -26,7 +26,7 @@ class FakePipeline:
         theta_filter=0.2,
         min_size_frac=0.03,
         max_depth=4,
-        variant="beta",
+        variant="harmonic",
         beta=1.0,
         h=0.1,
         relative_h=True,
@@ -481,7 +481,7 @@ def test_default_search_space_matches_paper_dimensions(
 
     assert set(
         config["variant"] for config in configurations
-    ) == {"max", "avg", "min", "mean", "harmonic"}
+    ) == {"max", "weighted", "min", "mean", "harmonic"}
 
     assert set(
         config["h"] for config in configurations
@@ -513,7 +513,7 @@ def test_default_search_space_does_not_search_over_beta(
     assert "beta" not in DEFAULT_SEARCH_SPACE
     assert all("beta" not in config for config in configurations)
 
-    for variant in ("max", "avg", "min", "mean", "harmonic"):
+    for variant in ("max", "weighted", "min", "mean", "harmonic"):
         assert sum(c["variant"] == variant for c in configurations) == 648
 
 

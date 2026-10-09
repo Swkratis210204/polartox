@@ -26,7 +26,7 @@ Subjective annotation can produce polarization, where annotators form opposing p
 - **4.1 Finding polarized texts:** keep only texts that are polarized enough to explain.
 - **4.2 Selecting a configuration and building one tree per text:** settings are chosen by a rule, not a fixed value. Whichever setting recovers the planted synthetic structure best is the one used to build a tree, one per text, starting at the root.
 - **4.3 Splitting and recursing:**
-  - *The criterion:* Polarization Explanation Gain (PEG): how much of a node's polarization a trait explains. Four variants exist (min, max, avg, β), plus a possible fifth: the mean of the three base variants (min, max, avg), for a formulation that doesn't lean toward any single view of the split.
+  - *The criterion:* Polarization Explanation Gain (PEG): how much of a node's polarization a trait explains. Four variants exist (min, max, weighted, harmonic), plus a possible fifth: the mean of the three base variants (min, max, weighted), for a formulation that doesn't lean toward any single view of the split.
   - *The recursion:* at each node, split on the trait with the best PEG, drop it from that branch, repeat inside each resulting subgroup until size/depth/gain stopping rules trigger.
 - **4.4 Labeling leaves and interpreting results:**
   - Each leaf gets a pole by majority vote.
@@ -61,7 +61,7 @@ Subjective annotation can produce polarization, where annotators form opposing p
 - **5.4 Qualitative comparison across PEG approaches (RQ2: the same text, explained differently):**
   - Take the same handful of real texts and build a tree for each one under every formulation. For each text, walk through what each formulation actually did, which trait it split on first, whether it kept going or stopped and what subgroup and pole it landed on.
   - For each text, check whether that matches what we'd expect from the text itself, and interpret the result either way. The match is a sanity check, a mismatch is itself a finding worth explaining.
-  - Example (illustrative, not a real result): a comment that's clearly misogynistic in content. We'd expect gender to show up early and the split to be decisive. If PEGmax does exactly that but PEGavg needs a second trait to agree, that's a concrete, readable difference between the two, not an abstract one.
+  - Example (illustrative, not a real result): a comment that's clearly misogynistic in content. We'd expect gender to show up early and the split to be decisive. If PEGmax does exactly that but PEGweighted needs a second trait to agree, that's a concrete, readable difference between the two, not an abstract one.
   - The aim is depth, not breadth: a close reading of a few texts, showing what each formulation does with them and why, and letting the disagreements between formulations (when they happen) speak for themselves.
   - *Experiment (planned):* the same set of texts, one tree per formulation per text, read side by side.
   - *Why:* numbers in 5.1–5.3 say formulations differ. This section shows what that difference actually looks like on real text.

@@ -1,4 +1,4 @@
-,max,max,avg,avg,min,min,mean,mean,harmonic,harmonic
+,max,max,weighted,weighted,min,min,mean,mean,harmonic,harmonic
 ,n_s,frac_toxic,n_s,frac_toxic,n_s,frac_toxic,n_s,frac_toxic,n_s,frac_toxic
 "(('age', 'Gen X+'), ('gender', 'Woman'), ('race', 'Asian'))",13,1.0,2.0,1.0,22.0,0.9545454545454546,19.0,0.9473684210526315,10.0,1.0
 "(('age', 'Millennial'), ('gender', 'Woman'), ('race', 'Asian'))",16,0.375,2.0,0.0,9.0,0.3333333333333333,13.0,0.38461538461538464,6.0,0.5

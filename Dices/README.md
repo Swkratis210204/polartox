@@ -20,7 +20,7 @@ formulation.
   SCD dimensions plus `Q3_bias_overall`, validate/EDA the annotation-level
   data, compute nDFU per item, then run the configuration selected on the synthetic
   benchmark (see [`../benchmarks/README.md`](../benchmarks/README.md)) once per PEG
-  formulation (`max`, `avg`, `min`, `mean`, `harmonic`), **everything else fixed**,
+  formulation (`max`, `weighted`, `min`, `mean`, `harmonic`), **everything else fixed**,
   through `PEGComparison`. It then:
   - compares the formulations overall: retention, leaves, depth (also by depth,
     accumulated), annotators per leaf, residual nDFU, split PEG, indeterminate

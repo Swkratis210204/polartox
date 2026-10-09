@@ -70,15 +70,15 @@ def test_compute_peg_variants_differ():
     node_ratings = np.array([1] * 20 + [5] * 20)
     groups = {"a": np.array([1] * 15 + [5] * 5), "b": np.array([1] * 5 + [5] * 15)}
     peg_max, _, _ = compute_peg(node_ratings, groups, SCALE, variant="max")
-    peg_avg, _, _ = compute_peg(node_ratings, groups, SCALE, variant="avg")
+    peg_weighted, _, _ = compute_peg(node_ratings, groups, SCALE, variant="weighted")
     peg_min, _, _ = compute_peg(node_ratings, groups, SCALE, variant="min")
     peg_mean, _, _ = compute_peg(node_ratings, groups, SCALE, variant="mean")
     peg_harmonic, _, _ = compute_peg(node_ratings, groups, SCALE, variant="harmonic")
-    values = [peg_max, peg_avg, peg_min, peg_mean, peg_harmonic]
+    values = [peg_max, peg_weighted, peg_min, peg_mean, peg_harmonic]
     assert all(np.isfinite(v) for v in values)
-    # mean and harmonic are means of max/avg/min, so they stay between the extremes,
+    # mean and harmonic are means of max/weighted/min, so they stay between the extremes,
     # and the harmonic mean never exceeds the arithmetic mean
-    low, high = min(peg_max, peg_avg, peg_min), max(peg_max, peg_avg, peg_min)
+    low, high = min(peg_max, peg_weighted, peg_min), max(peg_max, peg_weighted, peg_min)
     assert low - 1e-12 <= peg_harmonic <= peg_mean + 1e-12 <= high + 2e-12
 
 

@@ -1,12 +1,12 @@
 # Top-20 configurations: which PEG formulations?
 
-**All 20 of the top-ranked configurations use `harmonic` (11) or `avg` (9).**
+**All 20 of the top-ranked configurations use `harmonic` (11) or `weighted` (9).**
 None of them uses `max`, `min` or `mean`.
 
 | variant | in top 20 | best rank | configs evaluated | best Jaccard | mean Jaccard | median Jaccard |
 |---|---|---|---|---|---|---|
 | harmonic | 11 | 1 | 161 | 0.8924 | 0.7727 | 0.8234 |
-| avg | 9 | 9 | 175 | 0.8794 | 0.7256 | 0.8037 |
+| weighted | 9 | 9 | 175 | 0.8794 | 0.7256 | 0.8037 |
 | max | 0 | - | 155 | 0.8503 | 0.7950 | 0.7991 |
 | mean | 0 | - | 142 | 0.8429 | 0.8041 | 0.8098 |
 | min | 0 | - | 167 | 0.8287 | 0.7905 | 0.7971 |
@@ -18,7 +18,7 @@ themselves, with all their metrics, are in `top_configurations.csv`
 ## Other things true of the top 20
 
 - `relative_h=True` and `theta_stop=0.1` in every one of the 20.
-- `harmonic` rows use `h` of 0.15 or 0.20; `avg` rows use `h` of 0.10 or 0.15.
+- `harmonic` rows use `h` of 0.15 or 0.20; `weighted` rows use `h` of 0.10 or 0.15.
 - Ranks 1, 2 and 3 have identical scores (Jaccard 0.8924, precision 0.9521,
   recall 0.9280) and differ only in `min_size_frac` and `max_depth`, which
   rarely change recovery on this synthetic data. The order among tied rows is

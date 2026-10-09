@@ -1,4 +1,4 @@
 corpus,rank,variant,theta_filter,min_size_frac,max_depth,h,relative_h,theta_stop,jaccard
 A_default,1,harmonic,0.3,0.02,4,0.2,True,0.1,0.9166666666666666
-B_weak_signal,13,avg,0.3,0.03,8,0.15,True,0.1,0.9061728395061728
-C_deep,50,avg,0.4,0.03,4,0.1,True,0.05,0.9199612403100776
+B_weak_signal,13,weighted,0.3,0.03,8,0.15,True,0.1,0.9061728395061728
+C_deep,50,weighted,0.4,0.03,4,0.1,True,0.05,0.9199612403100776

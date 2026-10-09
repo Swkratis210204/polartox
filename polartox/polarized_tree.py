@@ -57,12 +57,13 @@ def print_histogram(ratings, scale, label="ratings", indent=0, width=30):
         print(f"{pad}  {rating}: {'#' * round(width * count / peak)} ({count})")
 
 
-PEG_VARIANTS = ("max", "avg", "min", "mean", "harmonic")
+PEG_VARIANTS = ("max", "weighted", "min", "mean", "harmonic")
 
 _REMOVED_VARIANTS = {
-    "var": "use 'avg', the size-weighted average",
-    "beta": "the max/avg-only PEGbeta was replaced by 'harmonic', the harmonic mean "
-            "of max, avg and min",
+    "avg": "renamed to 'weighted'",
+    "var": "use 'weighted', the size-weighted average",
+    "beta": "the max/weighted-only PEGbeta was replaced by 'harmonic', the harmonic mean "
+            "of max, weighted and min",
 }
 
 
@@ -80,10 +81,10 @@ def compute_peg(node_ratings, groups, scale, variant="harmonic", beta=1.0):
     """PEG of splitting a node into `groups` (group -> ratings).
 
     Three base formulations compare the node's nDFU with its subgroups':
-    "max" (the most polarized subgroup), "avg" (the size-weighted average)
+    "max" (the most polarized subgroup), "weighted" (the size-weighted average)
     and "min" (the least polarized subgroup). "mean" is their arithmetic mean
     and "harmonic" their harmonic mean (0 if any of the three is 0). In
-    "harmonic", beta weights avg against max and min (weights 1, beta**2, 1),
+    "harmonic", beta weights weighted against max and min (weights 1, beta**2, 1),
     so the default beta=1 is the plain harmonic mean; the other variants
     ignore beta.
     """
@@ -99,20 +100,20 @@ def compute_peg(node_ratings, groups, scale, variant="harmonic", beta=1.0):
 def _combine_peg(global_ndfu, group_ndfus, sizes, n, variant, beta):
     """PEG from precomputed nDFUs; `group_ndfus` and `sizes` map group -> value."""
     peg_max = abs(global_ndfu - max(group_ndfus.values()))
-    peg_avg = abs(global_ndfu - sum(sizes[v] / n * group_ndfus[v] for v in group_ndfus))
+    peg_weighted = abs(global_ndfu - sum(sizes[v] / n * group_ndfus[v] for v in group_ndfus))
     peg_min = abs(global_ndfu - min(group_ndfus.values()))
 
     if variant == "max":
         peg = peg_max
-    elif variant == "avg":
-        peg = peg_avg
+    elif variant == "weighted":
+        peg = peg_weighted
     elif variant == "min":
         peg = peg_min
     elif variant == "mean":
-        peg = (peg_max + peg_avg + peg_min) / 3
+        peg = (peg_max + peg_weighted + peg_min) / 3
     elif variant == "harmonic":
-        if peg_max > 0 and peg_avg > 0 and peg_min > 0:
-            peg = (2 + beta**2) / (1 / peg_max + beta**2 / peg_avg + 1 / peg_min)
+        if peg_max > 0 and peg_weighted > 0 and peg_min > 0:
+            peg = (2 + beta**2) / (1 / peg_max + beta**2 / peg_weighted + 1 / peg_min)
         else:
             peg = 0.0
     else:
@@ -166,7 +167,7 @@ def detect_polarized_subgroups(
         A node with nDFU below this is already unpolarized and becomes a
         leaf. None disables this rule.
     variant, beta :
-        PEG formulation: "max", "avg", "min", "mean" or "harmonic", and the
+        PEG formulation: "max", "weighted", "min", "mean" or "harmonic", and the
         beta weight used by "harmonic" (see compute_peg). An unknown variant
         raises ValueError immediately, even if no node ever needs a split.
     relative_h : bool

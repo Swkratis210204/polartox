@@ -1,6 +1,6 @@
 variant,n_in_top20,best_rank,n_configs_evaluated,best_jaccard,mean_jaccard,median_jaccard
 harmonic,11,1,161,0.8924,0.7727,0.8234
-avg,9,9,175,0.8794,0.7256,0.8037
+weighted,9,9,175,0.8794,0.7256,0.8037
 max,0,,155,0.8503,0.795,0.7991
 mean,0,,142,0.8429,0.8041,0.8098
 min,0,,167,0.8287,0.7905,0.7971

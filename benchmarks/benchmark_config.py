@@ -117,7 +117,7 @@ def check_polartox():
     for name in ("numpy", "pandas", "ndfu", "scikit-learn"):
         print(f"{name} {md.version(name)}")
 
-    assert set(PEG_VARIANTS) == {"max", "avg", "min", "mean", "harmonic"}
+    assert set(PEG_VARIANTS) == {"max", "weighted", "min", "mean", "harmonic"}
 
 
 def load_corpus(name):

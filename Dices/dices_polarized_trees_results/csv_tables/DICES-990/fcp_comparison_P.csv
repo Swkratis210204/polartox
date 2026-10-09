@@ -1,4 +1,4 @@
-,max,max,avg,avg,min,min,mean,mean,harmonic,harmonic
+,max,max,weighted,weighted,min,min,mean,mean,harmonic,harmonic
 ,n_s,mean_peg,n_s,mean_peg,n_s,mean_peg,n_s,mean_peg,n_s,mean_peg
 "(('age', 'Gen Z'), ('education', 'High School or Below'))",2.0,0.30000000000000004,,,,,1.0,0.64,1.0,0.75
 "(('age', 'Millennial'), ('education', 'High School or Below'))",2.0,0.8333333333333334,2.0,0.12022710931629335,9.0,0.6151390185703911,4.0,0.2490609631710037,3.0,0.32273410281358655

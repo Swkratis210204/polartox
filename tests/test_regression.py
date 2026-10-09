@@ -188,15 +188,15 @@ def test_peg_variants_with_unequal_group_sizes():
     assert abs(weighted_avg - (na + nb) / 2) > 1e-3   # weights must matter here
 
     peg_max = abs(g - max(na, nb))
-    peg_avg = abs(g - weighted_avg)
+    peg_weighted = abs(g - weighted_avg)
     peg_min = abs(g - min(na, nb))
-    assert min(peg_max, peg_avg, peg_min) > 0.1       # no base is 0, so harmonic is defined
+    assert min(peg_max, peg_weighted, peg_min) > 0.1       # no base is 0, so harmonic is defined
 
     assert compute_peg(node, groups, 5, "max")[0] == pytest.approx(peg_max)
-    assert compute_peg(node, groups, 5, "avg")[0] == pytest.approx(peg_avg)
+    assert compute_peg(node, groups, 5, "weighted")[0] == pytest.approx(peg_weighted)
     assert compute_peg(node, groups, 5, "min")[0] == pytest.approx(peg_min)
-    assert compute_peg(node, groups, 5, "mean")[0] == pytest.approx((peg_max + peg_avg + peg_min) / 3)
+    assert compute_peg(node, groups, 5, "mean")[0] == pytest.approx((peg_max + peg_weighted + peg_min) / 3)
     for beta in (0.5, 1.0, 2.0):
-        # weighted harmonic mean, weights (max, avg, min) = (1, beta^2, 1)
-        expected = (2 + beta**2) / (1 / peg_max + beta**2 / peg_avg + 1 / peg_min)
+        # weighted harmonic mean, weights (max, weighted, min) = (1, beta^2, 1)
+        expected = (2 + beta**2) / (1 / peg_max + beta**2 / peg_weighted + 1 / peg_min)
         assert compute_peg(node, groups, 5, "harmonic", beta)[0] == pytest.approx(expected)

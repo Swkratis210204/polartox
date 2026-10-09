@@ -1,5 +1,9 @@
 ## [0.8.1]
 
+### Changed
+
+- **Breaking rename: `variant="avg"` → `variant="weighted"`** (PEGavg → PEGweighted). `"avg"` now raises a ValueError that points to `"weighted"`.
+
 ### Added
 
 - `PEGComparison` works **without ground truth**. A corpus may be the annotations

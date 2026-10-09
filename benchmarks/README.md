@@ -73,7 +73,7 @@ This notebook shows how the PEG formulations change the trees. The comparison it
 It:
 
 - opens the top-20 table saved by `treesbenchmark.ipynb` (shown in full by `resultsexploration.ipynb`) and lets you choose rows by position;
-- keeps every setting of a chosen row fixed except the PEG formulation, and runs all five (`max`, `avg`, `min`, `mean`, `harmonic`) on the three benchmark corpora and on the unseen corpus;
+- keeps every setting of a chosen row fixed except the PEG formulation, and runs all five (`max`, `weighted`, `min`, `mean`, `harmonic`) on the three benchmark corpora and on the unseen corpus;
 - gives one **overview** per formulation: recovery (checked against the benchmark's own saved numbers) and tree shape (retention, leaves, depth, annotators per leaf, residual nDFU, top-split PEG, indeterminate leaves);
 - splits recovery **by the true number of active dimensions** of each text (k), which is where the formulations differ most;
 - computes the **ARI** between formulations, overall and by k: whether two of them split the annotators of a text into the same groups;
@@ -99,7 +99,7 @@ The benchmark is not restricted to the settings used in the paper. Users can cus
 - **per-corpus evaluation** — `text_groups` maps each text to a corpus; metrics are computed per corpus and averaged with equal weight per corpus, which is how `treesbenchmark.ipynb` combines the A, B and C corpora;
 - **per-text results** — `keep_text_results` keeps the raw per-text recovery values (e.g. for boxplots).
 
-The package default search space contains **3,240 valid configurations**: 648 settings of the other hyperparameters times the five PEG formulations (`max`, `avg`, `min`, `mean`, `harmonic`). For the reported benchmark, **800 configurations are randomly sampled** and ranked according to mean Jaccard across the three synthetic benchmark corpora.
+The package default search space contains **3,240 valid configurations**: 648 settings of the other hyperparameters times the five PEG formulations (`max`, `weighted`, `min`, `mean`, `harmonic`). For the reported benchmark, **800 configurations are randomly sampled** and ranked according to mean Jaccard across the three synthetic benchmark corpora.
 
 The default settings can be replaced with a custom search space, evaluation strategy, metrics, and selection criterion for other experiments.
 

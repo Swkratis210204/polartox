@@ -1,4 +1,4 @@
-,max,max,avg,avg,min,min,mean,mean,harmonic,harmonic
+,max,max,weighted,weighted,min,min,mean,mean,harmonic,harmonic
 ,n_s,mean_peg,n_s,mean_peg,n_s,mean_peg,n_s,mean_peg,n_s,mean_peg
 "(('age', 'Gen X+'), ('education', 'Degree+'), ('race', 'Black'))",3.0,0.5315656565656567,,,6.0,0.3815776815776815,6.0,0.3681979694234596,3.0,0.6454688131260407
 "(('age', 'Gen X+'), ('gender', 'Man'), ('race', 'Hispanic/Latino'))",16.0,0.4758928571428572,1.0,0.6666666666666667,19.0,0.35877192982456146,17.0,0.3251167133520075,5.0,0.3154761904761905

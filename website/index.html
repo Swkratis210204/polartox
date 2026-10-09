@@ -415,7 +415,7 @@ best = bench.get_best_pipeline()</pre>
       <div class="modcard wide">
         <div><span class="path">polartox.peg_comparison</span></div>
         <span class="status">stable</span>
-        <p class="desc">The last step of the chain: take the benchmark's best settings, hold everything fixed except the PEG formulation (<code>max</code>, <code>avg</code>, <code>min</code>, <code>mean</code>, <code>harmonic</code>), and compare. What do its trees look like (leaves, depth, group size, the dimensions used), how close are the trees of two formulations (adjusted Rand index, normalized mutual information, same dimensions), and with ground truth, which formulation recovers the true dimensions? Ground truth is optional, so it works on real data too.</p>
+        <p class="desc">The last step of the chain: take the benchmark's best settings, hold everything fixed except the PEG formulation (<code>max</code>, <code>weighted</code>, <code>min</code>, <code>mean</code>, <code>harmonic</code>), and compare. What do its trees look like (leaves, depth, group size, the dimensions used), how close are the trees of two formulations (adjusted Rand index, normalized mutual information, same dimensions), and with ground truth, which formulation recovers the true dimensions? Ground truth is optional, so it works on real data too.</p>
         <pre class="code"><span class="c1"># the best settings, one formulation at a time</span>
 <span class="kw">from</span> polartox <span class="kw">import</span> PEGComparison
 

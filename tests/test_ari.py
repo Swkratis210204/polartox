@@ -136,10 +136,10 @@ def fitted(dataset, variant):
 
 def test_pairwise_ari_shape_symmetry_and_range():
     dataset, _ = make_toy_dataset(n_texts=5)
-    pipes = {v: fitted(dataset, v) for v in ("max", "avg", "harmonic")}
+    pipes = {v: fitted(dataset, v) for v in ("max", "weighted", "harmonic")}
     matrix, per_text = pairwise_ari(pipes, dataset)
 
-    assert list(matrix.index) == list(matrix.columns) == ["max", "avg", "harmonic"]
+    assert list(matrix.index) == list(matrix.columns) == ["max", "weighted", "harmonic"]
     assert np.allclose(np.diag(matrix), 1.0)
     assert np.allclose(matrix, matrix.T)
     assert ((matrix >= -1) & (matrix <= 1)).all().all()
@@ -149,7 +149,7 @@ def test_pairwise_ari_shape_symmetry_and_range():
 
 def test_identical_pipelines_agree_completely():
     dataset, _ = make_toy_dataset(n_texts=4)
-    matrix, per_text = pairwise_ari({"one": fitted(dataset, "avg"), "two": fitted(dataset, "avg")}, dataset)
+    matrix, per_text = pairwise_ari({"one": fitted(dataset, "weighted"), "two": fitted(dataset, "weighted")}, dataset)
     assert matrix.loc["one", "two"] == 1.0
     assert (per_text["ari"] == 1.0).all()
 
@@ -169,7 +169,7 @@ def test_pairwise_ari_matches_a_direct_computation():
 
 def test_only_texts_that_every_pipeline_analysed_are_compared():
     dataset, _ = make_toy_dataset(n_texts=4)
-    loose, strict = fitted(dataset, "avg"), fitted(dataset, "avg")
+    loose, strict = fitted(dataset, "weighted"), fitted(dataset, "weighted")
     strict.trees_ = {t: tree for t, tree in strict.trees_.items() if t != 0}       # one text dropped
     _, per_text = pairwise_ari({"loose": loose, "strict": strict}, dataset)
     assert 0 not in set(per_text["text_id"])

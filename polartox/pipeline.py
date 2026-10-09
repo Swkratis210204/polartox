@@ -64,12 +64,12 @@ class PolarizedTreesPipeline:
             splits in texts with 3+ true causes (too strict) -- see project
             notes for the k=2 vs k=3/4 tradeoff this resolves.
         variant : str
-            PEG formulation: "max", "avg", "min", "mean" or "harmonic" (see
+            PEG formulation: "max", "weighted", "min", "mean" or "harmonic" (see
             polartox.polarized_tree.compute_peg). Checked here, so a typo
             fails at construction and not at the first split.
         beta : float
-            Weight of avg in "harmonic" (default 1: plain harmonic mean of
-            max, avg and min); ignored by the other variants.
+            Weight of weighted in "harmonic" (default 1: plain harmonic mean of
+            max, weighted and min); ignored by the other variants.
         """
         check_variant(variant)
         self.dims = list(dims)

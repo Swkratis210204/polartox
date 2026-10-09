@@ -17,7 +17,7 @@ from polartox import PEGComparison, PolarizedTreesBenchmark, PolarizedTreesPipel
 from polartox.polarized_tree import PEG_VARIANTS
 
 DIMS = ["gender", "politics", "age"]
-VARIANTS = ["max", "avg", "harmonic"]
+VARIANTS = ["max", "weighted", "harmonic"]
 SETTING = dict(theta_filter=0.1, min_size_frac=0.05, max_depth=4, h=0.05, relative_h=False, theta_stop=0.1)
 
 
@@ -65,12 +65,12 @@ def test_overview_matches_a_hand_written_loop(corpora, comparison):
 def test_recovery_by_k_matches_the_pooled_texts(corpora, comparison):
     runs = reference_runs(corpora)
     table = comparison.recovery_by_k()
-    pooled = pd.concat(runs["avg", name][1]["recovery"] for name in corpora)
+    pooled = pd.concat(runs["weighted", name][1]["recovery"] for name in corpora)
 
     for k, group in pooled.groupby("k_true"):
-        assert table.loc[(0, "avg", k), "texts"] == len(group)
-        assert table.loc[(0, "avg", k), "jaccard"] == pytest.approx(group["jaccard"].mean())
-        assert table.loc[(0, "avg", k), "exact_match"] == pytest.approx(group["exact_match"].astype(float).mean())
+        assert table.loc[(0, "weighted", k), "texts"] == len(group)
+        assert table.loc[(0, "weighted", k), "jaccard"] == pytest.approx(group["jaccard"].mean())
+        assert table.loc[(0, "weighted", k), "exact_match"] == pytest.approx(group["exact_match"].astype(float).mean())
 
 
 def test_tables_list_formulations_in_the_given_order_and_k_ascending(comparison):
@@ -79,7 +79,7 @@ def test_tables_list_formulations_in_the_given_order_and_k_ascending(comparison)
     ks = table.index.get_level_values("k_true")
     assert list(ks) == sorted(ks)
     pairs = list(dict.fromkeys(comparison.ari_by_k().index.get_level_values("pair")))
-    assert pairs == ["max - avg", "max - harmonic", "avg - harmonic", "all pairs"]
+    assert pairs == ["max - weighted", "max - harmonic", "weighted - harmonic", "all pairs"]
 
 
 def test_ari_matches_pairwise_ari(corpora, comparison):
@@ -96,7 +96,7 @@ def test_ari_matches_pairwise_ari(corpora, comparison):
 
 def test_ari_by_k_and_disagreement(corpora, comparison):
     by_k = comparison.ari_by_k()
-    assert set(by_k.index.get_level_values("pair")) == {"max - avg", "max - harmonic", "avg - harmonic", "all pairs"}
+    assert set(by_k.index.get_level_values("pair")) == {"max - weighted", "max - harmonic", "weighted - harmonic", "all pairs"}
     # the toy corpus has one structure: k = 2 for every text
     assert set(by_k.index.get_level_values("k_true")) == {2}
 
@@ -146,7 +146,7 @@ def test_ground_truth_is_optional_but_checked_when_given(corpora):
 def test_a_single_corpus_and_string_ids_are_accepted(corpora):
     data, truth = corpora["one"]
     stringly = {str(t): entry for t, entry in truth.items()}      # as read back from JSON
-    single = PEGComparison((data, stringly), dims=DIMS, scale=5, variants=["max", "avg"])
+    single = PEGComparison((data, stringly), dims=DIMS, scale=5, variants=["max", "weighted"])
     assert list(single.corpora) == ["corpus"]
     assert set(single.corpora["corpus"][1]) == set(truth)
 
@@ -178,7 +178,7 @@ def test_invalid_arguments(corpora):
 
 
 def test_settings_forms(corpora):
-    one = PEGComparison(corpora, dims=DIMS, scale=5, variants=["max", "avg"])
+    one = PEGComparison(corpora, dims=DIMS, scale=5, variants=["max", "weighted"])
     assert list(one.run(SETTING).settings_) == [0]
     assert list(one.run([SETTING, {**SETTING, "h": 0.1}]).settings_) == [0, 1]
     with pytest.raises(ValueError, match="not pipeline arguments"):
@@ -190,17 +190,17 @@ def test_settings_forms(corpora):
     table = pd.DataFrame([{**SETTING, "variant": "min", "rank": 1, "jaccard": 0.9, "min_size": np.nan}], index=[7])
     assert list(one.run(table).settings_) == [7]
     assert one.settings_[7] == SETTING
-    assert {variant for (_, variant, _) in one.runs_} == {"max", "avg"}
+    assert {variant for (_, variant, _) in one.runs_} == {"max", "weighted"}
 
 
 def test_a_setting_that_keeps_no_text_says_which(corpora):
-    comparison = PEGComparison(corpora, dims=DIMS, scale=5, variants=["max", "avg"])
+    comparison = PEGComparison(corpora, dims=DIMS, scale=5, variants=["max", "weighted"])
     with pytest.raises(ValueError, match="keeps no text"):
         comparison.run({**SETTING, "theta_filter": 0.99})
 
 
 def test_a_bad_setting_fails_before_anything_runs(corpora):
-    bad = PEGComparison(corpora, dims=DIMS, scale=5, variants=["max", "avg"])
+    bad = PEGComparison(corpora, dims=DIMS, scale=5, variants=["max", "weighted"])
     with pytest.raises(TypeError):
         bad.run({"theta_filter": 0.1})                  # h and max_depth missing
     assert bad.runs_ == {}
@@ -217,7 +217,7 @@ def make_benchmark(corpora, text_groups=True):
         truth.update({k + offset: v for k, v in t.items()})
         groups.update({k + offset: name for k in t})
     pipeline = PolarizedTreesPipeline(dims=DIMS, scale=5, **{k: v for k, v in SETTING.items()})
-    configs = [{**SETTING, "variant": v} for v in ("avg", "max")]
+    configs = [{**SETTING, "variant": v} for v in ("weighted", "max")]
     return PolarizedTreesBenchmark(
         pipeline, pd.concat(frames, ignore_index=True), truth, search_space=configs, strategy="full",
         text_groups=groups if text_groups else None, verbose=False, top_k=2,
@@ -300,7 +300,7 @@ def test_tree_statistics_reproduce_the_pipeline_diagnostics(corpora):
     from polartox import tree_statistics
 
     data, truth = corpora["one"]
-    pipe = PolarizedTreesPipeline(dims=DIMS, scale=5, variant="avg", **SETTING)
+    pipe = PolarizedTreesPipeline(dims=DIMS, scale=5, variant="weighted", **SETTING)
     diagnostics = pipe.run_full_evaluation(data, ground_truth=truth, verbose=False)["diagnostics"]
     stats = tree_statistics(pipe)
     for key in ("retention_rate", "mean_leaves", "mean_depth", "mean_residual_ndfu", "mean_top_split_peg",
@@ -409,14 +409,14 @@ def test_similarity_within_a_setting_matches_ari_matrix_and_the_hand_computation
 
     # the mean over the texts, by hand, for one pair in one corpus
     data = corpora["one"][0]
-    pipes = {v: blind.runs_[0, v, "one"][0] for v in ("max", "avg")}
+    pipes = {v: blind.runs_[0, v, "one"][0] for v in ("max", "weighted")}
     expected = np.mean([
         adjusted_rand_index(pipes["max"].trees_[t].leaf_labels(data[data["text_id"] == t]),
-                            pipes["avg"].trees_[t].leaf_labels(data[data["text_id"] == t]))
+                            pipes["weighted"].trees_[t].leaf_labels(data[data["text_id"] == t]))
         for t in pipes["max"].trees_
     ])
-    one_corpus = PEGComparison({"one": data}, dims=DIMS, scale=5, variants=["max", "avg"]).run(SETTING)
-    assert one_corpus.similarity("ari", 0).loc["max", "avg"] == pytest.approx(expected)
+    one_corpus = PEGComparison({"one": data}, dims=DIMS, scale=5, variants=["max", "weighted"]).run(SETTING)
+    assert one_corpus.similarity("ari", 0).loc["max", "weighted"] == pytest.approx(expected)
 
 
 def test_similarity_across_all_settings(blind):
@@ -436,10 +436,10 @@ def test_similarity_across_all_settings(blind):
 
 def test_identical_settings_are_identical_runs(corpora):
     data = {name: corpus[0] for name, corpus in corpora.items()}
-    twin = PEGComparison(data, dims=DIMS, scale=5, variants=["max", "avg"]).run([SETTING, dict(SETTING)])
+    twin = PEGComparison(data, dims=DIMS, scale=5, variants=["max", "weighted"]).run([SETTING, dict(SETTING)])
     matrix = twin.similarity("ari")
     assert matrix.loc[(0, "max"), (1, "max")] == pytest.approx(1.0)
-    assert matrix.loc[(0, "avg"), (1, "avg")] == pytest.approx(1.0)
+    assert matrix.loc[(0, "weighted"), (1, "weighted")] == pytest.approx(1.0)
 
 
 # ---------------------------------------------------------------------
@@ -449,8 +449,8 @@ def test_identical_settings_are_identical_runs(corpora):
 def test_fcp_and_subgroup_overlap(blind):
     tables = blind.fcp(0, "one")
     assert list(tables) == VARIANTS and set(tables["max"]) == {"F", "C", "P"}
-    pipe, results = blind.runs_[0, "avg", "one"]
-    assert blind.fcp(0, "one", "avg")["C"].equals(results["C"])
+    pipe, results = blind.runs_[0, "weighted", "one"]
+    assert blind.fcp(0, "one", "weighted")["C"].equals(results["C"])
     assert "ever_truly_active" not in tables["max"]["F"].columns          # no ground truth: no validation columns
 
     for table in ("C", "P"):
@@ -521,7 +521,7 @@ def test_with_ground_truth_the_same_analysis_plus_recovery(comparison):
 
 def test_mixed_corpora_average_recovery_over_those_that_have_it(corpora):
     mixed = PEGComparison({"one": corpora["one"], "two": corpora["two"][0]}, dims=DIMS, scale=5,
-                          variants=["max", "avg"]).run(SETTING)
+                          variants=["max", "weighted"]).run(SETTING)
     frame = mixed.per_run()
     assert frame[frame["corpus"] == "one"]["jaccard"].notna().all()
     assert frame[frame["corpus"] == "two"]["jaccard"].isna().all()

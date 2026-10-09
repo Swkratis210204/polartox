@@ -1,4 +1,4 @@
-,max,max,avg,avg,min,min,mean,mean,harmonic,harmonic
+,max,max,weighted,weighted,min,min,mean,mean,harmonic,harmonic
 ,n_s,frac_toxic,n_s,frac_toxic,n_s,frac_toxic,n_s,frac_toxic,n_s,frac_toxic
 "(('gender', 'Man'), ('race', 'Black'))",45,0.28888888888888886,9,0.2222222222222222,60.0,0.25,52.0,0.2692307692307692,21,0.14285714285714285
 (),8,0.0,66,0.12121212121212122,,,,,36,0.16666666666666666

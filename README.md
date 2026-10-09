@@ -200,15 +200,15 @@ and two combine them:
 | `variant` | PEG is the absolute gap between the node's nDFU and ... |
 |---|---|
 | `max` | the nDFU of the most polarized subgroup (PEGmax) |
-| `avg` | the size-weighted average nDFU of the subgroups (PEGavg) |
+| `weighted` | the size-weighted average nDFU of the subgroups (PEGweighted) |
 | `min` | the nDFU of the least polarized subgroup (PEGmin) |
-| `mean` | the arithmetic mean of PEGmax, PEGavg and PEGmin |
-| `harmonic` | the harmonic mean of PEGmax, PEGavg and PEGmin (0 if any of them is 0); the default |
+| `mean` | the arithmetic mean of PEGmax, PEGweighted and PEGmin |
+| `harmonic` | the harmonic mean of PEGmax, PEGweighted and PEGmin (0 if any of them is 0); the default |
 
-`beta` (default 1) only matters for `harmonic`: it weights `avg` against `max`
+`beta` (default 1) only matters for `harmonic`: it weights `weighted` against `max`
 and `min` with weights (1, beta^2, 1), so `beta=1` is the plain harmonic
 mean. An unknown `variant` raises `ValueError` immediately. The older names
-`beta` (the harmonic mean of max and avg only) and `var` (now `avg`) no
+`beta` (the harmonic mean of max and weighted only) and `var` (now `weighted`) no
 longer exist.
 
 ## `polartox.benchmark`
@@ -227,8 +227,8 @@ The benchmark:
 
 The default search space contains **3,240 valid configurations**: 648
 settings of the other hyperparameters times the five PEG formulations
-(`max`, `avg`, `min`, `mean`, `harmonic`). `beta` is not searched; it only
-weights `avg` inside `harmonic` (default 1.0) and can be added to a custom
+(`max`, `weighted`, `min`, `mean`, `harmonic`). `beta` is not searched; it only
+weights `weighted` inside `harmonic` (default 1.0) and can be added to a custom
 search space like any other parameter.
 
 Both `full` and `random` search are supported. Users can also customize the

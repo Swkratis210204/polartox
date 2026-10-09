@@ -1,6 +1,6 @@
 # PEG comparison — `polartox.peg_comparison`
 
-`polartox.peg_comparison` compares the **PEG formulations** (`max`, `avg`,
+`polartox.peg_comparison` compares the **PEG formulations** (`max`, `weighted`,
 `min`, `mean`, `harmonic`) on the same corpora, with **everything else held
 fixed**. For each chosen setting and each corpus it runs one
 `PolarizedTreesPipeline` per formulation, and analyses the trees they build.

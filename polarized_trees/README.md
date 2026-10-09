@@ -133,8 +133,8 @@ is unavailable.
 | `theta_filter` | Minimum nDFU required to analyze a text |
 | `min_size_frac` | Minimum subgroup size relative to the text |
 | `max_depth` | Maximum tree depth |
-| `variant` | PEG formulation: `max`, `avg`, `min`, `mean` (mean of the three) or `harmonic` (harmonic mean of the three) |
-| `beta` | Weight of `avg` in `harmonic` (default 1, the plain harmonic mean); ignored by the other variants |
+| `variant` | PEG formulation: `max`, `weighted`, `min`, `mean` (mean of the three) or `harmonic` (harmonic mean of the three) |
+| `beta` | Weight of `weighted` in `harmonic` (default 1, the plain harmonic mean); ignored by the other variants |
 | `h` | Minimum PEG required to make a split |
 | `relative_h` | Expresses `h` relative to the node's remaining polarization |
 | `theta_stop` | Stops splitting when remaining polarization is already low |
