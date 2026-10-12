@@ -1,0 +1,5 @@
+dataset,analysis,annotations kept,texts,texts retained (polarized),share retained
+DICES-350,original,35350,350,28,0.08
+DICES-350,sens,43050,350,32,0.09142857142857143
+DICES-990,original,45379,990,105,0.10606060606060606
+DICES-990,sens,71442,990,139,0.1404040404040404

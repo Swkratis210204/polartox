@@ -1,0 +1,5 @@
+corpus,texts,annotations,annotators per text (mean),annotators per text (min),annotators per text (max),dimensions,texts with k=0,texts with k=1,texts with k=2,texts with k=3,texts with k=4,share k=0,share k=1,share k=2,share k=3,share k=4,mean k
+A_default,100,162000,1620.0,1620,1620,"gender, politics, age, education, orientation",16,18,33,19,14,0.16,0.18,0.33,0.19,0.14,1.97
+B_weak_signal,100,162000,1620.0,1620,1620,"gender, politics, age, education, orientation",15,30,18,26,11,0.15,0.3,0.18,0.26,0.11,1.88
+C_deep,100,162000,1620.0,1620,1620,"gender, politics, age, education, orientation",8,17,15,19,41,0.08,0.17,0.15,0.19,0.41,2.68
+inference_unseen,100,162000,1620.0,1620,1620,"gender, politics, age, education, orientation",13,31,21,24,11,0.13,0.31,0.21,0.24,0.11,1.89

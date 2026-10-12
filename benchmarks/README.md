@@ -183,7 +183,7 @@ Then run `treesbenchmark.ipynb` to reproduce the search and save the top configu
 
 The full benchmark can be computationally expensive because it evaluates a large hyperparameter search. Existing results can be inspected without rerunning the complete search.
 
-> **Note.** The search results in `benchmark_results/` (`benchmark_*.csv`, `benchmark_report.json`, `top_configurations.csv`) come from the current search (800 random configurations of the 3,240, seed 0). A few older files from the earlier version of the notebook are still in that folder (`selected_configuration*`, `fcp_*`, `summary_results_extra.csv`, `top20_formulations.csv`, `top20_findings.md`); they are not produced by the current notebooks (`top20_formulations.csv` is now written by `resultsexploration.ipynb`, to `exploration/`).
+> **Note.** The search results in `benchmark_results/` (`benchmark_*.csv`, `benchmark_report.json`, `top_configurations.csv`) come from the current search (800 random configurations of the 3,240, seed 0). Every file in `benchmark_results/` is written by one of the notebooks; [`benchmark_results/README.md`](benchmark_results/README.md) lists which notebook and section writes which file. A file that is not listed there is a leftover of an earlier version of a notebook and can be deleted.
 
 ## Outputs
 
@@ -201,12 +201,12 @@ The full benchmark can be computationally expensive because it evaluates a large
 - the best configuration of each corpus (`best_per_corpus.csv`) and recovery by k (`recovery_by_k.csv`);
 - the `relative_h` experiment (`relative_h_*.csv`).
 
-`pegcomparison.ipynb` saves, in `benchmark_results/peg_comparison/`:
+`pegcomparison.ipynb` saves, in `benchmark_results/peg_comparison/`, one folder per kind:
 
-- the chosen settings (`selected_settings.csv`);
-- every number of every run and corpus (`per_run.csv`), the overview table (`overview.csv`) and the by-k tables (`recovery_by_k.csv`, `ari_by_k.csv`);
-- the ARI between formulations, as matrices and per text (`ari_*.csv`);
-- the inference outputs **F**, **C** and **P** for every formulation (`F_*.csv`, `C_*.csv`, `P_*.csv`).
+- `abc/`, the corpora with ground truth: the chosen settings (`selected_settings.csv`); every number of every run and corpus (`per_run.csv`), the overview table (`overview.csv`) and the by-k tables (`recovery_by_k.csv`, `ari_by_k.csv`); the ARI between formulations, as matrices and per text (`ari_*.csv`), and the similarity matrices (`similarity_*.csv`); **F**, **C** and **P** of every formulation and corpus (`fcp/`);
+- `inference_unseen/`, the unseen corpus: the same tables, laid out like the DICES `comparison/` folders;
+- `figures/`: the inference analysis of the DICES notebook repeated on the unseen corpus (retention, depth, dimensions used, similarity, subgroup overlap), so the two can be compared, and the ARI and NMI heatmaps;
+- `synthetic_indicators/`: the overview, the trees by number of dimensions, the ARI and NMI matrices, the rank orders and the description of the corpora.
 
 These outputs provide the reproducible record of **model selection** and of the **PEG comparison**.
 

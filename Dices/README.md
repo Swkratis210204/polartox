@@ -41,13 +41,17 @@ formulation.
   (`fcp_comparison_F`, `_C`, `_P`), and the comparison tables in
   `csv_tables/<dataset>/comparison/` (per text, retention curve, dimension usage,
   similarity matrices, and the F, C and P tables of every formulation in `fcp/`).
-- `dices990_polarized_tree.png` — an example recovered tree from DICES-990.
+- `dices990_polarized_tree.png` — an example recovered tree from DICES-990 (a static file: no cell of the notebook makes it).
+- `dices_polarized_trees_results/sensitivity_gender_only/` — the sensitivity analysis of the last section of the notebook: the same
+  analysis when only *Nonbinary* and *Self-describe* are removed (the race *Other* and *Multiracial* and the education *Other* stay).
 
-> **Note.** The notebook needs `polartox >= 0.8.1` (`pip install -e .` from the
-> repository root). Files in `dices_polarized_trees_results/` that are not listed above
-> (`config_<n>_F/C/P`, `<dataset>_diagnostics_*`, and the `config_<n>_<formulation>_*`
-> files of an earlier version of the notebook) are from earlier runs and are not
-> produced any more.
+[`dices_polarized_trees_results/README.md`](dices_polarized_trees_results/README.md) lists which cell of the notebook writes which file.
+The synthetic counterpart of these tables and figures (the same analysis on the unseen synthetic corpus) is in
+`../benchmarks/benchmark_results/peg_comparison/`.
+
+> **Note.** The notebook needs `polartox >= 0.8.1` (`pip install -e .` from the repository root). A file in
+> `dices_polarized_trees_results/` that is not listed in its README is a leftover of an earlier version of the notebook
+> and can be deleted.
 
 ## Why this notebook exists
 
