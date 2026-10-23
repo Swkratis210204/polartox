@@ -1,0 +1,18 @@
+,all texts with 2+ dimensions,"DICES-350, 2+ dimensions","DICES-990, 2+ dimensions"
+texts,79.0,16.0,63.0
+"explained, no split: mean",0.0,0.0,0.0
+"explained, no split: median",0.0,0.0,0.0
+"explained, one dimension: mean",0.04288982229900824,0.16362042232838644,0.012228082609007433
+"explained, one dimension: median",-0.09294871794871806,0.1920112529460229,-0.10526919888622022
+"explained, full tree: mean",0.2228237971095865,0.3570663287992713,0.18873045572807925
+"explained, full tree: median",0.29366374137413753,0.3630772410574391,0.24297700773673303
+"residual (weighted), no split: mean",0.505828474261319,0.606502634944149,0.4802604334529811
+"residual (weighted), no split: median",0.435483870967742,0.6444793850454227,0.393939393939394
+"residual (weighted), one dimension: mean",0.44197433616360343,0.47340348566444784,0.43399232994116654
+"residual (weighted), one dimension: median",0.4328703703703704,0.4803001991551281,0.42307692307692313
+"residual (weighted), full tree: mean",0.3585603673718251,0.3650137515007438,0.3569214126724172
+"residual (weighted), full tree: median",0.3404255319148936,0.34792342679646115,0.3404255319148936
+gain from the extra dimensions (full - one): mean,0.17993397481057824,0.1934459064708849,0.17650237311907177
+gain from the extra dimensions (full - one): median,0.16029360710211793,0.19676202968282197,0.14538043478260876
+texts where the full tree explains less than one dimension,21.0,3.0,18.0
+texts where the full tree leaves more residual than one dimension,21.0,3.0,18.0
