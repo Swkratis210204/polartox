@@ -1,3 +1,25 @@
+## [Unreleased]
+
+### Changed
+
+- **The synthetic hyperparameter search now runs on all ten corpora (A to J)**, not only
+  on A, B and C. `BENCHMARK_CORPORA` in `modules/benchmarks/benchmark_config.py` lists all ten, so
+  `treesbenchmark.ipynb`, `resultsexploration.ipynb` and `pegcomparison.ipynb` use them
+  with no other code change; the same 800 configurations (seed 0) are scored on every
+  corpus and ranked by the mean Jaccard over the ten (equal weight per corpus). The
+  best configuration is unchanged (`harmonic`, `theta_filter` 0.3, `min_size_frac` 0.02,
+  `max_depth` 4, `h` 0.20; mean Jaccard 0.889). The re-scoring in `pegcomparison.ipynb`
+  (section 2b) now reproduces the search's own ranking.
+- **The five modules moved under `modules/`**: `modules/data_gen/`, `modules/tree_module/`,
+  `modules/polarized_trees/`, `modules/peg_comparison/` and `modules/benchmarks/`. The `polartox` package,
+  `Dices/`, `tests/` and `scripts/` stay where they were. The links in the READMEs, `PYPI_README.md` and
+  `scripts/demos.sh` point to the new paths.
+- The saved results in `modules/benchmarks/benchmark_results/` (search, `exploration/`,
+  `peg_comparison/`) are regenerated on the ten corpora. `checkpoint/` and
+  `synthetic_benchmark_bundle*` are no longer tracked (`.gitignore`): they are
+  regenerated, and a stale checkpoint would make a search on other corpora resume from
+  the old one.
+
 ## [0.8.1]
 
 ### Changed

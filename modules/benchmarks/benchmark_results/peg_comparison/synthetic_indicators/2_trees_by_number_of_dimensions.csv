@@ -1,0 +1,61 @@
+corpus,formulation,0 dimension(s),1 dimension(s),2 dimension(s),3 dimension(s),4 dimension(s),5 dimension(s),total
+A_default,min,0,25,1,36,17,5,84
+A_default,mean,0,25,1,39,16,3,84
+A_default,max,1,25,5,24,25,4,84
+A_default,weighted,0,32,17,25,10,0,84
+A_default,har,0,25,22,28,9,0,84
+B_weak_signal,min,0,24,0,33,20,4,81
+B_weak_signal,mean,0,24,0,30,25,2,81
+B_weak_signal,max,2,24,0,19,29,7,81
+B_weak_signal,weighted,1,33,9,29,8,1,81
+B_weak_signal,har,3,26,4,32,15,1,81
+C_deep,min,0,27,0,39,22,4,92
+C_deep,mean,0,27,0,34,28,3,92
+C_deep,max,0,27,0,21,39,5,92
+C_deep,weighted,0,36,6,37,13,0,92
+C_deep,har,0,27,10,32,23,0,92
+D_strong_signal,min,0,40,0,29,13,0,82
+D_strong_signal,mean,0,40,1,35,6,0,82
+D_strong_signal,max,3,40,0,26,10,3,82
+D_strong_signal,weighted,1,47,6,26,2,0,82
+D_strong_signal,har,1,41,9,29,2,0,82
+E_very_weak,min,0,17,0,39,24,1,81
+E_very_weak,mean,0,17,0,33,29,2,81
+E_very_weak,max,2,17,0,12,41,9,81
+E_very_weak,weighted,2,19,10,40,9,1,81
+E_very_weak,har,3,18,4,40,16,0,81
+F_shallow,min,0,40,0,12,9,2,63
+F_shallow,mean,0,40,2,13,8,0,63
+F_shallow,max,0,40,1,12,9,1,63
+F_shallow,weighted,0,48,9,5,1,0,63
+F_shallow,har,0,41,12,8,2,0,63
+G_uniform_depth,min,0,22,0,27,15,3,67
+G_uniform_depth,mean,0,22,1,30,13,1,67
+G_uniform_depth,max,0,22,0,21,19,5,67
+G_uniform_depth,weighted,0,24,10,28,5,0,67
+G_uniform_depth,har,2,22,10,28,5,0,67
+H_deep_weak,min,0,5,0,34,47,7,93
+H_deep_weak,mean,0,5,0,34,48,6,93
+H_deep_weak,max,1,5,0,19,57,11,93
+H_deep_weak,weighted,7,11,11,47,16,1,93
+H_deep_weak,har,0,5,8,46,34,0,93
+I_deep_strong,min,0,13,0,52,26,3,94
+I_deep_strong,mean,0,13,3,56,21,1,94
+I_deep_strong,max,2,13,0,47,29,3,94
+I_deep_strong,weighted,0,21,13,47,13,0,94
+I_deep_strong,har,4,14,15,49,12,0,94
+J_shallow_weak,min,0,32,0,12,12,1,57
+J_shallow_weak,mean,0,32,0,14,10,1,57
+J_shallow_weak,max,4,32,0,6,11,4,57
+J_shallow_weak,weighted,0,34,6,12,5,0,57
+J_shallow_weak,har,0,32,7,16,2,0,57
+all corpora pooled,min,0,245,1,313,205,30,794
+all corpora pooled,mean,0,245,8,318,204,19,794
+all corpora pooled,max,15,245,6,207,269,52,794
+all corpora pooled,weighted,11,305,97,296,82,3,794
+all corpora pooled,har,13,251,101,308,120,1,794
+inference_unseen,min,0,36,0,31,16,3,86
+inference_unseen,mean,0,36,1,32,15,2,86
+inference_unseen,max,2,36,0,21,23,4,86
+inference_unseen,weighted,0,41,12,28,5,0,86
+inference_unseen,har,0,37,7,34,8,0,86

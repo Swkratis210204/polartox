@@ -1,0 +1,1448 @@
+{
+  "0": {
+    "active_dims": [],
+    "peak": 4,
+    "spread": 0.9608990145740144
+  },
+  "1": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        "25-50": "civil",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.3818828286072664
+    }
+  },
+  "2": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        "25-50": "toxic",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.4970467947372492
+    }
+  },
+  "3": {
+    "active_dims": [],
+    "peak": 3,
+    "spread": 0.9541000199190963
+  },
+  "4": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "non-binary": "toxic",
+        "female": "civil",
+        "male": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.2961820404140795
+    }
+  },
+  "5": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "male": "civil",
+        "non-binary": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.34468921205104297
+    }
+  },
+  "6": {
+    "active_dims": [
+      "education",
+      "gender"
+    ],
+    "lean": {
+      "education": {
+        "high": "toxic",
+        "medium": "toxic",
+        "low": "civil"
+      },
+      "gender": {
+        "non-binary": "toxic",
+        "female": "civil",
+        "male": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.495001905302551,
+      "gender": 0.5369635577591201
+    }
+  },
+  "7": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        ">50": "toxic",
+        "<25": "civil",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.2747962917021462
+    }
+  },
+  "8": {
+    "active_dims": [
+      "gender",
+      "education"
+    ],
+    "lean": {
+      "gender": {
+        "male": "toxic",
+        "female": "toxic",
+        "non-binary": "civil"
+      },
+      "education": {
+        "high": "toxic",
+        "medium": "toxic",
+        "low": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.3848284661880639,
+      "education": 0.3216352920567759
+    }
+  },
+  "9": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        ">50": "toxic",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.4817481318363726
+    }
+  },
+  "10": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 1.1543838903515944
+  },
+  "11": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 1.1807118968387438
+  },
+  "12": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "non-binary": "toxic",
+        "male": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.3862701163035888
+    }
+  },
+  "13": {
+    "active_dims": [],
+    "peak": 2,
+    "spread": 0.6792795946822122
+  },
+  "14": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "left": "toxic",
+        "right": "toxic",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.40331962391436904
+    }
+  },
+  "15": {
+    "active_dims": [],
+    "peak": 4,
+    "spread": 0.8539543351244158
+  },
+  "16": {
+    "active_dims": [
+      "education",
+      "gender",
+      "age"
+    ],
+    "lean": {
+      "education": {
+        "high": "toxic",
+        "medium": "toxic",
+        "low": "civil"
+      },
+      "gender": {
+        "non-binary": "toxic",
+        "male": "toxic",
+        "female": "civil"
+      },
+      "age": {
+        ">50": "toxic",
+        "<25": "civil",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.23386803629521574,
+      "gender": 0.5412087330007547,
+      "age": 0.375041773763365
+    }
+  },
+  "17": {
+    "active_dims": [
+      "gender",
+      "politics"
+    ],
+    "lean": {
+      "gender": {
+        "non-binary": "toxic",
+        "female": "civil",
+        "male": "civil"
+      },
+      "politics": {
+        "center": "toxic",
+        "left": "toxic",
+        "right": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.39221797249432044,
+      "politics": 0.5361712118760866
+    }
+  },
+  "18": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 1.0829540164790945
+  },
+  "19": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "high": "toxic",
+        "low": "toxic",
+        "medium": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.458871006469793
+    }
+  },
+  "20": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.24616906068400662
+    }
+  },
+  "21": {
+    "active_dims": [
+      "age",
+      "orientation",
+      "education"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        "<25": "toxic",
+        ">50": "civil"
+      },
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      },
+      "education": {
+        "low": "toxic",
+        "medium": "toxic",
+        "high": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.26373901219825996,
+      "orientation": 0.5820183137199614,
+      "education": 0.22011064618900075
+    }
+  },
+  "22": {
+    "active_dims": [],
+    "peak": 3,
+    "spread": 1.126316110977133
+  },
+  "23": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "low": "toxic",
+        "medium": "civil",
+        "high": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.20065864138513936
+    }
+  },
+  "24": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 1.1950893533765905
+  },
+  "25": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "right": "toxic",
+        "left": "civil",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.31692484392535325
+    }
+  },
+  "26": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "medium": "toxic",
+        "high": "civil",
+        "low": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.2735190054235229
+    }
+  },
+  "27": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 1.106943886699058
+  },
+  "28": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "male": "toxic",
+        "non-binary": "toxic",
+        "female": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.37617048160496286
+    }
+  },
+  "29": {
+    "active_dims": [],
+    "peak": 2,
+    "spread": 1.0498144607572881
+  },
+  "30": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "male": "toxic",
+        "non-binary": "civil",
+        "female": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.20414373060787516
+    }
+  },
+  "31": {
+    "active_dims": [
+      "age",
+      "gender",
+      "education"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        "<25": "civil",
+        ">50": "civil"
+      },
+      "gender": {
+        "female": "toxic",
+        "male": "civil",
+        "non-binary": "civil"
+      },
+      "education": {
+        "low": "toxic",
+        "high": "toxic",
+        "medium": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.4011459517997118,
+      "gender": 0.2220405211474862,
+      "education": 0.2970318957553272
+    }
+  },
+  "32": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        ">50": "toxic",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.3208730114043289
+    }
+  },
+  "33": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 0.9111865486014215
+  },
+  "34": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "non-binary": "toxic",
+        "male": "civil",
+        "female": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.28002078901433447
+    }
+  },
+  "35": {
+    "active_dims": [
+      "gender",
+      "orientation"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "non-binary": "toxic",
+        "male": "civil"
+      },
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.5421985574191105,
+      "orientation": 0.4337369573331564
+    }
+  },
+  "36": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        "25-50": "toxic",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.5022241199868663
+    }
+  },
+  "37": {
+    "active_dims": [
+      "gender",
+      "education",
+      "age"
+    ],
+    "lean": {
+      "gender": {
+        "male": "toxic",
+        "female": "civil",
+        "non-binary": "civil"
+      },
+      "education": {
+        "low": "toxic",
+        "medium": "toxic",
+        "high": "civil"
+      },
+      "age": {
+        "<25": "toxic",
+        "25-50": "civil",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.4876593577386416,
+      "education": 0.3161289724894301,
+      "age": 0.34457099953482273
+    }
+  },
+  "38": {
+    "active_dims": [
+      "age",
+      "orientation"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        "<25": "civil",
+        ">50": "civil"
+      },
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.5198523452463149,
+      "orientation": 0.28927560960104576
+    }
+  },
+  "39": {
+    "active_dims": [
+      "age",
+      "gender"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        ">50": "toxic",
+        "25-50": "civil"
+      },
+      "gender": {
+        "male": "toxic",
+        "non-binary": "toxic",
+        "female": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.32363753501987336,
+      "gender": 0.5481404089005752
+    }
+  },
+  "40": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "left": "toxic",
+        "right": "civil",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.597797551116632
+    }
+  },
+  "41": {
+    "active_dims": [
+      "gender",
+      "age"
+    ],
+    "lean": {
+      "gender": {
+        "male": "toxic",
+        "non-binary": "civil",
+        "female": "civil"
+      },
+      "age": {
+        ">50": "toxic",
+        "25-50": "civil",
+        "<25": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.3369449940599444,
+      "age": 0.3275104423472128
+    }
+  },
+  "42": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "medium": "toxic",
+        "low": "civil",
+        "high": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.524715009480776
+    }
+  },
+  "43": {
+    "active_dims": [
+      "politics",
+      "gender"
+    ],
+    "lean": {
+      "politics": {
+        "right": "toxic",
+        "center": "civil",
+        "left": "civil"
+      },
+      "gender": {
+        "male": "toxic",
+        "non-binary": "toxic",
+        "female": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.38984796460508386,
+      "gender": 0.4912873843730617
+    }
+  },
+  "44": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        "<25": "civil",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.335112675877533
+    }
+  },
+  "45": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        ">50": "toxic",
+        "<25": "civil",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.4821550193445663
+    }
+  },
+  "46": {
+    "active_dims": [],
+    "peak": 4,
+    "spread": 0.9228295679671374
+  },
+  "47": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        ">50": "toxic",
+        "25-50": "toxic",
+        "<25": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.3808577705406827
+    }
+  },
+  "48": {
+    "active_dims": [
+      "education",
+      "politics"
+    ],
+    "lean": {
+      "education": {
+        "low": "toxic",
+        "high": "civil",
+        "medium": "civil"
+      },
+      "politics": {
+        "right": "toxic",
+        "center": "toxic",
+        "left": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.44260571242028973,
+      "politics": 0.37047938893365195
+    }
+  },
+  "49": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "medium": "toxic",
+        "high": "civil",
+        "low": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.5093301966651381
+    }
+  },
+  "50": {
+    "active_dims": [],
+    "peak": 3,
+    "spread": 1.0628339789551244
+  },
+  "51": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "center": "toxic",
+        "right": "toxic",
+        "left": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.30723726058751594
+    }
+  },
+  "52": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "right": "toxic",
+        "left": "toxic",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.5693737093745852
+    }
+  },
+  "53": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        "25-50": "toxic",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.3260508172183846
+    }
+  },
+  "54": {
+    "active_dims": [
+      "age",
+      "education",
+      "gender"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        ">50": "toxic",
+        "<25": "civil"
+      },
+      "education": {
+        "medium": "toxic",
+        "low": "civil",
+        "high": "civil"
+      },
+      "gender": {
+        "male": "toxic",
+        "female": "civil",
+        "non-binary": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.39478203519185817,
+      "education": 0.21499420035558386,
+      "gender": 0.34531177377093036
+    }
+  },
+  "55": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.26208180883290033
+    }
+  },
+  "56": {
+    "active_dims": [],
+    "peak": 2,
+    "spread": 1.0663947782846352
+  },
+  "57": {
+    "active_dims": [
+      "politics",
+      "orientation"
+    ],
+    "lean": {
+      "politics": {
+        "center": "toxic",
+        "left": "civil",
+        "right": "civil"
+      },
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.23447168353943115,
+      "orientation": 0.20451097493936765
+    }
+  },
+  "58": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "left": "toxic",
+        "right": "civil",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.4521188018890928
+    }
+  },
+  "59": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        ">50": "toxic",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.4049275095466134
+    }
+  },
+  "60": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.49320158173251605
+    }
+  },
+  "61": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "low": "toxic",
+        "high": "toxic",
+        "medium": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.490204912458077
+    }
+  },
+  "62": {
+    "active_dims": [],
+    "peak": 1,
+    "spread": 0.768462440138482
+  },
+  "63": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        "<25": "toxic",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.5140041101507393
+    }
+  },
+  "64": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "high": "toxic",
+        "medium": "toxic",
+        "low": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.33816195247828107
+    }
+  },
+  "65": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        "<25": "civil",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.2526975552665562
+    }
+  },
+  "66": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 1.190079560410843
+  },
+  "67": {
+    "active_dims": [
+      "education",
+      "politics"
+    ],
+    "lean": {
+      "education": {
+        "low": "toxic",
+        "medium": "civil",
+        "high": "civil"
+      },
+      "politics": {
+        "left": "toxic",
+        "right": "civil",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.26592043285119243,
+      "politics": 0.5245611179384986
+    }
+  },
+  "68": {
+    "active_dims": [
+      "gender",
+      "politics",
+      "education",
+      "orientation"
+    ],
+    "lean": {
+      "gender": {
+        "non-binary": "toxic",
+        "male": "civil",
+        "female": "civil"
+      },
+      "politics": {
+        "center": "toxic",
+        "right": "civil",
+        "left": "civil"
+      },
+      "education": {
+        "medium": "toxic",
+        "low": "civil",
+        "high": "civil"
+      },
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.2229059327968349,
+      "politics": 0.5890628954147836,
+      "education": 0.43621520882355247,
+      "orientation": 0.3585047528979641
+    }
+  },
+  "69": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "male": "toxic",
+        "non-binary": "civil",
+        "female": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.5922976871729977
+    }
+  },
+  "70": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "non-binary": "civil",
+        "male": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.24554077018726647
+    }
+  },
+  "71": {
+    "active_dims": [
+      "age",
+      "education"
+    ],
+    "lean": {
+      "age": {
+        ">50": "toxic",
+        "<25": "toxic",
+        "25-50": "civil"
+      },
+      "education": {
+        "high": "toxic",
+        "medium": "civil",
+        "low": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.5691893229274094,
+      "education": 0.2382742273817674
+    }
+  },
+  "72": {
+    "active_dims": [],
+    "peak": 2,
+    "spread": 0.6842587116126434
+  },
+  "73": {
+    "active_dims": [
+      "orientation",
+      "gender",
+      "politics"
+    ],
+    "lean": {
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      },
+      "gender": {
+        "male": "toxic",
+        "non-binary": "toxic",
+        "female": "civil"
+      },
+      "politics": {
+        "left": "toxic",
+        "right": "toxic",
+        "center": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.5229016327746783,
+      "gender": 0.4367633043648106,
+      "politics": 0.45838118398553307
+    }
+  },
+  "74": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "left": "toxic",
+        "center": "toxic",
+        "right": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.5043022480574004
+    }
+  },
+  "75": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "medium": "toxic",
+        "low": "civil",
+        "high": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.25244841279012203
+    }
+  },
+  "76": {
+    "active_dims": [],
+    "peak": 4,
+    "spread": 1.1536318656268134
+  },
+  "77": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.5443498166728824
+    }
+  },
+  "78": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "25-50": "toxic",
+        ">50": "toxic",
+        "<25": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.38652337497708955
+    }
+  },
+  "79": {
+    "active_dims": [
+      "gender",
+      "education",
+      "orientation",
+      "politics"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "non-binary": "civil",
+        "male": "civil"
+      },
+      "education": {
+        "low": "toxic",
+        "high": "civil",
+        "medium": "civil"
+      },
+      "orientation": {
+        "heterosexual": "toxic",
+        "lgbtq+": "civil"
+      },
+      "politics": {
+        "center": "toxic",
+        "right": "toxic",
+        "left": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.42269591119802974,
+      "education": 0.4902040496566505,
+      "orientation": 0.33719095020842066,
+      "politics": 0.4931896184057114
+    }
+  },
+  "80": {
+    "active_dims": [],
+    "peak": 3,
+    "spread": 0.8209579861564953
+  },
+  "81": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "non-binary": "toxic",
+        "female": "civil",
+        "male": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.2544202761501595
+    }
+  },
+  "82": {
+    "active_dims": [],
+    "peak": 1,
+    "spread": 1.028999877743888
+  },
+  "83": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 0.7994214909518389
+  },
+  "84": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.42753003129751477
+    }
+  },
+  "85": {
+    "active_dims": [
+      "gender"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "non-binary": "toxic",
+        "male": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.45714569431324553
+    }
+  },
+  "86": {
+    "active_dims": [],
+    "peak": 4,
+    "spread": 0.768863991478811
+  },
+  "87": {
+    "active_dims": [
+      "politics"
+    ],
+    "lean": {
+      "politics": {
+        "center": "toxic",
+        "right": "toxic",
+        "left": "civil"
+      }
+    },
+    "alpha": {
+      "politics": 0.23308941811364883
+    }
+  },
+  "88": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.32635365099432506
+    }
+  },
+  "89": {
+    "active_dims": [
+      "education"
+    ],
+    "lean": {
+      "education": {
+        "low": "toxic",
+        "high": "civil",
+        "medium": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.24540498843826658
+    }
+  },
+  "90": {
+    "active_dims": [
+      "orientation"
+    ],
+    "lean": {
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "orientation": 0.3706718196312615
+    }
+  },
+  "91": {
+    "active_dims": [],
+    "peak": 2,
+    "spread": 0.8641155866820414
+  },
+  "92": {
+    "active_dims": [
+      "education",
+      "age"
+    ],
+    "lean": {
+      "education": {
+        "medium": "toxic",
+        "high": "civil",
+        "low": "civil"
+      },
+      "age": {
+        "25-50": "toxic",
+        ">50": "civil",
+        "<25": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.21644997124516988,
+      "age": 0.3366647807140882
+    }
+  },
+  "93": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        ">50": "toxic",
+        "25-50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.23301983115299463
+    }
+  },
+  "94": {
+    "active_dims": [
+      "gender",
+      "education"
+    ],
+    "lean": {
+      "gender": {
+        "female": "toxic",
+        "male": "toxic",
+        "non-binary": "civil"
+      },
+      "education": {
+        "low": "toxic",
+        "medium": "toxic",
+        "high": "civil"
+      }
+    },
+    "alpha": {
+      "gender": 0.510967580715779,
+      "education": 0.5431322861792557
+    }
+  },
+  "95": {
+    "active_dims": [
+      "education",
+      "orientation"
+    ],
+    "lean": {
+      "education": {
+        "high": "toxic",
+        "medium": "toxic",
+        "low": "civil"
+      },
+      "orientation": {
+        "lgbtq+": "toxic",
+        "heterosexual": "civil"
+      }
+    },
+    "alpha": {
+      "education": 0.3341651019703825,
+      "orientation": 0.4700147290805133
+    }
+  },
+  "96": {
+    "active_dims": [],
+    "peak": 4,
+    "spread": 1.0570321689952396
+  },
+  "97": {
+    "active_dims": [],
+    "peak": 5,
+    "spread": 0.887157945006728
+  },
+  "98": {
+    "active_dims": [
+      "age"
+    ],
+    "lean": {
+      "age": {
+        "<25": "toxic",
+        "25-50": "toxic",
+        ">50": "civil"
+      }
+    },
+    "alpha": {
+      "age": 0.514906848915661
+    }
+  },
+  "99": {
+    "active_dims": [],
+    "peak": 1,
+    "spread": 0.8259221112189545
+  }
+}

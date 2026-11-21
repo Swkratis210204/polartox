@@ -1,0 +1,11 @@
+corpus,rank,variant,theta_filter,min_size_frac,max_depth,h,relative_h,theta_stop,jaccard
+A_default,1,harmonic,0.3,0.02,4,0.2,True,0.1,0.9166666666666666
+B_weak_signal,8,weighted,0.3,0.03,8,0.15,True,0.1,0.9061728395061729
+C_deep,110,weighted,0.4,0.03,4,0.1,True,0.05,0.9199612403100776
+D_strong_signal,372,weighted,0.3,0.02,6,0.1,True,0.05,0.9278455284552845
+E_very_weak,24,harmonic,0.2,0.03,4,0.2,True,0.15,0.8965201465201464
+F_shallow,16,harmonic,0.2,0.05,4,0.2,True,0.1,0.9538461538461539
+G_uniform_depth,65,weighted,0.4,0.03,8,0.15,True,0.05,0.9256830601092897
+H_deep_weak,16,harmonic,0.2,0.05,4,0.2,True,0.1,0.8824561403508775
+I_deep_strong,254,weighted,0.3,0.03,8,0.15,True,0.05,0.9459219858156027
+J_shallow_weak,6,harmonic,0.3,0.05,6,0.2,True,0.1,0.948830409356725

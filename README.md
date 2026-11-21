@@ -17,12 +17,13 @@ pip install polartox
 ```text
 polartox/
 ├── polartox/          installable Python package
-├── data_gen/          synthetic-data generation demos and materials
-├── tree_module/       single-tree (PolarizedTree) demo
-├── polarized_trees/   pipeline / corpus-level Polarized Trees demos and research materials
-├── peg_comparison/    comparing the PEG formulations: demo and README
+├── modules/           the five modules: demos, READMEs and experiments
+│   ├── data_gen/          synthetic-data generation demos and materials
+│   ├── tree_module/       single-tree (PolarizedTree) demo
+│   ├── polarized_trees/   pipeline / corpus-level Polarized Trees demos and research materials
+│   ├── peg_comparison/    comparing the PEG formulations: demo and README
+│   └── benchmarks/        synthetic benchmark and paper reproducibility code
 ├── Dices/             real-data (DICES-350/990) end-to-end inference notebook
-├── benchmarks/        synthetic benchmark and paper reproducibility code
 ├── tests/             package, benchmark and regression tests
 ├── website/           project website (GitHub Pages)
 ├── .github/workflows/ CI (tests) and website deployment
@@ -44,7 +45,7 @@ It provides:
 - `polartox.benchmark` — hyperparameter search and model selection;
 - `polartox.peg_comparison` — comparison of the PEG formulations on the same corpora (`PEGComparison`, `pairwise_ari`).
 
-### `data_gen/`
+### `modules/data_gen/`
 
 Materials and demos for generating synthetic annotation datasets with
 **known polarization ground truth**.
@@ -54,13 +55,13 @@ socio-demographic dimensions are known. This provides a controlled setting
 for evaluating whether Polarized Trees can recover the dimensions that
 generate observed disagreement.
 
-### `tree_module/`
+### `modules/tree_module/`
 
 Demo for `PolarizedTree`, the single-tree building block: build and inspect
 one text's polarized tree directly, without a corpus or a pipeline. See
-[`tree_module/README.md`](tree_module/README.md).
+[`modules/tree_module/README.md`](modules/tree_module/README.md).
 
-### `polarized_trees/`
+### `modules/polarized_trees/`
 
 Research and demonstration materials for the Polarized Trees methodology at
 the corpus/pipeline level (`PolarizedTreesPipeline`): filtering a corpus,
@@ -76,7 +77,7 @@ Applies Polarized Trees to the **DICES-350** and **DICES-990** datasets —
 real conversational-safety annotations, not synthetic data, so there is no
 ground truth and no recovery metrics. See [`Dices/README.md`](Dices/README.md).
 
-### `benchmarks/`
+### `modules/benchmarks/`
 
 Code used to reproduce the synthetic benchmark experiments reported in the
 paper.
@@ -97,15 +98,15 @@ Selected Polarized Trees pipeline
 Inference on unseen data
 ```
 
-The [`treesbenchmark.ipynb`](benchmarks/notebooks/treesbenchmark.ipynb) notebook
+The [`treesbenchmark.ipynb`](modules/benchmarks/notebooks/treesbenchmark.ipynb) notebook
 serves both as a runnable demonstration of `PolarizedTreesBenchmark` and as
 the experimental workflow used to select the configurations reported in the
-paper; [`resultsexploration.ipynb`](benchmarks/notebooks/resultsexploration.ipynb)
+paper; [`resultsexploration.ipynb`](modules/benchmarks/notebooks/resultsexploration.ipynb)
 then explores its results, and
-[`pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb) compares the PEG
+[`pegcomparison.ipynb`](modules/benchmarks/notebooks/pegcomparison.ipynb) compares the PEG
 formulations on the best of them.
 
-See [`benchmarks/README.md`](benchmarks/README.md) for the complete
+See [`modules/benchmarks/README.md`](modules/benchmarks/README.md) for the complete
 benchmark workflow and reproducibility instructions.
 
 ## Notebooks
@@ -121,27 +122,27 @@ benchmark workflow and reproducibility instructions.
 with `pip install polartox`, so they use the *released* package; use
 `pip install -e .` from a clone to run them against this repository:
 
-- [`data_gen/datagen_demo.ipynb`](data_gen/datagen_demo.ipynb) — generate
+- [`modules/data_gen/datagen_demo.ipynb`](modules/data_gen/datagen_demo.ipynb) — generate
   synthetic annotation data with known polarization ground truth
   (`polartox.datagen`).
-- [`tree_module/polarized_tree_demo.ipynb`](tree_module/polarized_tree_demo.ipynb)
+- [`modules/tree_module/polarized_tree_demo.ipynb`](modules/tree_module/polarized_tree_demo.ipynb)
   — build and inspect one text's tree directly (`PolarizedTree`), without a
   pipeline or a corpus.
-- [`polarized_trees/trees_demo.ipynb`](polarized_trees/trees_demo.ipynb) —
+- [`modules/polarized_trees/trees_demo.ipynb`](modules/polarized_trees/trees_demo.ipynb) —
   run the full pipeline over a corpus and compute F/C/P
   (`PolarizedTreesPipeline`).
-- [`benchmarks/notebooks/datasetdemo.ipynb`](benchmarks/notebooks/datasetdemo.ipynb)
+- [`modules/benchmarks/notebooks/datasetdemo.ipynb`](modules/benchmarks/notebooks/datasetdemo.ipynb)
   — generate the fixed synthetic benchmark corpora.
-- [`benchmarks/notebooks/treesbenchmark.ipynb`](benchmarks/notebooks/treesbenchmark.ipynb)
+- [`modules/benchmarks/notebooks/treesbenchmark.ipynb`](modules/benchmarks/notebooks/treesbenchmark.ipynb)
   — hyperparameter search and saved results, including the top 20
   configurations (`PolarizedTreesBenchmark`).
-- [`peg_comparison/peg_comparison_demo.ipynb`](peg_comparison/peg_comparison_demo.ipynb)
+- [`modules/peg_comparison/peg_comparison_demo.ipynb`](modules/peg_comparison/peg_comparison_demo.ipynb)
   — the chain from synthetic corpora to a comparison of the PEG formulations
   (`PEGComparison`), small enough to run in a minute.
-- [`benchmarks/notebooks/resultsexploration.ipynb`](benchmarks/notebooks/resultsexploration.ipynb)
+- [`modules/benchmarks/notebooks/resultsexploration.ipynb`](modules/benchmarks/notebooks/resultsexploration.ipynb)
   — explores the saved results: the top 20 (per corpus), which formulations and
   hyperparameters matter, `relative_h`, recovery by corpus and by k.
-- [`benchmarks/notebooks/pegcomparison.ipynb`](benchmarks/notebooks/pegcomparison.ipynb)
+- [`modules/benchmarks/notebooks/pegcomparison.ipynb`](modules/benchmarks/notebooks/pegcomparison.ipynb)
   — takes settings from that top 20 and compares the five PEG formulations:
   recovery, inference without ground truth, and tree shape.
 
@@ -264,7 +265,7 @@ comparison.run(benchmark.top_configs_.head(3))          # each row with every fo
 comparison.overview()
 ```
 
-See [`peg_comparison/README.md`](peg_comparison/README.md).
+See [`modules/peg_comparison/README.md`](modules/peg_comparison/README.md).
 
 ## Testing
 

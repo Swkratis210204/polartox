@@ -25,5 +25,5 @@ of an earlier version of the notebook and can be deleted.
   plots the nDFU distribution on screen (section 6 and 7); the code that saved this figure is not in the notebook or its git history.
 - `../dices990_polarized_tree.png`: an example tree of DICES-990.
 
-The synthetic counterpart of these tables and figures is in `benchmarks/benchmark_results/peg_comparison/`
-(`benchmarks/benchmark_results/README.md`).
+The synthetic counterpart of these tables and figures is in `modules/benchmarks/benchmark_results/peg_comparison/`
+(`modules/benchmarks/benchmark_results/README.md`).

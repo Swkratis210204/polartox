@@ -9,3 +9,8 @@ commands.txt
 fixes.md
 instructions.md
 paper
+# regenerated artifacts
+modules/benchmarks/synthetic_benchmark_bundle/
+modules/benchmarks/synthetic_benchmark_bundle.zip
+modules/benchmarks/benchmark_results/checkpoint/
+modules/benchmarks/benchmark_results/benchmark_text_results.csv

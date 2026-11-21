@@ -19,7 +19,7 @@ formulation.
   — the full workflow: load and preprocess DICES-350/990, keep the four
   SCD dimensions plus `Q3_bias_overall`, validate/EDA the annotation-level
   data, compute nDFU per item, then run the configuration selected on the synthetic
-  benchmark (see [`../benchmarks/README.md`](../benchmarks/README.md)) once per PEG
+  benchmark (see [`../modules/benchmarks/README.md`](../modules/benchmarks/README.md)) once per PEG
   formulation (`max`, `weighted`, `min`, `mean`, `harmonic`), **everything else fixed**,
   through `PEGComparison`. It then:
   - compares the formulations overall: retention, leaves, depth (also by depth,
@@ -47,7 +47,7 @@ formulation.
 
 [`dices_polarized_trees_results/README.md`](dices_polarized_trees_results/README.md) lists which cell of the notebook writes which file.
 The synthetic counterpart of these tables and figures (the same analysis on the unseen synthetic corpus) is in
-`../benchmarks/benchmark_results/peg_comparison/`.
+`../modules/benchmarks/benchmark_results/peg_comparison/`.
 
 > **Note.** The notebook needs `polartox >= 0.8.1` (`pip install -e .` from the repository root). A file in
 > `dices_polarized_trees_results/` that is not listed in its README is a leftover of an earlier version of the notebook
@@ -55,8 +55,7 @@ The synthetic counterpart of these tables and figures (the same analysis on the 
 
 ## Why this notebook exists
 
-The rest of the repository (`data_gen/`, `tree_module/`, `polarized_trees/`,
-`benchmarks/`) validates and tunes Polarized Trees on synthetic data with
+The rest of the repository (`modules/`) validates and tunes Polarized Trees on synthetic data with
 known ground truth. This notebook is the real-data counterpart: it takes
 the configuration selected on synthetic corpora and applies it, unmodified,
 to actual annotated conversations — showing what the method actually
@@ -68,6 +67,6 @@ the F, C and P tables on DICES-350 and DICES-990.
 ## Method documentation
 
 For what F/C/P and the diagnostics actually mean, and how the method
-works, see [`../polarized_trees/README.md`](../polarized_trees/README.md).
+works, see [`../modules/polarized_trees/README.md`](../modules/polarized_trees/README.md).
 For the single-tree API used to build and inspect any one item's tree
-directly, see [`../tree_module/README.md`](../tree_module/README.md).
+directly, see [`../modules/tree_module/README.md`](../modules/tree_module/README.md).

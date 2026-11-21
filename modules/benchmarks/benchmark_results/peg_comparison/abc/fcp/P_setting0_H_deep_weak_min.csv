@@ -1,0 +1,303 @@
+subgroup,n_s,mean_peg,mean_true_alpha
+"(('education', 'high'), ('orientation', 'heterosexual'), ('politics', 'right'))",3,0.7164930218442626,0.39538471975582024
+"(('education', 'medium'), ('gender', 'non-binary'), ('orientation', 'lgbtq+'))",1,0.6840720501922687,0.30676055369120786
+"(('age', '>50'),)",1,0.6374092009685229,0.5095197387235457
+"(('education', 'low'), ('gender', 'non-binary'), ('orientation', 'lgbtq+'))",3,0.5933324494781624,0.43865336713855535
+"(('gender', 'male'),)",3,0.5906927613248377,0.4863658616128767
+"(('age', '25-50'), ('gender', 'male'), ('orientation', 'heterosexual'))",1,0.5868751017749553,0.46635018344350837
+"(('orientation', 'heterosexual'),)",3,0.5577471502003423,0.4724501762954077
+"(('education', 'low'), ('gender', 'female'), ('orientation', 'heterosexual'))",3,0.5560503756632122,0.42667445238386786
+"(('education', 'high'), ('orientation', 'heterosexual'), ('politics', 'center'))",3,0.5533875908638702,0.3801823019334922
+"(('age', '<25'), ('gender', 'female'), ('politics', 'right'))",3,0.5302201028945215,0.288001490766526
+"(('orientation', 'lgbtq+'),)",3,0.528849147127204,0.45635393780588523
+"(('education', 'high'), ('orientation', 'heterosexual'), ('politics', 'left'))",4,0.5111240908827742,0.39651981114539003
+"(('age', '25-50'), ('gender', 'male'), ('politics', 'left'))",2,0.5062192518332869,0.3062493547027576
+"(('education', 'low'), ('orientation', 'lgbtq+'), ('politics', 'left'))",4,0.5037110693736462,0.3484660898114855
+"(('age', '>50'), ('education', 'medium'), ('gender', 'female'))",6,0.5033234804356254,0.352186913571558
+"(('age', '<25'), ('gender', 'female'), ('politics', 'center'))",5,0.49655318492527795,0.3022697683435357
+"(('politics', 'left'),)",3,0.4940035210712841,0.5578798434430082
+"(('age', '>50'), ('education', 'low'), ('gender', 'female'))",6,0.49067934644252514,0.3801833045222516
+"(('education', 'low'), ('orientation', 'heterosexual'), ('politics', 'right'))",6,0.4811883300357647,0.39859741133299487
+"(('age', '25-50'), ('education', 'high'), ('gender', 'male'))",2,0.4805329498534714,0.3892319916215028
+"(('age', '25-50'), ('education', 'medium'), ('politics', 'right'))",4,0.48045141501672345,0.39489690891735907
+"(('education', 'low'), ('gender', 'non-binary'), ('orientation', 'heterosexual'))",3,0.4795020653007828,0.44607494975724293
+"(('education', 'medium'), ('orientation', 'lgbtq+'), ('politics', 'center'))",6,0.4708370996373672,0.3934813793654546
+"(('education', 'medium'), ('orientation', 'lgbtq+'), ('politics', 'left'))",5,0.4678536080627553,0.4502842328203848
+"(('age', '25-50'), ('gender', 'male'), ('orientation', 'lgbtq+'))",6,0.4662955286284373,0.36258424604917844
+"(('education', 'low'), ('gender', 'female'), ('politics', 'left'))",5,0.4645680183913766,0.2850814020462088
+"(('age', '25-50'), ('education', 'high'), ('politics', 'right'))",5,0.46422553286680374,0.39489690891735907
+"(('age', '>50'), ('education', 'high'), ('gender', 'female'))",8,0.4636835063162723,0.352186913571558
+"(('age', '>50'), ('orientation', 'heterosexual'), ('politics', 'left'))",7,0.459406138852095,0.3655825247956011
+"(('age', '<25'), ('gender', 'female'), ('politics', 'left'))",5,0.4589612257627936,0.32367854685200037
+"(('education', 'high'), ('orientation', 'lgbtq+'), ('politics', 'left'))",5,0.4574684239034207,0.3978150897727146
+"(('education', 'medium'), ('gender', 'male'), ('orientation', 'lgbtq+'))",3,0.44837960535346894,0.4201916176907202
+"(('gender', 'female'),)",3,0.44827778448821715,0.43451037243729734
+"(('education', 'low'), ('gender', 'female'), ('orientation', 'lgbtq+'))",7,0.44384658417972733,0.35967370101400004
+"(('education', 'low'), ('gender', 'female'), ('politics', 'center'))",3,0.44369575254796284,0.2853935582217768
+"(('age', '25-50'), ('gender', 'female'), ('orientation', 'lgbtq+'))",3,0.44041579707251904,0.3016719701524949
+"(('age', '25-50'), ('orientation', 'heterosexual'), ('politics', 'right'))",5,0.44034426284721045,0.30837782051379703
+"(('age', '>50'), ('orientation', 'lgbtq+'), ('politics', 'left'))",5,0.4386672055753255,0.4018576809466165
+"(('age', '>50'), ('gender', 'female'), ('orientation', 'lgbtq+'))",3,0.43522669628634797,0.45236050148096657
+"(('education', 'medium'), ('orientation', 'heterosexual'), ('politics', 'center'))",3,0.43290107432225583,0.3921412558707719
+"(('age', '>50'), ('orientation', 'heterosexual'), ('politics', 'right'))",7,0.432751373669904,0.3254294504281692
+"(('age', '<25'), ('gender', 'male'), ('orientation', 'heterosexual'))",4,0.4313758910566231,0.35750903565663233
+"(('education', 'low'), ('orientation', 'heterosexual'), ('politics', 'left'))",6,0.4313266450909687,0.3862633755692974
+"(('age', '>50'), ('education', 'high'), ('orientation', 'lgbtq+'))",3,0.43078527436354425,0.32693370691565665
+"(('age', '>50'), ('education', 'low'), ('gender', 'non-binary'))",3,0.43032035549196296,0.4255190961948837
+"(('age', '<25'), ('gender', 'female'), ('orientation', 'lgbtq+'))",3,0.42963631455291834,0.45236050148096657
+"(('education', 'low'), ('gender', 'male'), ('politics', 'left'))",6,0.4281898304123209,0.2899081719895803
+"(('education', 'medium'), ('orientation', 'heterosexual'), ('politics', 'right'))",6,0.4274606526751308,0.30739145210216917
+"(('age', '>50'), ('orientation', 'lgbtq+'), ('politics', 'center'))",5,0.42739712259437174,0.3418702339688157
+"(('education', 'high'), ('orientation', 'lgbtq+'), ('politics', 'center'))",6,0.4251503142244008,0.35528334595388605
+"(('age', '>50'), ('education', 'medium'), ('gender', 'non-binary'))",4,0.423887727209237,0.3544143837359524
+"(('education', 'low'), ('orientation', 'lgbtq+'), ('politics', 'center'))",8,0.4236620409623415,0.3755716678122473
+"(('education', 'high'), ('gender', 'male'), ('politics', 'left'))",5,0.42269696739802853,0.27974301527167345
+"(('education', 'low'), ('orientation', 'lgbtq+'))",2,0.42206419533986717,0.4522234972462176
+"(('age', '25-50'), ('education', 'medium'), ('gender', 'non-binary'))",5,0.42062473149129953,0.3823253913356581
+"(('education', 'high'), ('gender', 'female'), ('politics', 'left'))",6,0.4199643098386539,0.2701773347842936
+"(('education', 'high'), ('gender', 'non-binary'))",2,0.4195781700921965,0.4434325279905856
+"(('age', '>50'), ('orientation', 'lgbtq+'), ('politics', 'right'))",5,0.4192999019158078,0.27496670657314987
+"(('age', '<25'), ('gender', 'female'), ('orientation', 'heterosexual'))",5,0.4172391259363758,0.3809256558565227
+"(('age', '<25'), ('gender', 'non-binary'), ('politics', 'center'))",4,0.41720323829010886,0.31919110349336
+"(('education', 'low'), ('gender', 'male'), ('politics', 'center'))",3,0.41628305275536887,0.3047796819450997
+"(('age', '25-50'), ('education', 'high'), ('gender', 'non-binary'))",7,0.41517647099118743,0.386445881969235
+"(('education', 'low'), ('orientation', 'heterosexual'), ('politics', 'center'))",8,0.41431482049764645,0.4235086576021067
+"(('education', 'high'), ('gender', 'non-binary'), ('politics', 'right'))",6,0.41304087476406864,0.2482456809473728
+"(('age', '>50'), ('education', 'low'), ('orientation', 'heterosexual'))",3,0.4127371925756325,0.3508674481638514
+"(('age', '25-50'), ('politics', 'left'))",5,0.41155194708616427,0.3680031702031497
+"(('education', 'high'), ('gender', 'male'), ('orientation', 'lgbtq+'))",4,0.409373966672379,0.3823812630242161
+"(('education', 'medium'), ('gender', 'non-binary'), ('orientation', 'heterosexual'))",4,0.4079816386037111,0.3387062364507339
+"(('politics', 'right'),)",3,0.40743682683531474,0.48305708649530216
+"(('age', '25-50'), ('education', 'medium'), ('gender', 'male'))",4,0.4072443263879729,0.3937972759155161
+"(('age', '<25'), ('education', 'high'), ('orientation', 'lgbtq+'))",4,0.40692253560871583,0.3394425896321266
+"(('age', '<25'), ('gender', 'male'), ('orientation', 'lgbtq+'))",6,0.4067034842117239,0.39385637933705697
+"(('education', 'high'), ('gender', 'male'), ('politics', 'center'))",4,0.40653830976415317,0.3334435404791951
+"(('age', '25-50'), ('orientation', 'lgbtq+'), ('politics', 'right'))",6,0.40587527768680576,0.26961629866410003
+"(('age', '<25'), ('gender', 'non-binary'), ('politics', 'left'))",3,0.4042179745438461,0.3583748445422817
+"(('education', 'low'), ('gender', 'female'), ('politics', 'right'))",3,0.4040150909245935,0.3099129248797909
+"(('age', '25-50'), ('education', 'high'), ('gender', 'female'))",6,0.4037986559836146,0.39211960795687034
+"(('age', '25-50'), ('orientation', 'lgbtq+'), ('politics', 'center'))",6,0.40216660920507663,0.3231391205806327
+"(('education', 'high'), ('gender', 'male'), ('politics', 'right'))",6,0.40122661183791997,0.2541358475129153
+"(('age', '>50'), ('education', 'high'), ('politics', 'center'))",4,0.4004912627634197,0.43958168572699596
+"(('education', 'low'), ('gender', 'male'), ('politics', 'right'))",6,0.395362176411012,0.2803501502668291
+"(('education', 'medium'), ('gender', 'male'), ('politics', 'center'))",5,0.3952536108163261,0.3171950398314092
+"(('education', 'high'), ('gender', 'female'), ('politics', 'center'))",6,0.39349854183220295,0.29322707986732294
+"(('politics', 'center'),)",4,0.38920191337703725,0.5186852634179051
+"(('gender', 'non-binary'),)",1,0.38864368782401576,0.5809462717204193
+"(('age', '>50'), ('education', 'high'), ('politics', 'left'))",4,0.3878746185227702,0.353094193873541
+"(('education', 'high'), ('gender', 'female'), ('orientation', 'heterosexual'))",7,0.3878064734331222,0.3666745376164659
+"(('age', '>50'), ('education', 'high'), ('orientation', 'heterosexual'))",5,0.38750068183089936,0.34382768585984164
+"(('education', 'high'),)",4,0.3869866949428018,0.4258968317802395
+"(('gender', 'female'), ('politics', 'right'))",1,0.3862891269393807,0.49362486601180644
+"(('age', '25-50'), ('education', 'high'), ('orientation', 'heterosexual'))",5,0.3861467247570163,0.32900296554968816
+"(('education', 'medium'),)",7,0.3848183042356697,0.42452992401789214
+"(('age', '25-50'), ('gender', 'female'), ('politics', 'center'))",3,0.38481109440812516,0.2797112309579451
+"(('age', '>50'), ('orientation', 'heterosexual'), ('politics', 'center'))",7,0.3839441404892633,0.31685943888254364
+"(('education', 'high'), ('orientation', 'lgbtq+'), ('politics', 'right'))",4,0.3829292690313058,0.33466289727990245
+"(('age', '>50'), ('education', 'medium'), ('gender', 'male'))",6,0.38023656784923004,0.353012785179267
+"(('education', 'high'), ('gender', 'female'), ('politics', 'right'))",5,0.3799663595788102,0.2527855091453224
+"(('age', '25-50'), ('gender', 'female'), ('politics', 'left'))",3,0.3792833027483995,0.28275258400956144
+"(('education', 'medium'), ('gender', 'male'), ('politics', 'right'))",5,0.3754139656939338,0.2527880784374645
+"(('age', '<25'), ('education', 'high'), ('orientation', 'heterosexual'))",3,0.3735005807126286,0.40251839844047105
+"(('age', '>50'), ('education', 'high'), ('gender', 'non-binary'))",9,0.3726639190822223,0.36654274892785
+"(('education', 'medium'), ('gender', 'male'), ('orientation', 'heterosexual'))",4,0.3725245782230643,0.4400712496743668
+"(('gender', 'female'), ('orientation', 'lgbtq+'), ('politics', 'right'))",2,0.37234240316220996,0.2681838406228674
+"(('age', '25-50'), ('education', 'high'), ('orientation', 'lgbtq+'))",2,0.3717818064324574,0.23846852570824822
+"(('education', 'low'), ('gender', 'non-binary'), ('politics', 'right'))",7,0.37104882883153856,0.27680938881460704
+"(('age', '<25'), ('orientation', 'heterosexual'), ('politics', 'left'))",8,0.37078259719384665,0.3155679831181226
+"(('age', '25-50'), ('education', 'medium'), ('gender', 'female'))",7,0.3697967844866429,0.39211960795687034
+"(('education', 'medium'), ('orientation', 'lgbtq+'), ('politics', 'right'))",7,0.3689403126779803,0.3137943381700945
+"(('education', 'low'), ('gender', 'male'), ('orientation', 'lgbtq+'))",7,0.36729993429693136,0.3784848658102529
+"(('age', '<25'), ('orientation', 'lgbtq+'), ('politics', 'center'))",6,0.3668964699385118,0.35292835944021805
+"(('education', 'medium'), ('orientation', 'heterosexual'), ('politics', 'left'))",4,0.3652105055562821,0.41377840529058474
+"(('age', '>50'), ('education', 'medium'), ('orientation', 'heterosexual'))",4,0.3638455826016172,0.33862957149356776
+"(('education', 'low'), ('orientation', 'lgbtq+'), ('politics', 'right'))",4,0.36335166044244754,0.3043424498495657
+"(('education', 'high'), ('gender', 'non-binary'), ('orientation', 'lgbtq+'))",3,0.36067642461024807,0.37122553289412247
+"(('age', '>50'), ('education', 'medium'), ('politics', 'left'))",5,0.36028463445765535,0.353094193873541
+"(('age', '25-50'), ('education', 'high'), ('politics', 'left'))",4,0.3596802141791453,0.3505687463757285
+"(('age', '25-50'), ('orientation', 'heterosexual'), ('politics', 'center'))",5,0.35946651353767445,0.29637980434992117
+"(('gender', 'non-binary'), ('politics', 'left'))",3,0.35887434398263646,0.37468922428898893
+"(('education', 'high'), ('gender', 'female'), ('orientation', 'lgbtq+'))",7,0.3578784813183808,0.33077605776638597
+"(('education', 'high'), ('gender', 'male'), ('orientation', 'heterosexual'))",6,0.3568967689730493,0.43087050743478345
+"(('age', '<25'), ('orientation', 'lgbtq+'), ('politics', 'left'))",7,0.35641663288548014,0.3123722412912662
+"(('age', '<25'), ('education', 'high'), ('politics', 'left'))",5,0.355866095776921,0.43958168572699596
+"(('age', '25-50'), ('education', 'low'), ('politics', 'right'))",7,0.35478544744450474,0.37471247012012604
+"(('age', '25-50'), ('gender', 'female'), ('politics', 'right'))",5,0.3546379603980529,0.28272403265323237
+"(('age', '>50'), ('gender', 'female'), ('orientation', 'heterosexual'))",4,0.35290056491808497,0.43281711858540833
+"(('age', '>50'), ('education', 'high'), ('gender', 'male'))",7,0.3526886749530958,0.3405340203481981
+"(('age', '>50'), ('gender', 'male'), ('orientation', 'lgbtq+'))",5,0.3506481177647512,0.39385637933705697
+"(('education', 'medium'), ('gender', 'non-binary'), ('politics', 'right'))",5,0.34866449495177754,0.32925920549135085
+"(('education', 'medium'), ('gender', 'male'), ('politics', 'left'))",6,0.34742346883633674,0.26088459299650374
+"(('age', '<25'), ('education', 'medium'), ('gender', 'male'))",3,0.3473509242867466,0.46360933836906704
+"(('age', '25-50'), ('education', 'medium'), ('politics', 'left'))",6,0.3445496515716468,0.3505687463757285
+"(('education', 'high'), ('gender', 'non-binary'), ('orientation', 'heterosexual'))",7,0.34125843262432126,0.37637478630315346
+"(('gender', 'non-binary'), ('orientation', 'lgbtq+'))",4,0.34103282539447927,0.51973881961037
+"(('age', '<25'), ('gender', 'non-binary'), ('orientation', 'heterosexual'))",7,0.3402499280558704,0.3417342027663959
+"(('education', 'high'), ('gender', 'non-binary'), ('politics', 'left'))",6,0.338972625573817,0.2738528487061309
+"(('age', '25-50'), ('education', 'low'), ('orientation', 'heterosexual'))",5,0.33859804469852317,0.3200986711058759
+"(('education', 'medium'), ('gender', 'female'), ('politics', 'center'))",7,0.337878997117088,0.29602415645412444
+"(('age', '25-50'), ('orientation', 'heterosexual'), ('politics', 'left'))",5,0.3346657146039513,0.35529769305517844
+"(('age', '25-50'), ('gender', 'non-binary'), ('orientation', 'lgbtq+'))",4,0.33459698347242217,0.3239960796326639
+"(('age', '<25'), ('education', 'low'), ('orientation', 'heterosexual'))",3,0.3313431264708315,0.39031688230674955
+"(('education', 'low'), ('gender', 'non-binary'), ('politics', 'left'))",8,0.33047163309056127,0.2887569159680461
+"(('age', '25-50'), ('education', 'low'))",3,0.33000302521392505,0.46032221355201974
+"(('age', '25-50'), ('gender', 'male'), ('politics', 'right'))",5,0.3288207888226629,0.2983790293299201
+"(('age', '<25'), ('education', 'medium'), ('politics', 'left'))",7,0.3280570069290324,0.43958168572699596
+"(('age', '25-50'), ('politics', 'center'))",5,0.3262720652664609,0.4337508262912735
+"(('age', '25-50'), ('education', 'medium'), ('orientation', 'heterosexual'))",5,0.3252647113651899,0.3200986711058759
+"(('gender', 'female'), ('orientation', 'lgbtq+'))",2,0.3245275197120349,0.5667484564021104
+"(('age', '>50'), ('education', 'medium'), ('politics', 'center'))",6,0.32340946826128053,0.43958168572699596
+"(('age', '25-50'), ('education', 'low'), ('gender', 'non-binary'))",6,0.32194773314233865,0.36060785525542727
+"(('age', '25-50'), ('gender', 'male'), ('politics', 'center'))",3,0.3173702170078982,0.30168732512533303
+"(('gender', 'female'), ('orientation', 'lgbtq+'), ('politics', 'left'))",5,0.315754567454131,0.30268683618039005
+"(('age', '<25'), ('orientation', 'heterosexual'), ('politics', 'center'))",7,0.31440565619263294,0.33054862870261076
+"(('gender', 'male'), ('orientation', 'heterosexual'))",6,0.3126647138353415,0.4926390939226711
+"(('education', 'high'), ('gender', 'male'))",5,0.312556034485692,0.3704859534274496
+"(('age', '<25'), ('education', 'medium'), ('gender', 'non-binary'))",5,0.31213683265760783,0.31601016695652384
+"(('education', 'low'),)",2,0.31169699333125556,0.4317064773200536
+"(('age', '<25'), ('gender', 'male'), ('politics', 'left'))",5,0.31165220777461056,0.34565842290920823
+"(('age', '25-50'), ('gender', 'female'), ('orientation', 'heterosexual'))",2,0.3111766741444322,0.3954253567447479
+"(('age', '<25'), ('education', 'low'), ('gender', 'non-binary'))",6,0.3095451491354249,0.300188638201177
+"(('age', '>50'), ('education', 'high'), ('politics', 'right'))",4,0.30932560921532665,
+"(('education', 'high'), ('gender', 'non-binary'), ('politics', 'center'))",5,0.3091834996073116,0.31256005579134966
+"(('age', '>50'), ('education', 'low'), ('orientation', 'lgbtq+'))",4,0.3087167657794498,0.36197943971239305
+"(('age', '>50'), ('education', 'low'), ('politics', 'center'))",6,0.3077921618470209,0.43958168572699596
+"(('orientation', 'lgbtq+'), ('politics', 'left'))",3,0.3067542628280203,0.49070795506834775
+"(('education', 'medium'), ('gender', 'female'), ('politics', 'left'))",7,0.3064126784087403,0.25974041944888093
+"(('age', '<25'), ('education', 'low'), ('orientation', 'lgbtq+'))",7,0.3061458358806054,0.3565388575486684
+"(('age', '25-50'), ('education', 'low'), ('gender', 'female'))",9,0.3050961412451658,0.3747455790926857
+"(('age', '>50'), ('education', 'medium'), ('orientation', 'lgbtq+'))",4,0.30481833678837217,0.3689842461212196
+"(('age', '<25'), ('education', 'low'), ('gender', 'female'))",4,0.30427779052067483,0.3928602688959232
+"(('age', '<25'), ('education', 'medium'))",3,0.3030103841633176,0.41750083136366634
+"(('age', '25-50'), ('orientation', 'lgbtq+'), ('politics', 'left'))",6,0.30285201448779847,0.36183464658985
+"(('age', '>50'), ('education', 'low'), ('gender', 'male'))",6,0.30277958672072774,0.3882147417695613
+"(('age', '25-50'), ('gender', 'non-binary'), ('orientation', 'heterosexual'))",5,0.2993470041082026,0.3674980301018636
+"(('gender', 'female'), ('orientation', 'lgbtq+'), ('politics', 'center'))",5,0.2988763897637311,0.31616184354623783
+"(('education', 'medium'), ('gender', 'female'), ('orientation', 'heterosexual'))",3,0.2960090669899626,0.41792730257914806
+"(('age', '<25'), ('education', 'medium'), ('gender', 'female'))",2,0.29589969607786565,0.5329964858567096
+"(('age', '<25'), ('education', 'high'), ('gender', 'non-binary'))",9,0.29283561244788847,0.3439861580872187
+"(('age', '>50'), ('gender', 'male'), ('politics', 'right'))",4,0.290799340339532,0.2700532863155028
+"(('education', 'high'), ('politics', 'center'))",6,0.29070963774402964,0.4333199020695637
+"(('age', '>50'), ('gender', 'non-binary'))",3,0.28966756831680807,0.4711856171146329
+"(('age', '<25'), ('education', 'low'), ('politics', 'left'))",8,0.28799217934441546,0.3695949717077296
+"(('age', '<25'), ('education', 'medium'), ('orientation', 'lgbtq+'))",4,0.287277850664732,0.40251839844047105
+"(('education', 'low'), ('gender', 'male'), ('orientation', 'heterosexual'))",5,0.285342676031131,0.44881839947908647
+"(('age', '25-50'), ('gender', 'non-binary'), ('politics', 'center'))",1,0.28478260869565214,0.2826383785842452
+"(('age', '>50'), ('education', 'low'), ('politics', 'left'))",6,0.28348986907018375,0.353094193873541
+"(('gender', 'non-binary'), ('orientation', 'heterosexual'), ('politics', 'center'))",4,0.2833883468067466,0.2796191379249471
+"(('education', 'medium'), ('gender', 'non-binary'), ('politics', 'center'))",6,0.2818998969656503,0.35850945863302486
+"(('age', '>50'), ('gender', 'non-binary'), ('orientation', 'heterosexual'))",6,0.28173083019687745,0.3674980301018636
+"(('education', 'medium'), ('politics', 'left'))",3,0.27943905866801094,0.4443834641266771
+"(('age', '<25'), ('gender', 'male'), ('politics', 'center'))",6,0.2782182678439031,0.3244400102503245
+"(('age', '<25'), ('education', 'high'), ('politics', 'right'))",5,0.2754077295999737,0.43958168572699596
+"(('age', '>50'), ('gender', 'male'), ('politics', 'left'))",3,0.2746058588352996,0.2700532863155028
+"(('age', '25-50'), ('education', 'low'), ('politics', 'left'))",8,0.271994641496254,0.3505687463757285
+"(('gender', 'female'), ('orientation', 'heterosexual'), ('politics', 'center'))",3,0.27173180217738313,0.3124089301890345
+"(('age', '<25'), ('orientation', 'heterosexual'), ('politics', 'right'))",4,0.2713508300222807,0.3465326350643794
+"(('age', '>50'), ('gender', 'non-binary'), ('politics', 'center'))",3,0.2710857198559058,0.2885359150391619
+"(('age', '25-50'), ('orientation', 'heterosexual'))",4,0.2667485362917526,0.4131682638445878
+"(('education', 'low'), ('gender', 'non-binary'), ('politics', 'center'))",5,0.26457931660877143,0.3047265341458035
+"(('education', 'high'), ('politics', 'right'))",5,0.26433583224595025,0.37058684993419444
+"(('gender', 'female'), ('orientation', 'heterosexual'), ('politics', 'right'))",4,0.2617119925585073,0.3899313656999963
+"(('age', '>50'), ('gender', 'male'))",3,0.2611414819770133,0.4929454628075649
+"(('education', 'medium'), ('gender', 'female'), ('orientation', 'lgbtq+'))",4,0.25936412662090674,0.366418703357044
+"(('gender', 'female'), ('orientation', 'heterosexual'), ('politics', 'left'))",2,0.2575977032660747,0.38146296641155075
+"(('education', 'medium'), ('gender', 'non-binary'), ('politics', 'left'))",7,0.25717982831472946,0.3373557200503901
+"(('gender', 'male'), ('orientation', 'heterosexual'), ('politics', 'right'))",3,0.25707559453035345,0.306219659192607
+"(('education', 'medium'), ('gender', 'female'), ('politics', 'right'))",4,0.2558972172843953,0.2709812421534544
+"(('age', '<25'), ('education', 'low'), ('gender', 'male'))",5,0.2556974919949591,0.3933142428910903
+"(('age', '<25'), ('orientation', 'heterosexual'))",3,0.25251093887690845,0.25936767910040753
+"(('age', '<25'), ('politics', 'left'))",3,0.24971271911026094,0.4406110879911787
+"(('age', '25-50'), ('gender', 'female'))",2,0.24907084968681747,0.38466168145073026
+"(('gender', 'non-binary'), ('orientation', 'heterosexual'), ('politics', 'right'))",4,0.247956712751286,0.3313007615989216
+"(('education', 'medium'), ('gender', 'male'))",2,0.24787582236761269,0.419250057217802
+"(('gender', 'non-binary'), ('orientation', 'heterosexual'), ('politics', 'left'))",3,0.24663152234118124,0.26869013168416145
+"(('education', 'high'), ('orientation', 'heterosexual'))",4,0.24499755960006886,0.4491099406274789
+"(('gender', 'non-binary'), ('politics', 'center'))",3,0.24386247176515552,0.34519527915973997
+"(('age', '<25'), ('gender', 'non-binary'), ('politics', 'right'))",4,0.2435955217244716,0.3062493547027576
+"(('age', '<25'), ('gender', 'non-binary'), ('orientation', 'lgbtq+'))",3,0.24240722692931718,0.36325357964029
+"(('age', '>50'), ('gender', 'non-binary'), ('orientation', 'lgbtq+'))",3,0.24240722692931718,0.36325357964029
+"(('age', '<25'), ('education', 'high'), ('politics', 'center'))",4,0.24240683972495236,0.3876708001724596
+"(('age', '>50'), ('gender', 'female'), ('politics', 'right'))",3,0.24226138324975532,0.2700532863155028
+"(('gender', 'male'), ('orientation', 'heterosexual'), ('politics', 'left'))",1,0.2395742198891805,0.21403955339677225
+"(('education', 'low'), ('orientation', 'heterosexual'))",5,0.2390374761127702,0.4235703360917876
+"(('gender', 'male'), ('politics', 'center'))",2,0.23901681803833041,0.3835500171743834
+"(('education', 'high'), ('orientation', 'lgbtq+'))",5,0.23850375369981883,0.4269703324322373
+"(('age', '>50'), ('gender', 'male'), ('politics', 'center'))",3,0.23482946648332792,0.2724357367255324
+"(('age', '<25'), ('orientation', 'lgbtq+'), ('politics', 'right'))",3,0.23460193690481934,0.2546638730691451
+"(('education', 'low'), ('gender', 'non-binary'))",4,0.23406752312316853,0.465398868863386
+"(('age', '25-50'), ('education', 'low'), ('gender', 'male'))",6,0.23289800042324524,0.364840561141875
+"(('age', '<25'), ('education', 'medium'), ('orientation', 'heterosexual'))",1,0.2328843995510662,0.4404166535560049
+"(('orientation', 'lgbtq+'), ('politics', 'right'))",8,0.23278359351380457,0.40277336731874114
+"(('age', '>50'), ('gender', 'non-binary'), ('politics', 'right'))",6,0.23273401613873437,0.28272403265323237
+"(('age', '<25'), ('education', 'high'), ('gender', 'female'))",3,0.23257951530402066,0.4509844654598445
+"(('age', '25-50'), ('gender', 'male'))",5,0.23210506891454732,0.4378952288355561
+"(('gender', 'male'), ('orientation', 'heterosexual'), ('politics', 'center'))",3,0.23056703748769367,0.22869722368164525
+"(('age', '>50'), ('education', 'medium'), ('politics', 'right'))",2,0.22966403903903906,
+"(('age', '25-50'), ('education', 'low'), ('orientation', 'lgbtq+'))",5,0.22952465680544307,0.32276083279058715
+"(('age', '<25'), ('politics', 'right'))",8,0.22884627240030775,0.37728889289769085
+"(('gender', 'non-binary'), ('orientation', 'lgbtq+'), ('politics', 'center'))",7,0.22853504285861614,0.27520972419949885
+"(('gender', 'non-binary'), ('orientation', 'lgbtq+'), ('politics', 'left'))",7,0.22721105260840996,0.2622780976875006
+"(('age', '<25'), ('education', 'low'), ('politics', 'center'))",7,0.22708307063842184,0.3481584860466439
+"(('gender', 'male'), ('orientation', 'lgbtq+'), ('politics', 'left'))",5,0.22578071664212995,0.282943527709779
+"(('age', '<25'), ('education', 'medium'), ('politics', 'center'))",7,0.2250375698336057,0.3876708001724596
+"(('age', '<25'), ('gender', 'female'))",5,0.22214325897979678,0.4602929961533408
+"(('age', '<25'), ('education', 'low'), ('politics', 'right'))",6,0.22112996606577506,0.35573601721290393
+"(('age', '25-50'), ('gender', 'non-binary'), ('politics', 'right'))",5,0.22024277542836343,0.2872004081616697
+"(('age', '<25'), ('education', 'high'))",2,0.22008802367794478,0.38266305531408445
+"(('age', '<25'), ('education', 'medium'), ('politics', 'right'))",4,0.21655204015951657,0.43958168572699596
+"(('age', '<25'), ('education', 'high'), ('gender', 'male'))",3,0.21528869209214477,0.4466316386487854
+"(('age', '<25'), ('gender', 'male'), ('politics', 'right'))",4,0.21261019136108106,0.31412271483820436
+"(('age', '25-50'), ('education', 'medium'), ('politics', 'center'))",5,0.21257860442789359,0.39673273663199393
+"(('age', '25-50'), ('education', 'medium'), ('orientation', 'lgbtq+'))",4,0.21204803717916676,0.3646201433249372
+"(('education', 'medium'), ('gender', 'female'))",4,0.20681347391986318,0.4191962437617457
+"(('age', '25-50'), ('gender', 'non-binary'))",4,0.20437007616635294,0.437531425372791
+"(('age', '>50'), ('education', 'low'), ('politics', 'right'))",4,0.2029693424288479,0.31415915372842684
+"(('gender', 'non-binary'), ('orientation', 'heterosexual'))",1,0.20103921675873765,0.46635018344350837
+"(('gender', 'male'), ('orientation', 'lgbtq+'), ('politics', 'center'))",6,0.1994399312220918,0.2898374322520898
+"(('age', '25-50'), ('education', 'low'), ('politics', 'center'))",6,0.19638872734353927,0.39673273663199393
+"(('age', '>50'), ('gender', 'non-binary'), ('politics', 'left'))",3,0.19582529176170027,0.2797112309579451
+"(('education', 'medium'), ('orientation', 'heterosexual'))",6,0.19493681329321544,0.4645894024339081
+"(('education', 'medium'), ('politics', 'center'))",3,0.191599416877509,0.28865886716167377
+"(('age', '<25'), ('politics', 'center'))",3,0.19080968305105547,0.3513147233900147
+"(('age', '25-50'), ('politics', 'right'))",1,0.19018033574849125,0.22585307717107553
+"(('age', '25-50'), ('education', 'high'))",6,0.19013985858850943,0.3470517053569282
+"(('age', '>50'), ('education', 'low'))",7,0.18653478742497395,0.3074765543052303
+"(('gender', 'male'), ('orientation', 'lgbtq+'))",1,0.18393558632602458,0.5706795614370497
+"(('gender', 'male'), ('politics', 'left'))",3,0.18129074291978112,0.3580411867403363
+"(('age', '<25'), ('orientation', 'lgbtq+'))",1,0.1805304400241109,0.5396274856644683
+"(('gender', 'female'), ('orientation', 'heterosexual'))",4,0.1784107257514856,0.37376939061414083
+"(('education', 'medium'), ('orientation', 'lgbtq+'))",4,0.17503300810034972,0.3247166321353278
+"(('age', '>50'), ('gender', 'male'), ('orientation', 'heterosexual'))",2,0.17357936628503823,0.46635018344350837
+"(('age', '25-50'), ('orientation', 'lgbtq+'))",1,0.17334840863941842,0.4404166535560049
+"(('age', '25-50'), ('education', 'high'), ('politics', 'center'))",2,0.17287445455467984,0.39673273663199393
+"(('orientation', 'heterosexual'), ('politics', 'center'))",2,0.17170367862481042,0.45585797251469107
+"(('age', '>50'), ('gender', 'female'), ('politics', 'center'))",2,0.17065598108242652,0.2724357367255324
+"(('age', '25-50'), ('education', 'medium'))",3,0.17059510428599092,0.3493015407818381
+"(('age', '>50'), ('politics', 'left'))",5,0.1705210157771436,0.3819494284668289
+"(('education', 'medium'), ('gender', 'non-binary'))",4,0.16555721988774763,0.41640877478647925
+"(('education', 'medium'), ('politics', 'right'))",5,0.16400953160199325,0.3883538900866536
+"(('age', '>50'), ('politics', 'right'))",4,0.1595004525238899,0.4710821634716904
+"(('gender', 'non-binary'), ('orientation', 'lgbtq+'), ('politics', 'right'))",3,0.1588896858641183,0.2295736824683389
+"(('age', '>50'), ('gender', 'female'))",3,0.1506226203295964,0.4520520550722234
+"(('age', '>50'), ('orientation', 'heterosexual'))",1,0.15044340772496112,0.39712036069520396
+"(('age', '>50'), ('orientation', 'lgbtq+'))",2,0.1502365881186159,0.3991802375006028
+"(('age', '>50'), ('education', 'high'))",1,0.14803312629399584,0.5242908322345914
+"(('gender', 'male'), ('orientation', 'lgbtq+'), ('politics', 'right'))",2,0.14740777613220726,0.22869722368164525
+"(('education', 'high'), ('gender', 'female'))",4,0.14737015509190748,0.30386065930634376
+"(('education', 'low'), ('politics', 'right'))",6,0.1445667498681873,0.34309367017561865
+"(('orientation', 'lgbtq+'), ('politics', 'center'))",2,0.14125912005611174,0.3783023744355908
+"(('age', '>50'), ('politics', 'center'))",4,0.13796357353064123,0.37134059695895805
+"(('education', 'high'), ('politics', 'left'))",5,0.13551996584790502,0.29723233935924637
+"(('orientation', 'heterosexual'), ('politics', 'right'))",2,0.13236942542154534,0.4310206098154752
+"(('gender', 'non-binary'), ('politics', 'right'))",1,0.1304800372844493,0.26848731596994846
+"(('age', '>50'), ('education', 'medium'))",3,0.1280068916060912,0.39291815330221896
+"(('age', '>50'), ('gender', 'female'), ('politics', 'left'))",3,0.1279099705329039,0.2700532863155028
+"(('education', 'low'), ('politics', 'left'))",4,0.1278231864399779,0.3242445792109153
+"(('age', '<25'), ('gender', 'male'))",3,0.1252486878471015,0.38204752298111044
+"(('education', 'low'), ('politics', 'center'))",4,0.1199779620152264,0.36050968498513797
+"(('education', 'low'), ('gender', 'female'))",5,0.11934622751732335,0.31686496205488324
+"(('age', '<25'), ('education', 'low'))",2,0.11802096696901387,0.22988727354433147
+"(('age', '<25'), ('gender', 'non-binary'))",2,0.11245947024405602,0.34308704343380325
+"(('orientation', 'heterosexual'), ('politics', 'left'))",2,0.0942095924707003,0.30049354461326183
+"(('gender', 'male'), ('politics', 'right'))",1,0.07048447204968943,0.2684858031304533

@@ -1,0 +1,19 @@
+# Environment for running the notebooks, the scripts and the tests.
+# The package's own dependencies (numpy, pandas, ndfu) are declared in pyproject.toml
+# and come with the editable install below; this file adds what only the notebooks,
+# scripts and tests need.
+#
+# From the repository root:
+#   python -m venv <somewhere outside OneDrive>\polartox-env
+#   <that folder>\Scripts\activate
+#   pip install -r requirements.txt
+
+-e .                # polartox itself, current source (the notebooks check for this)
+
+matplotlib          # notebooks: figures
+scikit-learn        # tests, and printed by benchmark_config.check_polartox()
+ipykernel           # run the notebooks in VS Code / Jupyter
+nbformat            # scripts/run_notebook.py
+nbclient            # scripts/run_notebook.py
+psutil              # scripts/runtime_benchmark.py
+pytest              # tests
