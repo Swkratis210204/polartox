@@ -820,13 +820,15 @@ class PEGComparison:
         table.insert(0, "texts", grouped.size())
         return _in_order(table, ["setting", "variant", "k_true"], setting=list(self.settings_), variant=self.variants)
 
-    def check_against_benchmark(self, table, rtol=1e-6):
+    def check_against_benchmark(self, table, rtol=1e-6, corpora=None):
         """Check that each setting taken from `table` (e.g. top_configs_, indexed as
         the settings were) reproduces, with its own `variant`, the numbers the
-        benchmark saved for it. Raises ValueError listing the differences; returns
-        the number of numbers compared."""
+        benchmark saved for it. The saved numbers are averages over the corpora the
+        benchmark ran on: pass their names as `corpora` when this comparison holds
+        more corpora than that (default: every corpus with ground truth). Raises
+        ValueError listing the differences; returns the number of numbers compared."""
         self._require_truth()
-        overview = self.overview(self.truth_corpora)
+        overview = self.overview(self.truth_corpora if corpora is None else corpora)
         compared, wrong = 0, []
         for setting in self.settings_:
             if setting not in table.index:
