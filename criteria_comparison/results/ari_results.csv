@@ -1,0 +1,1201 @@
+dataset,n_texts,measure,criterion_row,criterion_col,value
+synthetic,794,ARI,PEG harmonic,PEG harmonic,1.0
+synthetic,794,ARI,PEG harmonic,PEG weighted,0.8903027456709749
+synthetic,794,ARI,PEG harmonic,PEG max,0.7521975268803185
+synthetic,794,ARI,PEG harmonic,PEG min,0.8414752419066552
+synthetic,794,ARI,PEG harmonic,PEG mean,0.8938318880642504
+synthetic,794,ARI,PEG harmonic,Variance reduction,0.8924605424993083
+synthetic,794,ARI,PEG harmonic,JSD (= entropy gain),0.8871185901767327
+synthetic,794,ARI,PEG harmonic,Wasserstein,0.8825893719948726
+synthetic,794,ARI,PEG harmonic,Gain ratio (C4.5),0.8647536649156278
+synthetic,794,ARI,PEG harmonic,KL from node,0.8910021652500403
+synthetic,794,ARI,PEG weighted,PEG harmonic,0.8903027456709749
+synthetic,794,ARI,PEG weighted,PEG weighted,1.0
+synthetic,794,ARI,PEG weighted,PEG max,0.7276761375870737
+synthetic,794,ARI,PEG weighted,PEG min,0.8211409587326373
+synthetic,794,ARI,PEG weighted,PEG mean,0.8462716555728899
+synthetic,794,ARI,PEG weighted,Variance reduction,0.8876440847372451
+synthetic,794,ARI,PEG weighted,JSD (= entropy gain),0.8792358574255467
+synthetic,794,ARI,PEG weighted,Wasserstein,0.8758945136521205
+synthetic,794,ARI,PEG weighted,Gain ratio (C4.5),0.8660885998125566
+synthetic,794,ARI,PEG weighted,KL from node,0.8851858283101413
+synthetic,794,ARI,PEG max,PEG harmonic,0.7521975268803185
+synthetic,794,ARI,PEG max,PEG weighted,0.7276761375870737
+synthetic,794,ARI,PEG max,PEG max,1.0
+synthetic,794,ARI,PEG max,PEG min,0.7179945611953129
+synthetic,794,ARI,PEG max,PEG mean,0.8006404950910074
+synthetic,794,ARI,PEG max,Variance reduction,0.7511609588736662
+synthetic,794,ARI,PEG max,JSD (= entropy gain),0.7467390394173048
+synthetic,794,ARI,PEG max,Wasserstein,0.7477641214561166
+synthetic,794,ARI,PEG max,Gain ratio (C4.5),0.7590769734693136
+synthetic,794,ARI,PEG max,KL from node,0.7502837147992709
+synthetic,794,ARI,PEG min,PEG harmonic,0.8414752419066552
+synthetic,794,ARI,PEG min,PEG weighted,0.8211409587326373
+synthetic,794,ARI,PEG min,PEG max,0.7179945611953129
+synthetic,794,ARI,PEG min,PEG min,1.0
+synthetic,794,ARI,PEG min,PEG mean,0.8575250715538683
+synthetic,794,ARI,PEG min,Variance reduction,0.8805804314486497
+synthetic,794,ARI,PEG min,JSD (= entropy gain),0.890547849442444
+synthetic,794,ARI,PEG min,Wasserstein,0.8663882901475815
+synthetic,794,ARI,PEG min,Gain ratio (C4.5),0.8694311150441041
+synthetic,794,ARI,PEG min,KL from node,0.8890197860157473
+synthetic,794,ARI,PEG mean,PEG harmonic,0.8938318880642504
+synthetic,794,ARI,PEG mean,PEG weighted,0.8462716555728899
+synthetic,794,ARI,PEG mean,PEG max,0.8006404950910074
+synthetic,794,ARI,PEG mean,PEG min,0.8575250715538683
+synthetic,794,ARI,PEG mean,PEG mean,1.0
+synthetic,794,ARI,PEG mean,Variance reduction,0.8964609234035266
+synthetic,794,ARI,PEG mean,JSD (= entropy gain),0.8936075720045251
+synthetic,794,ARI,PEG mean,Wasserstein,0.8876831341789017
+synthetic,794,ARI,PEG mean,Gain ratio (C4.5),0.8755466639584173
+synthetic,794,ARI,PEG mean,KL from node,0.8966104024928797
+synthetic,794,ARI,Variance reduction,PEG harmonic,0.8924605424993083
+synthetic,794,ARI,Variance reduction,PEG weighted,0.8876440847372451
+synthetic,794,ARI,Variance reduction,PEG max,0.7511609588736662
+synthetic,794,ARI,Variance reduction,PEG min,0.8805804314486497
+synthetic,794,ARI,Variance reduction,PEG mean,0.8964609234035266
+synthetic,794,ARI,Variance reduction,Variance reduction,1.0
+synthetic,794,ARI,Variance reduction,JSD (= entropy gain),0.9671040012813171
+synthetic,794,ARI,Variance reduction,Wasserstein,0.9695955184954113
+synthetic,794,ARI,Variance reduction,Gain ratio (C4.5),0.9330161864539485
+synthetic,794,ARI,Variance reduction,KL from node,0.9763543511569862
+synthetic,794,ARI,JSD (= entropy gain),PEG harmonic,0.8871185901767327
+synthetic,794,ARI,JSD (= entropy gain),PEG weighted,0.8792358574255467
+synthetic,794,ARI,JSD (= entropy gain),PEG max,0.7467390394173048
+synthetic,794,ARI,JSD (= entropy gain),PEG min,0.890547849442444
+synthetic,794,ARI,JSD (= entropy gain),PEG mean,0.8936075720045251
+synthetic,794,ARI,JSD (= entropy gain),Variance reduction,0.9671040012813171
+synthetic,794,ARI,JSD (= entropy gain),JSD (= entropy gain),1.0
+synthetic,794,ARI,JSD (= entropy gain),Wasserstein,0.9497896803452878
+synthetic,794,ARI,JSD (= entropy gain),Gain ratio (C4.5),0.9370992286808651
+synthetic,794,ARI,JSD (= entropy gain),KL from node,0.9883064922113214
+synthetic,794,ARI,Wasserstein,PEG harmonic,0.8825893719948726
+synthetic,794,ARI,Wasserstein,PEG weighted,0.8758945136521205
+synthetic,794,ARI,Wasserstein,PEG max,0.7477641214561166
+synthetic,794,ARI,Wasserstein,PEG min,0.8663882901475815
+synthetic,794,ARI,Wasserstein,PEG mean,0.8876831341789017
+synthetic,794,ARI,Wasserstein,Variance reduction,0.9695955184954113
+synthetic,794,ARI,Wasserstein,JSD (= entropy gain),0.9497896803452878
+synthetic,794,ARI,Wasserstein,Wasserstein,1.0
+synthetic,794,ARI,Wasserstein,Gain ratio (C4.5),0.9410628612846036
+synthetic,794,ARI,Wasserstein,KL from node,0.9571064211564276
+synthetic,794,ARI,Gain ratio (C4.5),PEG harmonic,0.8647536649156278
+synthetic,794,ARI,Gain ratio (C4.5),PEG weighted,0.8660885998125566
+synthetic,794,ARI,Gain ratio (C4.5),PEG max,0.7590769734693136
+synthetic,794,ARI,Gain ratio (C4.5),PEG min,0.8694311150441041
+synthetic,794,ARI,Gain ratio (C4.5),PEG mean,0.8755466639584173
+synthetic,794,ARI,Gain ratio (C4.5),Variance reduction,0.9330161864539485
+synthetic,794,ARI,Gain ratio (C4.5),JSD (= entropy gain),0.9370992286808651
+synthetic,794,ARI,Gain ratio (C4.5),Wasserstein,0.9410628612846036
+synthetic,794,ARI,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+synthetic,794,ARI,Gain ratio (C4.5),KL from node,0.9436257605361792
+synthetic,794,ARI,KL from node,PEG harmonic,0.8910021652500403
+synthetic,794,ARI,KL from node,PEG weighted,0.8851858283101413
+synthetic,794,ARI,KL from node,PEG max,0.7502837147992709
+synthetic,794,ARI,KL from node,PEG min,0.8890197860157473
+synthetic,794,ARI,KL from node,PEG mean,0.8966104024928797
+synthetic,794,ARI,KL from node,Variance reduction,0.9763543511569862
+synthetic,794,ARI,KL from node,JSD (= entropy gain),0.9883064922113214
+synthetic,794,ARI,KL from node,Wasserstein,0.9571064211564276
+synthetic,794,ARI,KL from node,Gain ratio (C4.5),0.9436257605361792
+synthetic,794,ARI,KL from node,KL from node,1.0
+synthetic,794,first_split_agreement,PEG harmonic,PEG harmonic,1.0
+synthetic,794,first_split_agreement,PEG harmonic,PEG weighted,0.9168765743073047
+synthetic,794,first_split_agreement,PEG harmonic,PEG max,0.7770780856423174
+synthetic,794,first_split_agreement,PEG harmonic,PEG min,0.7355163727959698
+synthetic,794,first_split_agreement,PEG harmonic,PEG mean,0.9042821158690176
+synthetic,794,first_split_agreement,PEG harmonic,Variance reduction,0.8879093198992444
+synthetic,794,first_split_agreement,PEG harmonic,JSD (= entropy gain),0.8790931989924433
+synthetic,794,first_split_agreement,PEG harmonic,Wasserstein,0.8740554156171285
+synthetic,794,first_split_agreement,PEG harmonic,Gain ratio (C4.5),0.8375314861460957
+synthetic,794,first_split_agreement,PEG harmonic,KL from node,0.8803526448362721
+synthetic,794,first_split_agreement,PEG weighted,PEG harmonic,0.9168765743073047
+synthetic,794,first_split_agreement,PEG weighted,PEG weighted,1.0
+synthetic,794,first_split_agreement,PEG weighted,PEG max,0.739294710327456
+synthetic,794,first_split_agreement,PEG weighted,PEG min,0.7594458438287154
+synthetic,794,first_split_agreement,PEG weighted,PEG mean,0.8828715365239295
+synthetic,794,first_split_agreement,PEG weighted,Variance reduction,0.9433249370277078
+synthetic,794,first_split_agreement,PEG weighted,JSD (= entropy gain),0.9332493702770781
+synthetic,794,first_split_agreement,PEG weighted,Wasserstein,0.924433249370277
+synthetic,794,first_split_agreement,PEG weighted,Gain ratio (C4.5),0.8740554156171285
+synthetic,794,first_split_agreement,PEG weighted,KL from node,0.9345088161209067
+synthetic,794,first_split_agreement,PEG max,PEG harmonic,0.7770780856423174
+synthetic,794,first_split_agreement,PEG max,PEG weighted,0.739294710327456
+synthetic,794,first_split_agreement,PEG max,PEG max,1.0
+synthetic,794,first_split_agreement,PEG max,PEG min,0.6057934508816121
+synthetic,794,first_split_agreement,PEG max,PEG mean,0.8148614609571788
+synthetic,794,first_split_agreement,PEG max,Variance reduction,0.7103274559193955
+synthetic,794,first_split_agreement,PEG max,JSD (= entropy gain),0.7002518891687658
+synthetic,794,first_split_agreement,PEG max,Wasserstein,0.7015113350125944
+synthetic,794,first_split_agreement,PEG max,Gain ratio (C4.5),0.7065491183879093
+synthetic,794,first_split_agreement,PEG max,KL from node,0.7015113350125944
+synthetic,794,first_split_agreement,PEG min,PEG harmonic,0.7355163727959698
+synthetic,794,first_split_agreement,PEG min,PEG weighted,0.7594458438287154
+synthetic,794,first_split_agreement,PEG min,PEG max,0.6057934508816121
+synthetic,794,first_split_agreement,PEG min,PEG min,1.0
+synthetic,794,first_split_agreement,PEG min,PEG mean,0.7405541561712846
+synthetic,794,first_split_agreement,PEG min,Variance reduction,0.8022670025188917
+synthetic,794,first_split_agreement,PEG min,JSD (= entropy gain),0.8110831234256927
+synthetic,794,first_split_agreement,PEG min,Wasserstein,0.8110831234256927
+synthetic,794,first_split_agreement,PEG min,Gain ratio (C4.5),0.8400503778337531
+synthetic,794,first_split_agreement,PEG min,KL from node,0.809823677581864
+synthetic,794,first_split_agreement,PEG mean,PEG harmonic,0.9042821158690176
+synthetic,794,first_split_agreement,PEG mean,PEG weighted,0.8828715365239295
+synthetic,794,first_split_agreement,PEG mean,PEG max,0.8148614609571788
+synthetic,794,first_split_agreement,PEG mean,PEG min,0.7405541561712846
+synthetic,794,first_split_agreement,PEG mean,PEG mean,1.0
+synthetic,794,first_split_agreement,PEG mean,Variance reduction,0.8652392947103275
+synthetic,794,first_split_agreement,PEG mean,JSD (= entropy gain),0.8551637279596978
+synthetic,794,first_split_agreement,PEG mean,Wasserstein,0.8463476070528967
+synthetic,794,first_split_agreement,PEG mean,Gain ratio (C4.5),0.8261964735516373
+synthetic,794,first_split_agreement,PEG mean,KL from node,0.8564231738035264
+synthetic,794,first_split_agreement,Variance reduction,PEG harmonic,0.8879093198992444
+synthetic,794,first_split_agreement,Variance reduction,PEG weighted,0.9433249370277078
+synthetic,794,first_split_agreement,Variance reduction,PEG max,0.7103274559193955
+synthetic,794,first_split_agreement,Variance reduction,PEG min,0.8022670025188917
+synthetic,794,first_split_agreement,Variance reduction,PEG mean,0.8652392947103275
+synthetic,794,first_split_agreement,Variance reduction,Variance reduction,1.0
+synthetic,794,first_split_agreement,Variance reduction,JSD (= entropy gain),0.9836272040302267
+synthetic,794,first_split_agreement,Variance reduction,Wasserstein,0.9710327455919395
+synthetic,794,first_split_agreement,Variance reduction,Gain ratio (C4.5),0.9168765743073047
+synthetic,794,first_split_agreement,Variance reduction,KL from node,0.9848866498740554
+synthetic,794,first_split_agreement,JSD (= entropy gain),PEG harmonic,0.8790931989924433
+synthetic,794,first_split_agreement,JSD (= entropy gain),PEG weighted,0.9332493702770781
+synthetic,794,first_split_agreement,JSD (= entropy gain),PEG max,0.7002518891687658
+synthetic,794,first_split_agreement,JSD (= entropy gain),PEG min,0.8110831234256927
+synthetic,794,first_split_agreement,JSD (= entropy gain),PEG mean,0.8551637279596978
+synthetic,794,first_split_agreement,JSD (= entropy gain),Variance reduction,0.9836272040302267
+synthetic,794,first_split_agreement,JSD (= entropy gain),JSD (= entropy gain),1.0
+synthetic,794,first_split_agreement,JSD (= entropy gain),Wasserstein,0.9622166246851386
+synthetic,794,first_split_agreement,JSD (= entropy gain),Gain ratio (C4.5),0.9219143576826196
+synthetic,794,first_split_agreement,JSD (= entropy gain),KL from node,0.9987405541561712
+synthetic,794,first_split_agreement,Wasserstein,PEG harmonic,0.8740554156171285
+synthetic,794,first_split_agreement,Wasserstein,PEG weighted,0.924433249370277
+synthetic,794,first_split_agreement,Wasserstein,PEG max,0.7015113350125944
+synthetic,794,first_split_agreement,Wasserstein,PEG min,0.8110831234256927
+synthetic,794,first_split_agreement,Wasserstein,PEG mean,0.8463476070528967
+synthetic,794,first_split_agreement,Wasserstein,Variance reduction,0.9710327455919395
+synthetic,794,first_split_agreement,Wasserstein,JSD (= entropy gain),0.9622166246851386
+synthetic,794,first_split_agreement,Wasserstein,Wasserstein,1.0
+synthetic,794,first_split_agreement,Wasserstein,Gain ratio (C4.5),0.9382871536523929
+synthetic,794,first_split_agreement,Wasserstein,KL from node,0.9634760705289672
+synthetic,794,first_split_agreement,Gain ratio (C4.5),PEG harmonic,0.8375314861460957
+synthetic,794,first_split_agreement,Gain ratio (C4.5),PEG weighted,0.8740554156171285
+synthetic,794,first_split_agreement,Gain ratio (C4.5),PEG max,0.7065491183879093
+synthetic,794,first_split_agreement,Gain ratio (C4.5),PEG min,0.8400503778337531
+synthetic,794,first_split_agreement,Gain ratio (C4.5),PEG mean,0.8261964735516373
+synthetic,794,first_split_agreement,Gain ratio (C4.5),Variance reduction,0.9168765743073047
+synthetic,794,first_split_agreement,Gain ratio (C4.5),JSD (= entropy gain),0.9219143576826196
+synthetic,794,first_split_agreement,Gain ratio (C4.5),Wasserstein,0.9382871536523929
+synthetic,794,first_split_agreement,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+synthetic,794,first_split_agreement,Gain ratio (C4.5),KL from node,0.9231738035264484
+synthetic,794,first_split_agreement,KL from node,PEG harmonic,0.8803526448362721
+synthetic,794,first_split_agreement,KL from node,PEG weighted,0.9345088161209067
+synthetic,794,first_split_agreement,KL from node,PEG max,0.7015113350125944
+synthetic,794,first_split_agreement,KL from node,PEG min,0.809823677581864
+synthetic,794,first_split_agreement,KL from node,PEG mean,0.8564231738035264
+synthetic,794,first_split_agreement,KL from node,Variance reduction,0.9848866498740554
+synthetic,794,first_split_agreement,KL from node,JSD (= entropy gain),0.9987405541561712
+synthetic,794,first_split_agreement,KL from node,Wasserstein,0.9634760705289672
+synthetic,794,first_split_agreement,KL from node,Gain ratio (C4.5),0.9231738035264484
+synthetic,794,first_split_agreement,KL from node,KL from node,1.0
+synthetic,794,node_level_agreement,PEG harmonic,PEG harmonic,1.0
+synthetic,794,node_level_agreement,PEG harmonic,PEG weighted,0.8732021122116634
+synthetic,794,node_level_agreement,PEG harmonic,PEG max,0.6862767965983753
+synthetic,794,node_level_agreement,PEG harmonic,PEG min,0.6624304721486857
+synthetic,794,node_level_agreement,PEG harmonic,PEG mean,0.8569380359244476
+synthetic,794,node_level_agreement,PEG harmonic,Variance reduction,0.8269250638102371
+synthetic,794,node_level_agreement,PEG harmonic,JSD (= entropy gain),0.8117313331440279
+synthetic,794,node_level_agreement,PEG harmonic,Wasserstein,0.8087676539136307
+synthetic,794,node_level_agreement,PEG harmonic,Gain ratio (C4.5),0.7637884188942533
+synthetic,794,node_level_agreement,PEG harmonic,KL from node,0.8205784148289179
+synthetic,794,node_level_agreement,PEG weighted,PEG harmonic,0.8732021122116634
+synthetic,794,node_level_agreement,PEG weighted,PEG weighted,1.0
+synthetic,794,node_level_agreement,PEG weighted,PEG max,0.6423146773948549
+synthetic,794,node_level_agreement,PEG weighted,PEG min,0.6722546613567408
+synthetic,794,node_level_agreement,PEG weighted,PEG mean,0.8034293270505457
+synthetic,794,node_level_agreement,PEG weighted,Variance reduction,0.8663942992591974
+synthetic,794,node_level_agreement,PEG weighted,JSD (= entropy gain),0.8508575631160763
+synthetic,794,node_level_agreement,PEG weighted,Wasserstein,0.8441505283811649
+synthetic,794,node_level_agreement,PEG weighted,Gain ratio (C4.5),0.7947765715186035
+synthetic,794,node_level_agreement,PEG weighted,KL from node,0.8590305209495492
+synthetic,794,node_level_agreement,PEG max,PEG harmonic,0.6862767965983753
+synthetic,794,node_level_agreement,PEG max,PEG weighted,0.6423146773948549
+synthetic,794,node_level_agreement,PEG max,PEG max,1.0
+synthetic,794,node_level_agreement,PEG max,PEG min,0.5329118614383097
+synthetic,794,node_level_agreement,PEG max,PEG mean,0.7491989231618384
+synthetic,794,node_level_agreement,PEG max,Variance reduction,0.6342541354664792
+synthetic,794,node_level_agreement,PEG max,JSD (= entropy gain),0.6234096769650672
+synthetic,794,node_level_agreement,PEG max,Wasserstein,0.6238138621656453
+synthetic,794,node_level_agreement,PEG max,Gain ratio (C4.5),0.6319498657313811
+synthetic,794,node_level_agreement,PEG max,KL from node,0.6258162946691572
+synthetic,794,node_level_agreement,PEG min,PEG harmonic,0.6624304721486857
+synthetic,794,node_level_agreement,PEG min,PEG weighted,0.6722546613567408
+synthetic,794,node_level_agreement,PEG min,PEG max,0.5329118614383097
+synthetic,794,node_level_agreement,PEG min,PEG min,1.0
+synthetic,794,node_level_agreement,PEG min,PEG mean,0.6810711923690943
+synthetic,794,node_level_agreement,PEG min,Variance reduction,0.7314237082249011
+synthetic,794,node_level_agreement,PEG min,JSD (= entropy gain),0.7440297592664415
+synthetic,794,node_level_agreement,PEG min,Wasserstein,0.7314404266900946
+synthetic,794,node_level_agreement,PEG min,Gain ratio (C4.5),0.7624082833471651
+synthetic,794,node_level_agreement,PEG min,KL from node,0.7417679781711393
+synthetic,794,node_level_agreement,PEG mean,PEG harmonic,0.8569380359244476
+synthetic,794,node_level_agreement,PEG mean,PEG weighted,0.8034293270505457
+synthetic,794,node_level_agreement,PEG mean,PEG max,0.7491989231618384
+synthetic,794,node_level_agreement,PEG mean,PEG min,0.6810711923690943
+synthetic,794,node_level_agreement,PEG mean,PEG mean,1.0
+synthetic,794,node_level_agreement,PEG mean,Variance reduction,0.816195236048354
+synthetic,794,node_level_agreement,PEG mean,JSD (= entropy gain),0.7987703698655516
+synthetic,794,node_level_agreement,PEG mean,Wasserstein,0.7964213240154535
+synthetic,794,node_level_agreement,PEG mean,Gain ratio (C4.5),0.7667763566263661
+synthetic,794,node_level_agreement,PEG mean,KL from node,0.8058204567628893
+synthetic,794,node_level_agreement,Variance reduction,PEG harmonic,0.8269250638102371
+synthetic,794,node_level_agreement,Variance reduction,PEG weighted,0.8663942992591974
+synthetic,794,node_level_agreement,Variance reduction,PEG max,0.6342541354664792
+synthetic,794,node_level_agreement,Variance reduction,PEG min,0.7314237082249011
+synthetic,794,node_level_agreement,Variance reduction,PEG mean,0.816195236048354
+synthetic,794,node_level_agreement,Variance reduction,Variance reduction,1.0
+synthetic,794,node_level_agreement,Variance reduction,JSD (= entropy gain),0.9505491582961582
+synthetic,794,node_level_agreement,Variance reduction,Wasserstein,0.9517277863651943
+synthetic,794,node_level_agreement,Variance reduction,Gain ratio (C4.5),0.8761167847976906
+synthetic,794,node_level_agreement,Variance reduction,KL from node,0.9668791821341349
+synthetic,794,node_level_agreement,JSD (= entropy gain),PEG harmonic,0.8117313331440279
+synthetic,794,node_level_agreement,JSD (= entropy gain),PEG weighted,0.8508575631160763
+synthetic,794,node_level_agreement,JSD (= entropy gain),PEG max,0.6234096769650672
+synthetic,794,node_level_agreement,JSD (= entropy gain),PEG min,0.7440297592664415
+synthetic,794,node_level_agreement,JSD (= entropy gain),PEG mean,0.7987703698655516
+synthetic,794,node_level_agreement,JSD (= entropy gain),Variance reduction,0.9505491582961582
+synthetic,794,node_level_agreement,JSD (= entropy gain),JSD (= entropy gain),1.0
+synthetic,794,node_level_agreement,JSD (= entropy gain),Wasserstein,0.9181541776757479
+synthetic,794,node_level_agreement,JSD (= entropy gain),Gain ratio (C4.5),0.8749964652625026
+synthetic,794,node_level_agreement,JSD (= entropy gain),KL from node,0.9827739586848439
+synthetic,794,node_level_agreement,Wasserstein,PEG harmonic,0.8087676539136307
+synthetic,794,node_level_agreement,Wasserstein,PEG weighted,0.8441505283811649
+synthetic,794,node_level_agreement,Wasserstein,PEG max,0.6238138621656453
+synthetic,794,node_level_agreement,Wasserstein,PEG min,0.7314404266900946
+synthetic,794,node_level_agreement,Wasserstein,PEG mean,0.7964213240154535
+synthetic,794,node_level_agreement,Wasserstein,Variance reduction,0.9517277863651943
+synthetic,794,node_level_agreement,Wasserstein,JSD (= entropy gain),0.9181541776757479
+synthetic,794,node_level_agreement,Wasserstein,Wasserstein,1.0
+synthetic,794,node_level_agreement,Wasserstein,Gain ratio (C4.5),0.9035178820368269
+synthetic,794,node_level_agreement,Wasserstein,KL from node,0.9336206929664532
+synthetic,794,node_level_agreement,Gain ratio (C4.5),PEG harmonic,0.7637884188942533
+synthetic,794,node_level_agreement,Gain ratio (C4.5),PEG weighted,0.7947765715186035
+synthetic,794,node_level_agreement,Gain ratio (C4.5),PEG max,0.6319498657313811
+synthetic,794,node_level_agreement,Gain ratio (C4.5),PEG min,0.7624082833471651
+synthetic,794,node_level_agreement,Gain ratio (C4.5),PEG mean,0.7667763566263661
+synthetic,794,node_level_agreement,Gain ratio (C4.5),Variance reduction,0.8761167847976906
+synthetic,794,node_level_agreement,Gain ratio (C4.5),JSD (= entropy gain),0.8749964652625026
+synthetic,794,node_level_agreement,Gain ratio (C4.5),Wasserstein,0.9035178820368269
+synthetic,794,node_level_agreement,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+synthetic,794,node_level_agreement,Gain ratio (C4.5),KL from node,0.8872068819862268
+synthetic,794,node_level_agreement,KL from node,PEG harmonic,0.8205784148289179
+synthetic,794,node_level_agreement,KL from node,PEG weighted,0.8590305209495492
+synthetic,794,node_level_agreement,KL from node,PEG max,0.6258162946691572
+synthetic,794,node_level_agreement,KL from node,PEG min,0.7417679781711393
+synthetic,794,node_level_agreement,KL from node,PEG mean,0.8058204567628893
+synthetic,794,node_level_agreement,KL from node,Variance reduction,0.9668791821341349
+synthetic,794,node_level_agreement,KL from node,JSD (= entropy gain),0.9827739586848439
+synthetic,794,node_level_agreement,KL from node,Wasserstein,0.9336206929664532
+synthetic,794,node_level_agreement,KL from node,Gain ratio (C4.5),0.8872068819862268
+synthetic,794,node_level_agreement,KL from node,KL from node,1.0
+synthetic,794,dimension_set_jaccard,PEG harmonic,PEG harmonic,1.0
+synthetic,794,dimension_set_jaccard,PEG harmonic,PEG weighted,0.9304156171284634
+synthetic,794,dimension_set_jaccard,PEG harmonic,PEG max,0.8493073047858941
+synthetic,794,dimension_set_jaccard,PEG harmonic,PEG min,0.8967254408060453
+synthetic,794,dimension_set_jaccard,PEG harmonic,PEG mean,0.9305835432409738
+synthetic,794,dimension_set_jaccard,PEG harmonic,Variance reduction,0.9231528127623846
+synthetic,794,dimension_set_jaccard,PEG harmonic,JSD (= entropy gain),0.9087111670864819
+synthetic,794,dimension_set_jaccard,PEG harmonic,Wasserstein,0.9144206549118388
+synthetic,794,dimension_set_jaccard,PEG harmonic,Gain ratio (C4.5),0.9047649034424853
+synthetic,794,dimension_set_jaccard,PEG harmonic,KL from node,0.9247481108312342
+synthetic,794,dimension_set_jaccard,PEG weighted,PEG harmonic,0.9304156171284634
+synthetic,794,dimension_set_jaccard,PEG weighted,PEG weighted,1.0
+synthetic,794,dimension_set_jaccard,PEG weighted,PEG max,0.8427162048698573
+synthetic,794,dimension_set_jaccard,PEG weighted,PEG min,0.897208228379513
+synthetic,794,dimension_set_jaccard,PEG weighted,PEG mean,0.9078295549958018
+synthetic,794,dimension_set_jaccard,PEG weighted,Variance reduction,0.9253778337531486
+synthetic,794,dimension_set_jaccard,PEG weighted,JSD (= entropy gain),0.9115239294710328
+synthetic,794,dimension_set_jaccard,PEG weighted,Wasserstein,0.9145885810243494
+synthetic,794,dimension_set_jaccard,PEG weighted,Gain ratio (C4.5),0.916855583543241
+synthetic,794,dimension_set_jaccard,PEG weighted,KL from node,0.9273089840470192
+synthetic,794,dimension_set_jaccard,PEG max,PEG harmonic,0.8493073047858941
+synthetic,794,dimension_set_jaccard,PEG max,PEG weighted,0.8427162048698573
+synthetic,794,dimension_set_jaccard,PEG max,PEG max,1.0
+synthetic,794,dimension_set_jaccard,PEG max,PEG min,0.8422753988245172
+synthetic,794,dimension_set_jaccard,PEG max,PEG mean,0.860600335852225
+synthetic,794,dimension_set_jaccard,PEG max,Variance reduction,0.850230898404702
+synthetic,794,dimension_set_jaccard,PEG max,JSD (= entropy gain),0.844542401343409
+synthetic,794,dimension_set_jaccard,PEG max,Wasserstein,0.8456759026028547
+synthetic,794,dimension_set_jaccard,PEG max,Gain ratio (C4.5),0.8571578505457598
+synthetic,794,dimension_set_jaccard,PEG max,KL from node,0.8485096557514694
+synthetic,794,dimension_set_jaccard,PEG min,PEG harmonic,0.8967254408060453
+synthetic,794,dimension_set_jaccard,PEG min,PEG weighted,0.897208228379513
+synthetic,794,dimension_set_jaccard,PEG min,PEG max,0.8422753988245172
+synthetic,794,dimension_set_jaccard,PEG min,PEG min,1.0
+synthetic,794,dimension_set_jaccard,PEG min,PEG mean,0.9174223341729639
+synthetic,794,dimension_set_jaccard,PEG min,Variance reduction,0.9072418136020152
+synthetic,794,dimension_set_jaccard,PEG min,JSD (= entropy gain),0.9211167086481948
+synthetic,794,dimension_set_jaccard,PEG min,Wasserstein,0.8963056255247692
+synthetic,794,dimension_set_jaccard,PEG min,Gain ratio (C4.5),0.8925692695214107
+synthetic,794,dimension_set_jaccard,PEG min,KL from node,0.9165827036104114
+synthetic,794,dimension_set_jaccard,PEG mean,PEG harmonic,0.9305835432409738
+synthetic,794,dimension_set_jaccard,PEG mean,PEG weighted,0.9078295549958018
+synthetic,794,dimension_set_jaccard,PEG mean,PEG max,0.860600335852225
+synthetic,794,dimension_set_jaccard,PEG mean,PEG min,0.9174223341729639
+synthetic,794,dimension_set_jaccard,PEG mean,PEG mean,1.0
+synthetic,794,dimension_set_jaccard,PEG mean,Variance reduction,0.932136859781696
+synthetic,794,dimension_set_jaccard,PEG mean,JSD (= entropy gain),0.915155331654072
+synthetic,794,dimension_set_jaccard,PEG mean,Wasserstein,0.9239084802686817
+synthetic,794,dimension_set_jaccard,PEG mean,Gain ratio (C4.5),0.9131402183039462
+synthetic,794,dimension_set_jaccard,PEG mean,KL from node,0.9283165407220821
+synthetic,794,dimension_set_jaccard,Variance reduction,PEG harmonic,0.9231528127623846
+synthetic,794,dimension_set_jaccard,Variance reduction,PEG weighted,0.9253778337531486
+synthetic,794,dimension_set_jaccard,Variance reduction,PEG max,0.850230898404702
+synthetic,794,dimension_set_jaccard,Variance reduction,PEG min,0.9072418136020152
+synthetic,794,dimension_set_jaccard,Variance reduction,PEG mean,0.932136859781696
+synthetic,794,dimension_set_jaccard,Variance reduction,Variance reduction,1.0
+synthetic,794,dimension_set_jaccard,Variance reduction,JSD (= entropy gain),0.9420235096557515
+synthetic,794,dimension_set_jaccard,Variance reduction,Wasserstein,0.9774349286314021
+synthetic,794,dimension_set_jaccard,Variance reduction,Gain ratio (C4.5),0.961272040302267
+synthetic,794,dimension_set_jaccard,Variance reduction,KL from node,0.9725020990764063
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),PEG harmonic,0.9087111670864819
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),PEG weighted,0.9115239294710328
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),PEG max,0.844542401343409
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),PEG min,0.9211167086481948
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),PEG mean,0.915155331654072
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),Variance reduction,0.9420235096557515
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),JSD (= entropy gain),1.0
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),Wasserstein,0.9290092359361881
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),Gain ratio (C4.5),0.9340050377833753
+synthetic,794,dimension_set_jaccard,JSD (= entropy gain),KL from node,0.9663727959697732
+synthetic,794,dimension_set_jaccard,Wasserstein,PEG harmonic,0.9144206549118388
+synthetic,794,dimension_set_jaccard,Wasserstein,PEG weighted,0.9145885810243494
+synthetic,794,dimension_set_jaccard,Wasserstein,PEG max,0.8456759026028547
+synthetic,794,dimension_set_jaccard,Wasserstein,PEG min,0.8963056255247692
+synthetic,794,dimension_set_jaccard,Wasserstein,PEG mean,0.9239084802686817
+synthetic,794,dimension_set_jaccard,Wasserstein,Variance reduction,0.9774349286314021
+synthetic,794,dimension_set_jaccard,Wasserstein,JSD (= entropy gain),0.9290092359361881
+synthetic,794,dimension_set_jaccard,Wasserstein,Wasserstein,1.0
+synthetic,794,dimension_set_jaccard,Wasserstein,Gain ratio (C4.5),0.9607472712006716
+synthetic,794,dimension_set_jaccard,Wasserstein,KL from node,0.9568639798488665
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),PEG harmonic,0.9047649034424853
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),PEG weighted,0.916855583543241
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),PEG max,0.8571578505457598
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),PEG min,0.8925692695214107
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),PEG mean,0.9131402183039462
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),Variance reduction,0.961272040302267
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),JSD (= entropy gain),0.9340050377833753
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),Wasserstein,0.9607472712006716
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+synthetic,794,dimension_set_jaccard,Gain ratio (C4.5),KL from node,0.9574937027707808
+synthetic,794,dimension_set_jaccard,KL from node,PEG harmonic,0.9247481108312342
+synthetic,794,dimension_set_jaccard,KL from node,PEG weighted,0.9273089840470192
+synthetic,794,dimension_set_jaccard,KL from node,PEG max,0.8485096557514694
+synthetic,794,dimension_set_jaccard,KL from node,PEG min,0.9165827036104114
+synthetic,794,dimension_set_jaccard,KL from node,PEG mean,0.9283165407220821
+synthetic,794,dimension_set_jaccard,KL from node,Variance reduction,0.9725020990764063
+synthetic,794,dimension_set_jaccard,KL from node,JSD (= entropy gain),0.9663727959697732
+synthetic,794,dimension_set_jaccard,KL from node,Wasserstein,0.9568639798488665
+synthetic,794,dimension_set_jaccard,KL from node,Gain ratio (C4.5),0.9574937027707808
+synthetic,794,dimension_set_jaccard,KL from node,KL from node,1.0
+DICES-350,28,ARI,PEG harmonic,PEG harmonic,1.0
+DICES-350,28,ARI,PEG harmonic,PEG weighted,0.6371619767153717
+DICES-350,28,ARI,PEG harmonic,PEG max,0.255833618598138
+DICES-350,28,ARI,PEG harmonic,PEG min,0.546411992947298
+DICES-350,28,ARI,PEG harmonic,PEG mean,0.5896160375127664
+DICES-350,28,ARI,PEG harmonic,Variance reduction,0.7465205335063437
+DICES-350,28,ARI,PEG harmonic,JSD (= entropy gain),0.45894528557546316
+DICES-350,28,ARI,PEG harmonic,Wasserstein,0.5810973676480543
+DICES-350,28,ARI,PEG harmonic,Gain ratio (C4.5),0.42121843581562707
+DICES-350,28,ARI,PEG harmonic,KL from node,0.5935671896749762
+DICES-350,28,ARI,PEG weighted,PEG harmonic,0.6371619767153717
+DICES-350,28,ARI,PEG weighted,PEG weighted,1.0
+DICES-350,28,ARI,PEG weighted,PEG max,0.09833989130203331
+DICES-350,28,ARI,PEG weighted,PEG min,0.3736384890140961
+DICES-350,28,ARI,PEG weighted,PEG mean,0.41211835207599024
+DICES-350,28,ARI,PEG weighted,Variance reduction,0.6641061530256758
+DICES-350,28,ARI,PEG weighted,JSD (= entropy gain),0.2938460790254802
+DICES-350,28,ARI,PEG weighted,Wasserstein,0.6624549575621955
+DICES-350,28,ARI,PEG weighted,Gain ratio (C4.5),0.39517131626830493
+DICES-350,28,ARI,PEG weighted,KL from node,0.4265435506665595
+DICES-350,28,ARI,PEG max,PEG harmonic,0.255833618598138
+DICES-350,28,ARI,PEG max,PEG weighted,0.09833989130203331
+DICES-350,28,ARI,PEG max,PEG max,1.0
+DICES-350,28,ARI,PEG max,PEG min,0.3985065280263837
+DICES-350,28,ARI,PEG max,PEG mean,0.44668733549761824
+DICES-350,28,ARI,PEG max,Variance reduction,0.2715366572146388
+DICES-350,28,ARI,PEG max,JSD (= entropy gain),0.43884857864277443
+DICES-350,28,ARI,PEG max,Wasserstein,0.2863191476307489
+DICES-350,28,ARI,PEG max,Gain ratio (C4.5),0.37343320849382705
+DICES-350,28,ARI,PEG max,KL from node,0.3262270167431642
+DICES-350,28,ARI,PEG min,PEG harmonic,0.546411992947298
+DICES-350,28,ARI,PEG min,PEG weighted,0.3736384890140961
+DICES-350,28,ARI,PEG min,PEG max,0.3985065280263837
+DICES-350,28,ARI,PEG min,PEG min,1.0
+DICES-350,28,ARI,PEG min,PEG mean,0.5424436608072523
+DICES-350,28,ARI,PEG min,Variance reduction,0.4722478388733962
+DICES-350,28,ARI,PEG min,JSD (= entropy gain),0.6219968521341012
+DICES-350,28,ARI,PEG min,Wasserstein,0.35768052865609673
+DICES-350,28,ARI,PEG min,Gain ratio (C4.5),0.4320559901867764
+DICES-350,28,ARI,PEG min,KL from node,0.704256316991562
+DICES-350,28,ARI,PEG mean,PEG harmonic,0.5896160375127664
+DICES-350,28,ARI,PEG mean,PEG weighted,0.41211835207599024
+DICES-350,28,ARI,PEG mean,PEG max,0.44668733549761824
+DICES-350,28,ARI,PEG mean,PEG min,0.5424436608072523
+DICES-350,28,ARI,PEG mean,PEG mean,1.0
+DICES-350,28,ARI,PEG mean,Variance reduction,0.6849128771501247
+DICES-350,28,ARI,PEG mean,JSD (= entropy gain),0.42943964953684066
+DICES-350,28,ARI,PEG mean,Wasserstein,0.6825256346709049
+DICES-350,28,ARI,PEG mean,Gain ratio (C4.5),0.5729902255005488
+DICES-350,28,ARI,PEG mean,KL from node,0.5304130442311396
+DICES-350,28,ARI,Variance reduction,PEG harmonic,0.7465205335063437
+DICES-350,28,ARI,Variance reduction,PEG weighted,0.6641061530256758
+DICES-350,28,ARI,Variance reduction,PEG max,0.2715366572146388
+DICES-350,28,ARI,Variance reduction,PEG min,0.4722478388733962
+DICES-350,28,ARI,Variance reduction,PEG mean,0.6849128771501247
+DICES-350,28,ARI,Variance reduction,Variance reduction,1.0
+DICES-350,28,ARI,Variance reduction,JSD (= entropy gain),0.410286508046665
+DICES-350,28,ARI,Variance reduction,Wasserstein,0.8190528201740054
+DICES-350,28,ARI,Variance reduction,Gain ratio (C4.5),0.6050719461989906
+DICES-350,28,ARI,Variance reduction,KL from node,0.5303481805984838
+DICES-350,28,ARI,JSD (= entropy gain),PEG harmonic,0.45894528557546316
+DICES-350,28,ARI,JSD (= entropy gain),PEG weighted,0.2938460790254802
+DICES-350,28,ARI,JSD (= entropy gain),PEG max,0.43884857864277443
+DICES-350,28,ARI,JSD (= entropy gain),PEG min,0.6219968521341012
+DICES-350,28,ARI,JSD (= entropy gain),PEG mean,0.42943964953684066
+DICES-350,28,ARI,JSD (= entropy gain),Variance reduction,0.410286508046665
+DICES-350,28,ARI,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-350,28,ARI,JSD (= entropy gain),Wasserstein,0.2888602756120064
+DICES-350,28,ARI,JSD (= entropy gain),Gain ratio (C4.5),0.5878784081306169
+DICES-350,28,ARI,JSD (= entropy gain),KL from node,0.6969172117257401
+DICES-350,28,ARI,Wasserstein,PEG harmonic,0.5810973676480543
+DICES-350,28,ARI,Wasserstein,PEG weighted,0.6624549575621955
+DICES-350,28,ARI,Wasserstein,PEG max,0.2863191476307489
+DICES-350,28,ARI,Wasserstein,PEG min,0.35768052865609673
+DICES-350,28,ARI,Wasserstein,PEG mean,0.6825256346709049
+DICES-350,28,ARI,Wasserstein,Variance reduction,0.8190528201740054
+DICES-350,28,ARI,Wasserstein,JSD (= entropy gain),0.2888602756120064
+DICES-350,28,ARI,Wasserstein,Wasserstein,1.0
+DICES-350,28,ARI,Wasserstein,Gain ratio (C4.5),0.5999779419259844
+DICES-350,28,ARI,Wasserstein,KL from node,0.4164641092230474
+DICES-350,28,ARI,Gain ratio (C4.5),PEG harmonic,0.42121843581562707
+DICES-350,28,ARI,Gain ratio (C4.5),PEG weighted,0.39517131626830493
+DICES-350,28,ARI,Gain ratio (C4.5),PEG max,0.37343320849382705
+DICES-350,28,ARI,Gain ratio (C4.5),PEG min,0.4320559901867764
+DICES-350,28,ARI,Gain ratio (C4.5),PEG mean,0.5729902255005488
+DICES-350,28,ARI,Gain ratio (C4.5),Variance reduction,0.6050719461989906
+DICES-350,28,ARI,Gain ratio (C4.5),JSD (= entropy gain),0.5878784081306169
+DICES-350,28,ARI,Gain ratio (C4.5),Wasserstein,0.5999779419259844
+DICES-350,28,ARI,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-350,28,ARI,Gain ratio (C4.5),KL from node,0.5830231004759068
+DICES-350,28,ARI,KL from node,PEG harmonic,0.5935671896749762
+DICES-350,28,ARI,KL from node,PEG weighted,0.4265435506665595
+DICES-350,28,ARI,KL from node,PEG max,0.3262270167431642
+DICES-350,28,ARI,KL from node,PEG min,0.704256316991562
+DICES-350,28,ARI,KL from node,PEG mean,0.5304130442311396
+DICES-350,28,ARI,KL from node,Variance reduction,0.5303481805984838
+DICES-350,28,ARI,KL from node,JSD (= entropy gain),0.6969172117257401
+DICES-350,28,ARI,KL from node,Wasserstein,0.4164641092230474
+DICES-350,28,ARI,KL from node,Gain ratio (C4.5),0.5830231004759068
+DICES-350,28,ARI,KL from node,KL from node,1.0
+DICES-350,28,first_split_agreement,PEG harmonic,PEG harmonic,1.0
+DICES-350,28,first_split_agreement,PEG harmonic,PEG weighted,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG harmonic,PEG max,0.2857142857142857
+DICES-350,28,first_split_agreement,PEG harmonic,PEG min,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG harmonic,PEG mean,0.6785714285714286
+DICES-350,28,first_split_agreement,PEG harmonic,Variance reduction,0.7857142857142857
+DICES-350,28,first_split_agreement,PEG harmonic,JSD (= entropy gain),0.6071428571428571
+DICES-350,28,first_split_agreement,PEG harmonic,Wasserstein,0.6071428571428571
+DICES-350,28,first_split_agreement,PEG harmonic,Gain ratio (C4.5),0.42857142857142855
+DICES-350,28,first_split_agreement,PEG harmonic,KL from node,0.75
+DICES-350,28,first_split_agreement,PEG weighted,PEG harmonic,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG weighted,PEG weighted,1.0
+DICES-350,28,first_split_agreement,PEG weighted,PEG max,0.10714285714285714
+DICES-350,28,first_split_agreement,PEG weighted,PEG min,0.5
+DICES-350,28,first_split_agreement,PEG weighted,PEG mean,0.4642857142857143
+DICES-350,28,first_split_agreement,PEG weighted,Variance reduction,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG weighted,JSD (= entropy gain),0.39285714285714285
+DICES-350,28,first_split_agreement,PEG weighted,Wasserstein,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG weighted,Gain ratio (C4.5),0.42857142857142855
+DICES-350,28,first_split_agreement,PEG weighted,KL from node,0.5357142857142857
+DICES-350,28,first_split_agreement,PEG max,PEG harmonic,0.2857142857142857
+DICES-350,28,first_split_agreement,PEG max,PEG weighted,0.10714285714285714
+DICES-350,28,first_split_agreement,PEG max,PEG max,1.0
+DICES-350,28,first_split_agreement,PEG max,PEG min,0.5
+DICES-350,28,first_split_agreement,PEG max,PEG mean,0.5357142857142857
+DICES-350,28,first_split_agreement,PEG max,Variance reduction,0.2857142857142857
+DICES-350,28,first_split_agreement,PEG max,JSD (= entropy gain),0.5
+DICES-350,28,first_split_agreement,PEG max,Wasserstein,0.32142857142857145
+DICES-350,28,first_split_agreement,PEG max,Gain ratio (C4.5),0.39285714285714285
+DICES-350,28,first_split_agreement,PEG max,KL from node,0.42857142857142855
+DICES-350,28,first_split_agreement,PEG min,PEG harmonic,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG min,PEG weighted,0.5
+DICES-350,28,first_split_agreement,PEG min,PEG max,0.5
+DICES-350,28,first_split_agreement,PEG min,PEG min,1.0
+DICES-350,28,first_split_agreement,PEG min,PEG mean,0.6071428571428571
+DICES-350,28,first_split_agreement,PEG min,Variance reduction,0.5714285714285714
+DICES-350,28,first_split_agreement,PEG min,JSD (= entropy gain),0.7142857142857143
+DICES-350,28,first_split_agreement,PEG min,Wasserstein,0.39285714285714285
+DICES-350,28,first_split_agreement,PEG min,Gain ratio (C4.5),0.39285714285714285
+DICES-350,28,first_split_agreement,PEG min,KL from node,0.7857142857142857
+DICES-350,28,first_split_agreement,PEG mean,PEG harmonic,0.6785714285714286
+DICES-350,28,first_split_agreement,PEG mean,PEG weighted,0.4642857142857143
+DICES-350,28,first_split_agreement,PEG mean,PEG max,0.5357142857142857
+DICES-350,28,first_split_agreement,PEG mean,PEG min,0.6071428571428571
+DICES-350,28,first_split_agreement,PEG mean,PEG mean,1.0
+DICES-350,28,first_split_agreement,PEG mean,Variance reduction,0.75
+DICES-350,28,first_split_agreement,PEG mean,JSD (= entropy gain),0.5
+DICES-350,28,first_split_agreement,PEG mean,Wasserstein,0.7142857142857143
+DICES-350,28,first_split_agreement,PEG mean,Gain ratio (C4.5),0.5714285714285714
+DICES-350,28,first_split_agreement,PEG mean,KL from node,0.6071428571428571
+DICES-350,28,first_split_agreement,Variance reduction,PEG harmonic,0.7857142857142857
+DICES-350,28,first_split_agreement,Variance reduction,PEG weighted,0.7142857142857143
+DICES-350,28,first_split_agreement,Variance reduction,PEG max,0.2857142857142857
+DICES-350,28,first_split_agreement,Variance reduction,PEG min,0.5714285714285714
+DICES-350,28,first_split_agreement,Variance reduction,PEG mean,0.75
+DICES-350,28,first_split_agreement,Variance reduction,Variance reduction,1.0
+DICES-350,28,first_split_agreement,Variance reduction,JSD (= entropy gain),0.5
+DICES-350,28,first_split_agreement,Variance reduction,Wasserstein,0.8214285714285714
+DICES-350,28,first_split_agreement,Variance reduction,Gain ratio (C4.5),0.6071428571428571
+DICES-350,28,first_split_agreement,Variance reduction,KL from node,0.6428571428571429
+DICES-350,28,first_split_agreement,JSD (= entropy gain),PEG harmonic,0.6071428571428571
+DICES-350,28,first_split_agreement,JSD (= entropy gain),PEG weighted,0.39285714285714285
+DICES-350,28,first_split_agreement,JSD (= entropy gain),PEG max,0.5
+DICES-350,28,first_split_agreement,JSD (= entropy gain),PEG min,0.7142857142857143
+DICES-350,28,first_split_agreement,JSD (= entropy gain),PEG mean,0.5
+DICES-350,28,first_split_agreement,JSD (= entropy gain),Variance reduction,0.5
+DICES-350,28,first_split_agreement,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-350,28,first_split_agreement,JSD (= entropy gain),Wasserstein,0.32142857142857145
+DICES-350,28,first_split_agreement,JSD (= entropy gain),Gain ratio (C4.5),0.5357142857142857
+DICES-350,28,first_split_agreement,JSD (= entropy gain),KL from node,0.8214285714285714
+DICES-350,28,first_split_agreement,Wasserstein,PEG harmonic,0.6071428571428571
+DICES-350,28,first_split_agreement,Wasserstein,PEG weighted,0.7142857142857143
+DICES-350,28,first_split_agreement,Wasserstein,PEG max,0.32142857142857145
+DICES-350,28,first_split_agreement,Wasserstein,PEG min,0.39285714285714285
+DICES-350,28,first_split_agreement,Wasserstein,PEG mean,0.7142857142857143
+DICES-350,28,first_split_agreement,Wasserstein,Variance reduction,0.8214285714285714
+DICES-350,28,first_split_agreement,Wasserstein,JSD (= entropy gain),0.32142857142857145
+DICES-350,28,first_split_agreement,Wasserstein,Wasserstein,1.0
+DICES-350,28,first_split_agreement,Wasserstein,Gain ratio (C4.5),0.6428571428571429
+DICES-350,28,first_split_agreement,Wasserstein,KL from node,0.4642857142857143
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),PEG harmonic,0.42857142857142855
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),PEG weighted,0.42857142857142855
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),PEG max,0.39285714285714285
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),PEG min,0.39285714285714285
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),PEG mean,0.5714285714285714
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),Variance reduction,0.6071428571428571
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),JSD (= entropy gain),0.5357142857142857
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),Wasserstein,0.6428571428571429
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-350,28,first_split_agreement,Gain ratio (C4.5),KL from node,0.6071428571428571
+DICES-350,28,first_split_agreement,KL from node,PEG harmonic,0.75
+DICES-350,28,first_split_agreement,KL from node,PEG weighted,0.5357142857142857
+DICES-350,28,first_split_agreement,KL from node,PEG max,0.42857142857142855
+DICES-350,28,first_split_agreement,KL from node,PEG min,0.7857142857142857
+DICES-350,28,first_split_agreement,KL from node,PEG mean,0.6071428571428571
+DICES-350,28,first_split_agreement,KL from node,Variance reduction,0.6428571428571429
+DICES-350,28,first_split_agreement,KL from node,JSD (= entropy gain),0.8214285714285714
+DICES-350,28,first_split_agreement,KL from node,Wasserstein,0.4642857142857143
+DICES-350,28,first_split_agreement,KL from node,Gain ratio (C4.5),0.6071428571428571
+DICES-350,28,first_split_agreement,KL from node,KL from node,1.0
+DICES-350,28,node_level_agreement,PEG harmonic,PEG harmonic,1.0
+DICES-350,28,node_level_agreement,PEG harmonic,PEG weighted,0.6703939335518283
+DICES-350,28,node_level_agreement,PEG harmonic,PEG max,0.2275912996777658
+DICES-350,28,node_level_agreement,PEG harmonic,PEG min,0.5734783336411489
+DICES-350,28,node_level_agreement,PEG harmonic,PEG mean,0.6138177285084074
+DICES-350,28,node_level_agreement,PEG harmonic,Variance reduction,0.703139172335601
+DICES-350,28,node_level_agreement,PEG harmonic,JSD (= entropy gain),0.47248730177689807
+DICES-350,28,node_level_agreement,PEG harmonic,Wasserstein,0.5585175736961452
+DICES-350,28,node_level_agreement,PEG harmonic,Gain ratio (C4.5),0.3804111067503925
+DICES-350,28,node_level_agreement,PEG harmonic,KL from node,0.6151295994106146
+DICES-350,28,node_level_agreement,PEG weighted,PEG harmonic,0.6703939335518283
+DICES-350,28,node_level_agreement,PEG weighted,PEG weighted,1.0
+DICES-350,28,node_level_agreement,PEG weighted,PEG max,0.08801020408163265
+DICES-350,28,node_level_agreement,PEG weighted,PEG min,0.39528453219712617
+DICES-350,28,node_level_agreement,PEG weighted,PEG mean,0.43231877771351457
+DICES-350,28,node_level_agreement,PEG weighted,Variance reduction,0.6360119047619046
+DICES-350,28,node_level_agreement,PEG weighted,JSD (= entropy gain),0.31665291116446576
+DICES-350,28,node_level_agreement,PEG weighted,Wasserstein,0.6759778911564627
+DICES-350,28,node_level_agreement,PEG weighted,Gain ratio (C4.5),0.39755527210884356
+DICES-350,28,node_level_agreement,PEG weighted,KL from node,0.4571078431372549
+DICES-350,28,node_level_agreement,PEG max,PEG harmonic,0.2275912996777658
+DICES-350,28,node_level_agreement,PEG max,PEG weighted,0.08801020408163265
+DICES-350,28,node_level_agreement,PEG max,PEG max,1.0
+DICES-350,28,node_level_agreement,PEG max,PEG min,0.39620723289315724
+DICES-350,28,node_level_agreement,PEG max,PEG mean,0.45809405147778653
+DICES-350,28,node_level_agreement,PEG max,Variance reduction,0.21527777777777776
+DICES-350,28,node_level_agreement,PEG max,JSD (= entropy gain),0.34599521626832547
+DICES-350,28,node_level_agreement,PEG max,Wasserstein,0.2775793650793651
+DICES-350,28,node_level_agreement,PEG max,Gain ratio (C4.5),0.2890873015873016
+DICES-350,28,node_level_agreement,PEG max,KL from node,0.29619972989195675
+DICES-350,28,node_level_agreement,PEG min,PEG harmonic,0.5734783336411489
+DICES-350,28,node_level_agreement,PEG min,PEG weighted,0.39528453219712617
+DICES-350,28,node_level_agreement,PEG min,PEG max,0.39620723289315724
+DICES-350,28,node_level_agreement,PEG min,PEG min,1.0
+DICES-350,28,node_level_agreement,PEG min,PEG mean,0.5476610560492139
+DICES-350,28,node_level_agreement,PEG min,Variance reduction,0.4917588614393126
+DICES-350,28,node_level_agreement,PEG min,JSD (= entropy gain),0.6393822979106752
+DICES-350,28,node_level_agreement,PEG min,Wasserstein,0.34474206349206354
+DICES-350,28,node_level_agreement,PEG min,Gain ratio (C4.5),0.35083679895709974
+DICES-350,28,node_level_agreement,PEG min,KL from node,0.6907869210103236
+DICES-350,28,node_level_agreement,PEG mean,PEG harmonic,0.6138177285084074
+DICES-350,28,node_level_agreement,PEG mean,PEG weighted,0.43231877771351457
+DICES-350,28,node_level_agreement,PEG mean,PEG max,0.45809405147778653
+DICES-350,28,node_level_agreement,PEG mean,PEG min,0.5476610560492139
+DICES-350,28,node_level_agreement,PEG mean,PEG mean,1.0
+DICES-350,28,node_level_agreement,PEG mean,Variance reduction,0.6960534213685473
+DICES-350,28,node_level_agreement,PEG mean,JSD (= entropy gain),0.44057708747834795
+DICES-350,28,node_level_agreement,PEG mean,Wasserstein,0.6644557823129251
+DICES-350,28,node_level_agreement,PEG mean,Gain ratio (C4.5),0.5263311093668237
+DICES-350,28,node_level_agreement,PEG mean,KL from node,0.5424375431990979
+DICES-350,28,node_level_agreement,Variance reduction,PEG harmonic,0.703139172335601
+DICES-350,28,node_level_agreement,Variance reduction,PEG weighted,0.6360119047619046
+DICES-350,28,node_level_agreement,Variance reduction,PEG max,0.21527777777777776
+DICES-350,28,node_level_agreement,Variance reduction,PEG min,0.4917588614393126
+DICES-350,28,node_level_agreement,Variance reduction,PEG mean,0.6960534213685473
+DICES-350,28,node_level_agreement,Variance reduction,Variance reduction,1.0
+DICES-350,28,node_level_agreement,Variance reduction,JSD (= entropy gain),0.4478513518645098
+DICES-350,28,node_level_agreement,Variance reduction,Wasserstein,0.7892006802721089
+DICES-350,28,node_level_agreement,Variance reduction,Gain ratio (C4.5),0.5576623376623376
+DICES-350,28,node_level_agreement,Variance reduction,KL from node,0.5649172168867548
+DICES-350,28,node_level_agreement,JSD (= entropy gain),PEG harmonic,0.47248730177689807
+DICES-350,28,node_level_agreement,JSD (= entropy gain),PEG weighted,0.31665291116446576
+DICES-350,28,node_level_agreement,JSD (= entropy gain),PEG max,0.34599521626832547
+DICES-350,28,node_level_agreement,JSD (= entropy gain),PEG min,0.6393822979106752
+DICES-350,28,node_level_agreement,JSD (= entropy gain),PEG mean,0.44057708747834795
+DICES-350,28,node_level_agreement,JSD (= entropy gain),Variance reduction,0.4478513518645098
+DICES-350,28,node_level_agreement,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-350,28,node_level_agreement,JSD (= entropy gain),Wasserstein,0.28174603174603174
+DICES-350,28,node_level_agreement,JSD (= entropy gain),Gain ratio (C4.5),0.5097782543271265
+DICES-350,28,node_level_agreement,JSD (= entropy gain),KL from node,0.7297065075378802
+DICES-350,28,node_level_agreement,Wasserstein,PEG harmonic,0.5585175736961452
+DICES-350,28,node_level_agreement,Wasserstein,PEG weighted,0.6759778911564627
+DICES-350,28,node_level_agreement,Wasserstein,PEG max,0.2775793650793651
+DICES-350,28,node_level_agreement,Wasserstein,PEG min,0.34474206349206354
+DICES-350,28,node_level_agreement,Wasserstein,PEG mean,0.6644557823129251
+DICES-350,28,node_level_agreement,Wasserstein,Variance reduction,0.7892006802721089
+DICES-350,28,node_level_agreement,Wasserstein,JSD (= entropy gain),0.28174603174603174
+DICES-350,28,node_level_agreement,Wasserstein,Wasserstein,1.0
+DICES-350,28,node_level_agreement,Wasserstein,Gain ratio (C4.5),0.6072137188208616
+DICES-350,28,node_level_agreement,Wasserstein,KL from node,0.3954081632653061
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),PEG harmonic,0.3804111067503925
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),PEG weighted,0.39755527210884356
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),PEG max,0.2890873015873016
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),PEG min,0.35083679895709974
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),PEG mean,0.5263311093668237
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),Variance reduction,0.5576623376623376
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),JSD (= entropy gain),0.5097782543271265
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),Wasserstein,0.6072137188208616
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-350,28,node_level_agreement,Gain ratio (C4.5),KL from node,0.5418784939751878
+DICES-350,28,node_level_agreement,KL from node,PEG harmonic,0.6151295994106146
+DICES-350,28,node_level_agreement,KL from node,PEG weighted,0.4571078431372549
+DICES-350,28,node_level_agreement,KL from node,PEG max,0.29619972989195675
+DICES-350,28,node_level_agreement,KL from node,PEG min,0.6907869210103236
+DICES-350,28,node_level_agreement,KL from node,PEG mean,0.5424375431990979
+DICES-350,28,node_level_agreement,KL from node,Variance reduction,0.5649172168867548
+DICES-350,28,node_level_agreement,KL from node,JSD (= entropy gain),0.7297065075378802
+DICES-350,28,node_level_agreement,KL from node,Wasserstein,0.3954081632653061
+DICES-350,28,node_level_agreement,KL from node,Gain ratio (C4.5),0.5418784939751878
+DICES-350,28,node_level_agreement,KL from node,KL from node,1.0
+DICES-350,28,dimension_set_jaccard,PEG harmonic,PEG harmonic,1.0
+DICES-350,28,dimension_set_jaccard,PEG harmonic,PEG weighted,0.6607142857142857
+DICES-350,28,dimension_set_jaccard,PEG harmonic,PEG max,0.35714285714285715
+DICES-350,28,dimension_set_jaccard,PEG harmonic,PEG min,0.6875
+DICES-350,28,dimension_set_jaccard,PEG harmonic,PEG mean,0.6517857142857143
+DICES-350,28,dimension_set_jaccard,PEG harmonic,Variance reduction,0.75
+DICES-350,28,dimension_set_jaccard,PEG harmonic,JSD (= entropy gain),0.6071428571428571
+DICES-350,28,dimension_set_jaccard,PEG harmonic,Wasserstein,0.625
+DICES-350,28,dimension_set_jaccard,PEG harmonic,Gain ratio (C4.5),0.5446428571428571
+DICES-350,28,dimension_set_jaccard,PEG harmonic,KL from node,0.75
+DICES-350,28,dimension_set_jaccard,PEG weighted,PEG harmonic,0.6607142857142857
+DICES-350,28,dimension_set_jaccard,PEG weighted,PEG weighted,1.0
+DICES-350,28,dimension_set_jaccard,PEG weighted,PEG max,0.16071428571428573
+DICES-350,28,dimension_set_jaccard,PEG weighted,PEG min,0.45535714285714285
+DICES-350,28,dimension_set_jaccard,PEG weighted,PEG mean,0.44642857142857145
+DICES-350,28,dimension_set_jaccard,PEG weighted,Variance reduction,0.6696428571428571
+DICES-350,28,dimension_set_jaccard,PEG weighted,JSD (= entropy gain),0.39285714285714285
+DICES-350,28,dimension_set_jaccard,PEG weighted,Wasserstein,0.6964285714285714
+DICES-350,28,dimension_set_jaccard,PEG weighted,Gain ratio (C4.5),0.49107142857142855
+DICES-350,28,dimension_set_jaccard,PEG weighted,KL from node,0.5357142857142857
+DICES-350,28,dimension_set_jaccard,PEG max,PEG harmonic,0.35714285714285715
+DICES-350,28,dimension_set_jaccard,PEG max,PEG weighted,0.16071428571428573
+DICES-350,28,dimension_set_jaccard,PEG max,PEG max,1.0
+DICES-350,28,dimension_set_jaccard,PEG max,PEG min,0.6607142857142857
+DICES-350,28,dimension_set_jaccard,PEG max,PEG mean,0.550595238095238
+DICES-350,28,dimension_set_jaccard,PEG max,Variance reduction,0.3125
+DICES-350,28,dimension_set_jaccard,PEG max,JSD (= entropy gain),0.7321428571428571
+DICES-350,28,dimension_set_jaccard,PEG max,Wasserstein,0.3125
+DICES-350,28,dimension_set_jaccard,PEG max,Gain ratio (C4.5),0.5982142857142857
+DICES-350,28,dimension_set_jaccard,PEG max,KL from node,0.5892857142857143
+DICES-350,28,dimension_set_jaccard,PEG min,PEG harmonic,0.6875
+DICES-350,28,dimension_set_jaccard,PEG min,PEG weighted,0.45535714285714285
+DICES-350,28,dimension_set_jaccard,PEG min,PEG max,0.6607142857142857
+DICES-350,28,dimension_set_jaccard,PEG min,PEG min,1.0
+DICES-350,28,dimension_set_jaccard,PEG min,PEG mean,0.5863095238095237
+DICES-350,28,dimension_set_jaccard,PEG min,Variance reduction,0.5446428571428571
+DICES-350,28,dimension_set_jaccard,PEG min,JSD (= entropy gain),0.7767857142857143
+DICES-350,28,dimension_set_jaccard,PEG min,Wasserstein,0.4017857142857143
+DICES-350,28,dimension_set_jaccard,PEG min,Gain ratio (C4.5),0.5625
+DICES-350,28,dimension_set_jaccard,PEG min,KL from node,0.8482142857142857
+DICES-350,28,dimension_set_jaccard,PEG mean,PEG harmonic,0.6517857142857143
+DICES-350,28,dimension_set_jaccard,PEG mean,PEG weighted,0.44642857142857145
+DICES-350,28,dimension_set_jaccard,PEG mean,PEG max,0.550595238095238
+DICES-350,28,dimension_set_jaccard,PEG mean,PEG min,0.5863095238095237
+DICES-350,28,dimension_set_jaccard,PEG mean,PEG mean,1.0
+DICES-350,28,dimension_set_jaccard,PEG mean,Variance reduction,0.7410714285714286
+DICES-350,28,dimension_set_jaccard,PEG mean,JSD (= entropy gain),0.5178571428571429
+DICES-350,28,dimension_set_jaccard,PEG mean,Wasserstein,0.7142857142857143
+DICES-350,28,dimension_set_jaccard,PEG mean,Gain ratio (C4.5),0.6607142857142857
+DICES-350,28,dimension_set_jaccard,PEG mean,KL from node,0.5892857142857143
+DICES-350,28,dimension_set_jaccard,Variance reduction,PEG harmonic,0.75
+DICES-350,28,dimension_set_jaccard,Variance reduction,PEG weighted,0.6696428571428571
+DICES-350,28,dimension_set_jaccard,Variance reduction,PEG max,0.3125
+DICES-350,28,dimension_set_jaccard,Variance reduction,PEG min,0.5446428571428571
+DICES-350,28,dimension_set_jaccard,Variance reduction,PEG mean,0.7410714285714286
+DICES-350,28,dimension_set_jaccard,Variance reduction,Variance reduction,1.0
+DICES-350,28,dimension_set_jaccard,Variance reduction,JSD (= entropy gain),0.48214285714285715
+DICES-350,28,dimension_set_jaccard,Variance reduction,Wasserstein,0.8303571428571429
+DICES-350,28,dimension_set_jaccard,Variance reduction,Gain ratio (C4.5),0.6964285714285714
+DICES-350,28,dimension_set_jaccard,Variance reduction,KL from node,0.625
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),PEG harmonic,0.6071428571428571
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),PEG weighted,0.39285714285714285
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),PEG max,0.7321428571428571
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),PEG min,0.7767857142857143
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),PEG mean,0.5178571428571429
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),Variance reduction,0.48214285714285715
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),Wasserstein,0.3392857142857143
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),Gain ratio (C4.5),0.7142857142857143
+DICES-350,28,dimension_set_jaccard,JSD (= entropy gain),KL from node,0.8571428571428571
+DICES-350,28,dimension_set_jaccard,Wasserstein,PEG harmonic,0.625
+DICES-350,28,dimension_set_jaccard,Wasserstein,PEG weighted,0.6964285714285714
+DICES-350,28,dimension_set_jaccard,Wasserstein,PEG max,0.3125
+DICES-350,28,dimension_set_jaccard,Wasserstein,PEG min,0.4017857142857143
+DICES-350,28,dimension_set_jaccard,Wasserstein,PEG mean,0.7142857142857143
+DICES-350,28,dimension_set_jaccard,Wasserstein,Variance reduction,0.8303571428571429
+DICES-350,28,dimension_set_jaccard,Wasserstein,JSD (= entropy gain),0.3392857142857143
+DICES-350,28,dimension_set_jaccard,Wasserstein,Wasserstein,1.0
+DICES-350,28,dimension_set_jaccard,Wasserstein,Gain ratio (C4.5),0.625
+DICES-350,28,dimension_set_jaccard,Wasserstein,KL from node,0.48214285714285715
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),PEG harmonic,0.5446428571428571
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),PEG weighted,0.49107142857142855
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),PEG max,0.5982142857142857
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),PEG min,0.5625
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),PEG mean,0.6607142857142857
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),Variance reduction,0.6964285714285714
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),JSD (= entropy gain),0.7142857142857143
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),Wasserstein,0.625
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-350,28,dimension_set_jaccard,Gain ratio (C4.5),KL from node,0.7142857142857143
+DICES-350,28,dimension_set_jaccard,KL from node,PEG harmonic,0.75
+DICES-350,28,dimension_set_jaccard,KL from node,PEG weighted,0.5357142857142857
+DICES-350,28,dimension_set_jaccard,KL from node,PEG max,0.5892857142857143
+DICES-350,28,dimension_set_jaccard,KL from node,PEG min,0.8482142857142857
+DICES-350,28,dimension_set_jaccard,KL from node,PEG mean,0.5892857142857143
+DICES-350,28,dimension_set_jaccard,KL from node,Variance reduction,0.625
+DICES-350,28,dimension_set_jaccard,KL from node,JSD (= entropy gain),0.8571428571428571
+DICES-350,28,dimension_set_jaccard,KL from node,Wasserstein,0.48214285714285715
+DICES-350,28,dimension_set_jaccard,KL from node,Gain ratio (C4.5),0.7142857142857143
+DICES-350,28,dimension_set_jaccard,KL from node,KL from node,1.0
+DICES-990,105,ARI,PEG harmonic,PEG harmonic,1.0
+DICES-990,105,ARI,PEG harmonic,PEG weighted,0.6502821227024209
+DICES-990,105,ARI,PEG harmonic,PEG max,0.4148602621333175
+DICES-990,105,ARI,PEG harmonic,PEG min,0.4592295630346335
+DICES-990,105,ARI,PEG harmonic,PEG mean,0.5556219390405412
+DICES-990,105,ARI,PEG harmonic,Variance reduction,0.6215084942429328
+DICES-990,105,ARI,PEG harmonic,JSD (= entropy gain),0.45047773326818535
+DICES-990,105,ARI,PEG harmonic,Wasserstein,0.5506025388926821
+DICES-990,105,ARI,PEG harmonic,Gain ratio (C4.5),0.4244883301729784
+DICES-990,105,ARI,PEG harmonic,KL from node,0.45575803324720837
+DICES-990,105,ARI,PEG weighted,PEG harmonic,0.6502821227024209
+DICES-990,105,ARI,PEG weighted,PEG weighted,1.0
+DICES-990,105,ARI,PEG weighted,PEG max,0.25639689122706716
+DICES-990,105,ARI,PEG weighted,PEG min,0.37205852806056383
+DICES-990,105,ARI,PEG weighted,PEG mean,0.3896722074614302
+DICES-990,105,ARI,PEG weighted,Variance reduction,0.572617070276355
+DICES-990,105,ARI,PEG weighted,JSD (= entropy gain),0.35875259235326856
+DICES-990,105,ARI,PEG weighted,Wasserstein,0.5346740121627189
+DICES-990,105,ARI,PEG weighted,Gain ratio (C4.5),0.33263528507216295
+DICES-990,105,ARI,PEG weighted,KL from node,0.3720761581086997
+DICES-990,105,ARI,PEG max,PEG harmonic,0.4148602621333175
+DICES-990,105,ARI,PEG max,PEG weighted,0.25639689122706716
+DICES-990,105,ARI,PEG max,PEG max,1.0
+DICES-990,105,ARI,PEG max,PEG min,0.4709239226418403
+DICES-990,105,ARI,PEG max,PEG mean,0.5593484591348082
+DICES-990,105,ARI,PEG max,Variance reduction,0.4238059445704267
+DICES-990,105,ARI,PEG max,JSD (= entropy gain),0.49889128989864906
+DICES-990,105,ARI,PEG max,Wasserstein,0.4040055656818856
+DICES-990,105,ARI,PEG max,Gain ratio (C4.5),0.41994770794200353
+DICES-990,105,ARI,PEG max,KL from node,0.5109862477009277
+DICES-990,105,ARI,PEG min,PEG harmonic,0.4592295630346335
+DICES-990,105,ARI,PEG min,PEG weighted,0.37205852806056383
+DICES-990,105,ARI,PEG min,PEG max,0.4709239226418403
+DICES-990,105,ARI,PEG min,PEG min,1.0
+DICES-990,105,ARI,PEG min,PEG mean,0.6705522523887995
+DICES-990,105,ARI,PEG min,Variance reduction,0.6319116364578798
+DICES-990,105,ARI,PEG min,JSD (= entropy gain),0.8170131788620792
+DICES-990,105,ARI,PEG min,Wasserstein,0.3993347175576758
+DICES-990,105,ARI,PEG min,Gain ratio (C4.5),0.6704589642551596
+DICES-990,105,ARI,PEG min,KL from node,0.7809848584861195
+DICES-990,105,ARI,PEG mean,PEG harmonic,0.5556219390405412
+DICES-990,105,ARI,PEG mean,PEG weighted,0.3896722074614302
+DICES-990,105,ARI,PEG mean,PEG max,0.5593484591348082
+DICES-990,105,ARI,PEG mean,PEG min,0.6705522523887995
+DICES-990,105,ARI,PEG mean,PEG mean,1.0
+DICES-990,105,ARI,PEG mean,Variance reduction,0.6073913373839082
+DICES-990,105,ARI,PEG mean,JSD (= entropy gain),0.6658157675947161
+DICES-990,105,ARI,PEG mean,Wasserstein,0.4972923669316615
+DICES-990,105,ARI,PEG mean,Gain ratio (C4.5),0.6097642958416978
+DICES-990,105,ARI,PEG mean,KL from node,0.6533814461999835
+DICES-990,105,ARI,Variance reduction,PEG harmonic,0.6215084942429328
+DICES-990,105,ARI,Variance reduction,PEG weighted,0.572617070276355
+DICES-990,105,ARI,Variance reduction,PEG max,0.4238059445704267
+DICES-990,105,ARI,Variance reduction,PEG min,0.6319116364578798
+DICES-990,105,ARI,Variance reduction,PEG mean,0.6073913373839082
+DICES-990,105,ARI,Variance reduction,Variance reduction,1.0
+DICES-990,105,ARI,Variance reduction,JSD (= entropy gain),0.6442423584124269
+DICES-990,105,ARI,Variance reduction,Wasserstein,0.6612833958759546
+DICES-990,105,ARI,Variance reduction,Gain ratio (C4.5),0.5523909601790691
+DICES-990,105,ARI,Variance reduction,KL from node,0.6404968477705404
+DICES-990,105,ARI,JSD (= entropy gain),PEG harmonic,0.45047773326818535
+DICES-990,105,ARI,JSD (= entropy gain),PEG weighted,0.35875259235326856
+DICES-990,105,ARI,JSD (= entropy gain),PEG max,0.49889128989864906
+DICES-990,105,ARI,JSD (= entropy gain),PEG min,0.8170131788620792
+DICES-990,105,ARI,JSD (= entropy gain),PEG mean,0.6658157675947161
+DICES-990,105,ARI,JSD (= entropy gain),Variance reduction,0.6442423584124269
+DICES-990,105,ARI,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-990,105,ARI,JSD (= entropy gain),Wasserstein,0.40422319126693024
+DICES-990,105,ARI,JSD (= entropy gain),Gain ratio (C4.5),0.7363145949608126
+DICES-990,105,ARI,JSD (= entropy gain),KL from node,0.8453855965739553
+DICES-990,105,ARI,Wasserstein,PEG harmonic,0.5506025388926821
+DICES-990,105,ARI,Wasserstein,PEG weighted,0.5346740121627189
+DICES-990,105,ARI,Wasserstein,PEG max,0.4040055656818856
+DICES-990,105,ARI,Wasserstein,PEG min,0.3993347175576758
+DICES-990,105,ARI,Wasserstein,PEG mean,0.4972923669316615
+DICES-990,105,ARI,Wasserstein,Variance reduction,0.6612833958759546
+DICES-990,105,ARI,Wasserstein,JSD (= entropy gain),0.40422319126693024
+DICES-990,105,ARI,Wasserstein,Wasserstein,1.0
+DICES-990,105,ARI,Wasserstein,Gain ratio (C4.5),0.3632781042416767
+DICES-990,105,ARI,Wasserstein,KL from node,0.42034357592120203
+DICES-990,105,ARI,Gain ratio (C4.5),PEG harmonic,0.4244883301729784
+DICES-990,105,ARI,Gain ratio (C4.5),PEG weighted,0.33263528507216295
+DICES-990,105,ARI,Gain ratio (C4.5),PEG max,0.41994770794200353
+DICES-990,105,ARI,Gain ratio (C4.5),PEG min,0.6704589642551596
+DICES-990,105,ARI,Gain ratio (C4.5),PEG mean,0.6097642958416978
+DICES-990,105,ARI,Gain ratio (C4.5),Variance reduction,0.5523909601790691
+DICES-990,105,ARI,Gain ratio (C4.5),JSD (= entropy gain),0.7363145949608126
+DICES-990,105,ARI,Gain ratio (C4.5),Wasserstein,0.3632781042416767
+DICES-990,105,ARI,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-990,105,ARI,Gain ratio (C4.5),KL from node,0.6627975872936857
+DICES-990,105,ARI,KL from node,PEG harmonic,0.45575803324720837
+DICES-990,105,ARI,KL from node,PEG weighted,0.3720761581086997
+DICES-990,105,ARI,KL from node,PEG max,0.5109862477009277
+DICES-990,105,ARI,KL from node,PEG min,0.7809848584861195
+DICES-990,105,ARI,KL from node,PEG mean,0.6533814461999835
+DICES-990,105,ARI,KL from node,Variance reduction,0.6404968477705404
+DICES-990,105,ARI,KL from node,JSD (= entropy gain),0.8453855965739553
+DICES-990,105,ARI,KL from node,Wasserstein,0.42034357592120203
+DICES-990,105,ARI,KL from node,Gain ratio (C4.5),0.6627975872936857
+DICES-990,105,ARI,KL from node,KL from node,1.0
+DICES-990,105,first_split_agreement,PEG harmonic,PEG harmonic,1.0
+DICES-990,105,first_split_agreement,PEG harmonic,PEG weighted,0.6952380952380952
+DICES-990,105,first_split_agreement,PEG harmonic,PEG max,0.38095238095238093
+DICES-990,105,first_split_agreement,PEG harmonic,PEG min,0.4857142857142857
+DICES-990,105,first_split_agreement,PEG harmonic,PEG mean,0.5428571428571428
+DICES-990,105,first_split_agreement,PEG harmonic,Variance reduction,0.6857142857142857
+DICES-990,105,first_split_agreement,PEG harmonic,JSD (= entropy gain),0.5238095238095238
+DICES-990,105,first_split_agreement,PEG harmonic,Wasserstein,0.6190476190476191
+DICES-990,105,first_split_agreement,PEG harmonic,Gain ratio (C4.5),0.4
+DICES-990,105,first_split_agreement,PEG harmonic,KL from node,0.5238095238095238
+DICES-990,105,first_split_agreement,PEG weighted,PEG harmonic,0.6952380952380952
+DICES-990,105,first_split_agreement,PEG weighted,PEG weighted,1.0
+DICES-990,105,first_split_agreement,PEG weighted,PEG max,0.24761904761904763
+DICES-990,105,first_split_agreement,PEG weighted,PEG min,0.4
+DICES-990,105,first_split_agreement,PEG weighted,PEG mean,0.42857142857142855
+DICES-990,105,first_split_agreement,PEG weighted,Variance reduction,0.638095238095238
+DICES-990,105,first_split_agreement,PEG weighted,JSD (= entropy gain),0.45714285714285713
+DICES-990,105,first_split_agreement,PEG weighted,Wasserstein,0.6
+DICES-990,105,first_split_agreement,PEG weighted,Gain ratio (C4.5),0.3333333333333333
+DICES-990,105,first_split_agreement,PEG weighted,KL from node,0.4666666666666667
+DICES-990,105,first_split_agreement,PEG max,PEG harmonic,0.38095238095238093
+DICES-990,105,first_split_agreement,PEG max,PEG weighted,0.24761904761904763
+DICES-990,105,first_split_agreement,PEG max,PEG max,1.0
+DICES-990,105,first_split_agreement,PEG max,PEG min,0.41904761904761906
+DICES-990,105,first_split_agreement,PEG max,PEG mean,0.6666666666666666
+DICES-990,105,first_split_agreement,PEG max,Variance reduction,0.41904761904761906
+DICES-990,105,first_split_agreement,PEG max,JSD (= entropy gain),0.47619047619047616
+DICES-990,105,first_split_agreement,PEG max,Wasserstein,0.41904761904761906
+DICES-990,105,first_split_agreement,PEG max,Gain ratio (C4.5),0.3333333333333333
+DICES-990,105,first_split_agreement,PEG max,KL from node,0.4857142857142857
+DICES-990,105,first_split_agreement,PEG min,PEG harmonic,0.4857142857142857
+DICES-990,105,first_split_agreement,PEG min,PEG weighted,0.4
+DICES-990,105,first_split_agreement,PEG min,PEG max,0.41904761904761906
+DICES-990,105,first_split_agreement,PEG min,PEG min,1.0
+DICES-990,105,first_split_agreement,PEG min,PEG mean,0.6476190476190476
+DICES-990,105,first_split_agreement,PEG min,Variance reduction,0.6476190476190476
+DICES-990,105,first_split_agreement,PEG min,JSD (= entropy gain),0.8380952380952381
+DICES-990,105,first_split_agreement,PEG min,Wasserstein,0.4666666666666667
+DICES-990,105,first_split_agreement,PEG min,Gain ratio (C4.5),0.5904761904761905
+DICES-990,105,first_split_agreement,PEG min,KL from node,0.8
+DICES-990,105,first_split_agreement,PEG mean,PEG harmonic,0.5428571428571428
+DICES-990,105,first_split_agreement,PEG mean,PEG weighted,0.42857142857142855
+DICES-990,105,first_split_agreement,PEG mean,PEG max,0.6666666666666666
+DICES-990,105,first_split_agreement,PEG mean,PEG min,0.6476190476190476
+DICES-990,105,first_split_agreement,PEG mean,PEG mean,1.0
+DICES-990,105,first_split_agreement,PEG mean,Variance reduction,0.6190476190476191
+DICES-990,105,first_split_agreement,PEG mean,JSD (= entropy gain),0.6857142857142857
+DICES-990,105,first_split_agreement,PEG mean,Wasserstein,0.5238095238095238
+DICES-990,105,first_split_agreement,PEG mean,Gain ratio (C4.5),0.4857142857142857
+DICES-990,105,first_split_agreement,PEG mean,KL from node,0.7047619047619048
+DICES-990,105,first_split_agreement,Variance reduction,PEG harmonic,0.6857142857142857
+DICES-990,105,first_split_agreement,Variance reduction,PEG weighted,0.638095238095238
+DICES-990,105,first_split_agreement,Variance reduction,PEG max,0.41904761904761906
+DICES-990,105,first_split_agreement,Variance reduction,PEG min,0.6476190476190476
+DICES-990,105,first_split_agreement,Variance reduction,PEG mean,0.6190476190476191
+DICES-990,105,first_split_agreement,Variance reduction,Variance reduction,1.0
+DICES-990,105,first_split_agreement,Variance reduction,JSD (= entropy gain),0.7428571428571429
+DICES-990,105,first_split_agreement,Variance reduction,Wasserstein,0.7238095238095238
+DICES-990,105,first_split_agreement,Variance reduction,Gain ratio (C4.5),0.49523809523809526
+DICES-990,105,first_split_agreement,Variance reduction,KL from node,0.7333333333333333
+DICES-990,105,first_split_agreement,JSD (= entropy gain),PEG harmonic,0.5238095238095238
+DICES-990,105,first_split_agreement,JSD (= entropy gain),PEG weighted,0.45714285714285713
+DICES-990,105,first_split_agreement,JSD (= entropy gain),PEG max,0.47619047619047616
+DICES-990,105,first_split_agreement,JSD (= entropy gain),PEG min,0.8380952380952381
+DICES-990,105,first_split_agreement,JSD (= entropy gain),PEG mean,0.6857142857142857
+DICES-990,105,first_split_agreement,JSD (= entropy gain),Variance reduction,0.7428571428571429
+DICES-990,105,first_split_agreement,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-990,105,first_split_agreement,JSD (= entropy gain),Wasserstein,0.5142857142857142
+DICES-990,105,first_split_agreement,JSD (= entropy gain),Gain ratio (C4.5),0.580952380952381
+DICES-990,105,first_split_agreement,JSD (= entropy gain),KL from node,0.9428571428571428
+DICES-990,105,first_split_agreement,Wasserstein,PEG harmonic,0.6190476190476191
+DICES-990,105,first_split_agreement,Wasserstein,PEG weighted,0.6
+DICES-990,105,first_split_agreement,Wasserstein,PEG max,0.41904761904761906
+DICES-990,105,first_split_agreement,Wasserstein,PEG min,0.4666666666666667
+DICES-990,105,first_split_agreement,Wasserstein,PEG mean,0.5238095238095238
+DICES-990,105,first_split_agreement,Wasserstein,Variance reduction,0.7238095238095238
+DICES-990,105,first_split_agreement,Wasserstein,JSD (= entropy gain),0.5142857142857142
+DICES-990,105,first_split_agreement,Wasserstein,Wasserstein,1.0
+DICES-990,105,first_split_agreement,Wasserstein,Gain ratio (C4.5),0.3619047619047619
+DICES-990,105,first_split_agreement,Wasserstein,KL from node,0.5142857142857142
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),PEG harmonic,0.4
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),PEG weighted,0.3333333333333333
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),PEG max,0.3333333333333333
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),PEG min,0.5904761904761905
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),PEG mean,0.4857142857142857
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),Variance reduction,0.49523809523809526
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),JSD (= entropy gain),0.580952380952381
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),Wasserstein,0.3619047619047619
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-990,105,first_split_agreement,Gain ratio (C4.5),KL from node,0.5714285714285714
+DICES-990,105,first_split_agreement,KL from node,PEG harmonic,0.5238095238095238
+DICES-990,105,first_split_agreement,KL from node,PEG weighted,0.4666666666666667
+DICES-990,105,first_split_agreement,KL from node,PEG max,0.4857142857142857
+DICES-990,105,first_split_agreement,KL from node,PEG min,0.8
+DICES-990,105,first_split_agreement,KL from node,PEG mean,0.7047619047619048
+DICES-990,105,first_split_agreement,KL from node,Variance reduction,0.7333333333333333
+DICES-990,105,first_split_agreement,KL from node,JSD (= entropy gain),0.9428571428571428
+DICES-990,105,first_split_agreement,KL from node,Wasserstein,0.5142857142857142
+DICES-990,105,first_split_agreement,KL from node,Gain ratio (C4.5),0.5714285714285714
+DICES-990,105,first_split_agreement,KL from node,KL from node,1.0
+DICES-990,105,node_level_agreement,PEG harmonic,PEG harmonic,1.0
+DICES-990,105,node_level_agreement,PEG harmonic,PEG weighted,0.6533053019187474
+DICES-990,105,node_level_agreement,PEG harmonic,PEG max,0.3264279200413654
+DICES-990,105,node_level_agreement,PEG harmonic,PEG min,0.39893001178715465
+DICES-990,105,node_level_agreement,PEG harmonic,PEG mean,0.48913385556242706
+DICES-990,105,node_level_agreement,PEG harmonic,Variance reduction,0.6239076399790685
+DICES-990,105,node_level_agreement,PEG harmonic,JSD (= entropy gain),0.4491159682701036
+DICES-990,105,node_level_agreement,PEG harmonic,Wasserstein,0.5615585037433777
+DICES-990,105,node_level_agreement,PEG harmonic,Gain ratio (C4.5),0.3337657184085756
+DICES-990,105,node_level_agreement,PEG harmonic,KL from node,0.44118284765343585
+DICES-990,105,node_level_agreement,PEG weighted,PEG harmonic,0.6533053019187474
+DICES-990,105,node_level_agreement,PEG weighted,PEG weighted,1.0
+DICES-990,105,node_level_agreement,PEG weighted,PEG max,0.1997470612176494
+DICES-990,105,node_level_agreement,PEG weighted,PEG min,0.3262889755746899
+DICES-990,105,node_level_agreement,PEG weighted,PEG mean,0.3713782078487961
+DICES-990,105,node_level_agreement,PEG weighted,Variance reduction,0.5668240186517497
+DICES-990,105,node_level_agreement,PEG weighted,JSD (= entropy gain),0.38672999502831434
+DICES-990,105,node_level_agreement,PEG weighted,Wasserstein,0.5451659451659452
+DICES-990,105,node_level_agreement,PEG weighted,Gain ratio (C4.5),0.2781531299388442
+DICES-990,105,node_level_agreement,PEG weighted,KL from node,0.392380922065796
+DICES-990,105,node_level_agreement,PEG max,PEG harmonic,0.3264279200413654
+DICES-990,105,node_level_agreement,PEG max,PEG weighted,0.1997470612176494
+DICES-990,105,node_level_agreement,PEG max,PEG max,1.0
+DICES-990,105,node_level_agreement,PEG max,PEG min,0.2941228612657184
+DICES-990,105,node_level_agreement,PEG max,PEG mean,0.5400094707657733
+DICES-990,105,node_level_agreement,PEG max,Variance reduction,0.3280176173033316
+DICES-990,105,node_level_agreement,PEG max,JSD (= entropy gain),0.36231961160532594
+DICES-990,105,node_level_agreement,PEG max,Wasserstein,0.32887493458922035
+DICES-990,105,node_level_agreement,PEG max,Gain ratio (C4.5),0.23749295677867108
+DICES-990,105,node_level_agreement,PEG max,KL from node,0.3618965690394262
+DICES-990,105,node_level_agreement,PEG min,PEG harmonic,0.39893001178715465
+DICES-990,105,node_level_agreement,PEG min,PEG weighted,0.3262889755746899
+DICES-990,105,node_level_agreement,PEG min,PEG max,0.2941228612657184
+DICES-990,105,node_level_agreement,PEG min,PEG min,1.0
+DICES-990,105,node_level_agreement,PEG min,PEG mean,0.5872201965479276
+DICES-990,105,node_level_agreement,PEG min,Variance reduction,0.5716427581133464
+DICES-990,105,node_level_agreement,PEG min,JSD (= entropy gain),0.7693757839290789
+DICES-990,105,node_level_agreement,PEG min,Wasserstein,0.38697742733457025
+DICES-990,105,node_level_agreement,PEG min,Gain ratio (C4.5),0.5143529486386629
+DICES-990,105,node_level_agreement,PEG min,KL from node,0.6937906508859627
+DICES-990,105,node_level_agreement,PEG mean,PEG harmonic,0.48913385556242706
+DICES-990,105,node_level_agreement,PEG mean,PEG weighted,0.3713782078487961
+DICES-990,105,node_level_agreement,PEG mean,PEG max,0.5400094707657733
+DICES-990,105,node_level_agreement,PEG mean,PEG min,0.5872201965479276
+DICES-990,105,node_level_agreement,PEG mean,PEG mean,1.0
+DICES-990,105,node_level_agreement,PEG mean,Variance reduction,0.5589793804079518
+DICES-990,105,node_level_agreement,PEG mean,JSD (= entropy gain),0.6294763966192538
+DICES-990,105,node_level_agreement,PEG mean,Wasserstein,0.4668851083556966
+DICES-990,105,node_level_agreement,PEG mean,Gain ratio (C4.5),0.4331823335394764
+DICES-990,105,node_level_agreement,PEG mean,KL from node,0.612843589854868
+DICES-990,105,node_level_agreement,Variance reduction,PEG harmonic,0.6239076399790685
+DICES-990,105,node_level_agreement,Variance reduction,PEG weighted,0.5668240186517497
+DICES-990,105,node_level_agreement,Variance reduction,PEG max,0.3280176173033316
+DICES-990,105,node_level_agreement,Variance reduction,PEG min,0.5716427581133464
+DICES-990,105,node_level_agreement,Variance reduction,PEG mean,0.5589793804079518
+DICES-990,105,node_level_agreement,Variance reduction,Variance reduction,1.0
+DICES-990,105,node_level_agreement,Variance reduction,JSD (= entropy gain),0.6806791592030424
+DICES-990,105,node_level_agreement,Variance reduction,Wasserstein,0.6821040692889433
+DICES-990,105,node_level_agreement,Variance reduction,Gain ratio (C4.5),0.4227509791795506
+DICES-990,105,node_level_agreement,Variance reduction,KL from node,0.6635255852637543
+DICES-990,105,node_level_agreement,JSD (= entropy gain),PEG harmonic,0.4491159682701036
+DICES-990,105,node_level_agreement,JSD (= entropy gain),PEG weighted,0.38672999502831434
+DICES-990,105,node_level_agreement,JSD (= entropy gain),PEG max,0.36231961160532594
+DICES-990,105,node_level_agreement,JSD (= entropy gain),PEG min,0.7693757839290789
+DICES-990,105,node_level_agreement,JSD (= entropy gain),PEG mean,0.6294763966192538
+DICES-990,105,node_level_agreement,JSD (= entropy gain),Variance reduction,0.6806791592030424
+DICES-990,105,node_level_agreement,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-990,105,node_level_agreement,JSD (= entropy gain),Wasserstein,0.4464285768697533
+DICES-990,105,node_level_agreement,JSD (= entropy gain),Gain ratio (C4.5),0.540358583215726
+DICES-990,105,node_level_agreement,JSD (= entropy gain),KL from node,0.8645024709675307
+DICES-990,105,node_level_agreement,Wasserstein,PEG harmonic,0.5615585037433777
+DICES-990,105,node_level_agreement,Wasserstein,PEG weighted,0.5451659451659452
+DICES-990,105,node_level_agreement,Wasserstein,PEG max,0.32887493458922035
+DICES-990,105,node_level_agreement,Wasserstein,PEG min,0.38697742733457025
+DICES-990,105,node_level_agreement,Wasserstein,PEG mean,0.4668851083556966
+DICES-990,105,node_level_agreement,Wasserstein,Variance reduction,0.6821040692889433
+DICES-990,105,node_level_agreement,Wasserstein,JSD (= entropy gain),0.4464285768697533
+DICES-990,105,node_level_agreement,Wasserstein,Wasserstein,1.0
+DICES-990,105,node_level_agreement,Wasserstein,Gain ratio (C4.5),0.3065793994365423
+DICES-990,105,node_level_agreement,Wasserstein,KL from node,0.4556239801772752
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),PEG harmonic,0.3337657184085756
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),PEG weighted,0.2781531299388442
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),PEG max,0.23749295677867108
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),PEG min,0.5143529486386629
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),PEG mean,0.4331823335394764
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),Variance reduction,0.4227509791795506
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),JSD (= entropy gain),0.540358583215726
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),Wasserstein,0.3065793994365423
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-990,105,node_level_agreement,Gain ratio (C4.5),KL from node,0.4941666544342351
+DICES-990,105,node_level_agreement,KL from node,PEG harmonic,0.44118284765343585
+DICES-990,105,node_level_agreement,KL from node,PEG weighted,0.392380922065796
+DICES-990,105,node_level_agreement,KL from node,PEG max,0.3618965690394262
+DICES-990,105,node_level_agreement,KL from node,PEG min,0.6937906508859627
+DICES-990,105,node_level_agreement,KL from node,PEG mean,0.612843589854868
+DICES-990,105,node_level_agreement,KL from node,Variance reduction,0.6635255852637543
+DICES-990,105,node_level_agreement,KL from node,JSD (= entropy gain),0.8645024709675307
+DICES-990,105,node_level_agreement,KL from node,Wasserstein,0.4556239801772752
+DICES-990,105,node_level_agreement,KL from node,Gain ratio (C4.5),0.4941666544342351
+DICES-990,105,node_level_agreement,KL from node,KL from node,1.0
+DICES-990,105,dimension_set_jaccard,PEG harmonic,PEG harmonic,1.0
+DICES-990,105,dimension_set_jaccard,PEG harmonic,PEG weighted,0.6753968253968254
+DICES-990,105,dimension_set_jaccard,PEG harmonic,PEG max,0.48730158730158735
+DICES-990,105,dimension_set_jaccard,PEG harmonic,PEG min,0.5325396825396825
+DICES-990,105,dimension_set_jaccard,PEG harmonic,PEG mean,0.6126984126984127
+DICES-990,105,dimension_set_jaccard,PEG harmonic,Variance reduction,0.6595238095238095
+DICES-990,105,dimension_set_jaccard,PEG harmonic,JSD (= entropy gain),0.5253968253968254
+DICES-990,105,dimension_set_jaccard,PEG harmonic,Wasserstein,0.584126984126984
+DICES-990,105,dimension_set_jaccard,PEG harmonic,Gain ratio (C4.5),0.5150793650793651
+DICES-990,105,dimension_set_jaccard,PEG harmonic,KL from node,0.5246031746031745
+DICES-990,105,dimension_set_jaccard,PEG weighted,PEG harmonic,0.6753968253968254
+DICES-990,105,dimension_set_jaccard,PEG weighted,PEG weighted,1.0
+DICES-990,105,dimension_set_jaccard,PEG weighted,PEG max,0.319047619047619
+DICES-990,105,dimension_set_jaccard,PEG weighted,PEG min,0.4206349206349207
+DICES-990,105,dimension_set_jaccard,PEG weighted,PEG mean,0.45476190476190476
+DICES-990,105,dimension_set_jaccard,PEG weighted,Variance reduction,0.6007936507936508
+DICES-990,105,dimension_set_jaccard,PEG weighted,JSD (= entropy gain),0.41507936507936505
+DICES-990,105,dimension_set_jaccard,PEG weighted,Wasserstein,0.5603174603174603
+DICES-990,105,dimension_set_jaccard,PEG weighted,Gain ratio (C4.5),0.4261904761904762
+DICES-990,105,dimension_set_jaccard,PEG weighted,KL from node,0.4412698412698412
+DICES-990,105,dimension_set_jaccard,PEG max,PEG harmonic,0.48730158730158735
+DICES-990,105,dimension_set_jaccard,PEG max,PEG weighted,0.319047619047619
+DICES-990,105,dimension_set_jaccard,PEG max,PEG max,1.0
+DICES-990,105,dimension_set_jaccard,PEG max,PEG min,0.6492063492063492
+DICES-990,105,dimension_set_jaccard,PEG max,PEG mean,0.6674603174603175
+DICES-990,105,dimension_set_jaccard,PEG max,Variance reduction,0.5388888888888889
+DICES-990,105,dimension_set_jaccard,PEG max,JSD (= entropy gain),0.6753968253968253
+DICES-990,105,dimension_set_jaccard,PEG max,Wasserstein,0.4746031746031746
+DICES-990,105,dimension_set_jaccard,PEG max,Gain ratio (C4.5),0.638095238095238
+DICES-990,105,dimension_set_jaccard,PEG max,KL from node,0.6611111111111112
+DICES-990,105,dimension_set_jaccard,PEG min,PEG harmonic,0.5325396825396825
+DICES-990,105,dimension_set_jaccard,PEG min,PEG weighted,0.4206349206349207
+DICES-990,105,dimension_set_jaccard,PEG min,PEG max,0.6492063492063492
+DICES-990,105,dimension_set_jaccard,PEG min,PEG min,1.0
+DICES-990,105,dimension_set_jaccard,PEG min,PEG mean,0.7531746031746033
+DICES-990,105,dimension_set_jaccard,PEG min,Variance reduction,0.711111111111111
+DICES-990,105,dimension_set_jaccard,PEG min,JSD (= entropy gain),0.9134920634920634
+DICES-990,105,dimension_set_jaccard,PEG min,Wasserstein,0.4753968253968254
+DICES-990,105,dimension_set_jaccard,PEG min,Gain ratio (C4.5),0.8452380952380952
+DICES-990,105,dimension_set_jaccard,PEG min,KL from node,0.8642857142857143
+DICES-990,105,dimension_set_jaccard,PEG mean,PEG harmonic,0.6126984126984127
+DICES-990,105,dimension_set_jaccard,PEG mean,PEG weighted,0.45476190476190476
+DICES-990,105,dimension_set_jaccard,PEG mean,PEG max,0.6674603174603175
+DICES-990,105,dimension_set_jaccard,PEG mean,PEG min,0.7531746031746033
+DICES-990,105,dimension_set_jaccard,PEG mean,PEG mean,1.0
+DICES-990,105,dimension_set_jaccard,PEG mean,Variance reduction,0.680952380952381
+DICES-990,105,dimension_set_jaccard,PEG mean,JSD (= entropy gain),0.7436507936507936
+DICES-990,105,dimension_set_jaccard,PEG mean,Wasserstein,0.546031746031746
+DICES-990,105,dimension_set_jaccard,PEG mean,Gain ratio (C4.5),0.7436507936507938
+DICES-990,105,dimension_set_jaccard,PEG mean,KL from node,0.7380952380952381
+DICES-990,105,dimension_set_jaccard,Variance reduction,PEG harmonic,0.6595238095238095
+DICES-990,105,dimension_set_jaccard,Variance reduction,PEG weighted,0.6007936507936508
+DICES-990,105,dimension_set_jaccard,Variance reduction,PEG max,0.5388888888888889
+DICES-990,105,dimension_set_jaccard,Variance reduction,PEG min,0.711111111111111
+DICES-990,105,dimension_set_jaccard,Variance reduction,PEG mean,0.680952380952381
+DICES-990,105,dimension_set_jaccard,Variance reduction,Variance reduction,1.0
+DICES-990,105,dimension_set_jaccard,Variance reduction,JSD (= entropy gain),0.7103174603174602
+DICES-990,105,dimension_set_jaccard,Variance reduction,Wasserstein,0.6904761904761905
+DICES-990,105,dimension_set_jaccard,Variance reduction,Gain ratio (C4.5),0.6595238095238095
+DICES-990,105,dimension_set_jaccard,Variance reduction,KL from node,0.707936507936508
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),PEG harmonic,0.5253968253968254
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),PEG weighted,0.41507936507936505
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),PEG max,0.6753968253968253
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),PEG min,0.9134920634920634
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),PEG mean,0.7436507936507936
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),Variance reduction,0.7103174603174602
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),JSD (= entropy gain),1.0
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),Wasserstein,0.46190476190476193
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),Gain ratio (C4.5),0.861111111111111
+DICES-990,105,dimension_set_jaccard,JSD (= entropy gain),KL from node,0.9039682539682539
+DICES-990,105,dimension_set_jaccard,Wasserstein,PEG harmonic,0.584126984126984
+DICES-990,105,dimension_set_jaccard,Wasserstein,PEG weighted,0.5603174603174603
+DICES-990,105,dimension_set_jaccard,Wasserstein,PEG max,0.4746031746031746
+DICES-990,105,dimension_set_jaccard,Wasserstein,PEG min,0.4753968253968254
+DICES-990,105,dimension_set_jaccard,Wasserstein,PEG mean,0.546031746031746
+DICES-990,105,dimension_set_jaccard,Wasserstein,Variance reduction,0.6904761904761905
+DICES-990,105,dimension_set_jaccard,Wasserstein,JSD (= entropy gain),0.46190476190476193
+DICES-990,105,dimension_set_jaccard,Wasserstein,Wasserstein,1.0
+DICES-990,105,dimension_set_jaccard,Wasserstein,Gain ratio (C4.5),0.45158730158730154
+DICES-990,105,dimension_set_jaccard,Wasserstein,KL from node,0.4753968253968254
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),PEG harmonic,0.5150793650793651
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),PEG weighted,0.4261904761904762
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),PEG max,0.638095238095238
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),PEG min,0.8452380952380952
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),PEG mean,0.7436507936507938
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),Variance reduction,0.6595238095238095
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),JSD (= entropy gain),0.861111111111111
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),Wasserstein,0.45158730158730154
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),Gain ratio (C4.5),1.0
+DICES-990,105,dimension_set_jaccard,Gain ratio (C4.5),KL from node,0.8206349206349205
+DICES-990,105,dimension_set_jaccard,KL from node,PEG harmonic,0.5246031746031745
+DICES-990,105,dimension_set_jaccard,KL from node,PEG weighted,0.4412698412698412
+DICES-990,105,dimension_set_jaccard,KL from node,PEG max,0.6611111111111112
+DICES-990,105,dimension_set_jaccard,KL from node,PEG min,0.8642857142857143
+DICES-990,105,dimension_set_jaccard,KL from node,PEG mean,0.7380952380952381
+DICES-990,105,dimension_set_jaccard,KL from node,Variance reduction,0.707936507936508
+DICES-990,105,dimension_set_jaccard,KL from node,JSD (= entropy gain),0.9039682539682539
+DICES-990,105,dimension_set_jaccard,KL from node,Wasserstein,0.4753968253968254
+DICES-990,105,dimension_set_jaccard,KL from node,Gain ratio (C4.5),0.8206349206349205
+DICES-990,105,dimension_set_jaccard,KL from node,KL from node,1.0
